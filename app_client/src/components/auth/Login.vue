@@ -3,6 +3,7 @@
   import { useRouter } from 'vue-router'  
   import { useUserStore } from '../../stores/user.js'
   const router = useRouter()  
+  const axios = inject('axios')
   const toast = inject('toast')
 
   const credentials = ref({
@@ -10,20 +11,24 @@
         password: ''
     })
 
-  const userStore = useUserStore()     
+  //const userStore = useUserStore()     
 
   const emit = defineEmits(['login'])
 
   const login = async () => {
-    if (await userStore.login(credentials.value)) {
-      toast.success('User ' + userStore.user.name + ' has entered the application.')
+    try {
+      const response = await axios.post('login', credentials.value)
+      toast.success('User ' + credentials.value.username + ' has entered the application.')
+      axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
       emit('login')
       router.back()
-    } else {
+    }
+      catch(error) {
+      delete axios.defaults.headers.common.Authorization
       credentials.value.password = ''
       toast.error('User credentials are invalid!')
-    }
-  }
+   }
+ }
 </script>
 
 
