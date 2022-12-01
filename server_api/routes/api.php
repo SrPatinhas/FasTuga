@@ -1,10 +1,16 @@
 <?php
-
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\TaskController;
 use App\Http\Controllers\api\ProjectController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\AuthController;
+use Illuminate\Support\Facades\Hash;
+/*Route::get('pass', function (){
+    $pass = Hash::make('123');
+    User::where('id', '<>', 1)->update(['password' => $pass]);
+    return $pass;
+});*/
 
 Route::post('login', [AuthController::class, 'login']);
 

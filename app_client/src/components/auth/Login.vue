@@ -21,7 +21,8 @@
       toast.success('User ' + credentials.value.username + ' has entered the application.')
       axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
       emit('login')
-      router.back()
+      router.push({name:'Home'})
+      //router.back()
     }
       catch(error) {
       delete axios.defaults.headers.common.Authorization

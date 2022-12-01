@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 class UsersSeeder extends Seeder
 {
@@ -130,7 +131,7 @@ class UsersSeeder extends Seeder
             'name' => $fullname,
             'email' =>  $email,
             'email_verified_at' => $email_verified_at,
-            'password' => bcrypt('123'),
+            'password' => Hash:make('123'),
             'remember_token' => $faker->asciify('**********'), //str_random(10),
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
