@@ -6,14 +6,19 @@ import HomeView from '../views/HomeView.vue'
 import Dashboard from "../components/Dashboard.vue"
 import Login from "../components/auth/Login.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
-import Tasks from "../components/tasks/Tasks.vue"
-import Projects from "../components/projects/Projects.vue"
+import Kitchens from "../components/kitchen/Kitchens.vue"
+import Menus from "../components/menu/Menus.vue"
+import Orders from "../components/order/Orders.vue"
+import Publicboards from "../components/publicboard/Publicboards.vue"
 import Users from "../components/users/Users.vue"
 import User from "../components/users/User.vue"
-import ProjectTasks from "../components/projects/ProjectTasks.vue"
-import Task from "../components/tasks/Task.vue"
-import Project from "../components/projects/Project.vue"
+import Kitchen from "../components/kitchen/Kitchen.vue"
+import Menu from "../components/menu/Menu.vue"
+import Order from "../components/order/Order.vue"
+import Publicboard from "../components/publicboard/Publicboard.vue"
 import RouteRedirector from "../components/global/RouteRedirector.vue"
+
+/*OK-menu  OK-orders  OK-public-board  OK-kitchen  OK-users */
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,31 +50,77 @@ const router = createRouter({
       component: Dashboard
     },
     {
-      path: '/tasks',
-      name: 'Tasks',
-      component: Tasks,
+      path: '/menus',
+      name: 'Menus',
+      component: Menus,
     },
     {
-      path: '/tasks/current',
-      name: 'CurrentTasks',
-      component: Tasks,
-      props: { onlyCurrentTasks: true, tasksTitle: 'Current Tasks' }
+      path: '/kitchens/current',
+      name: 'CurrentKitchens',
+      component: Kitchens,
+      props: { onlyCurrentOrders: true, ordersTitle: 'Current Kitchens' }
     },
     {
-      path: '/projects',
-      name: 'Projects',
-      component: Projects,
+      path: '/kitchens',
+      name: 'Kitchens',
+      component: Kitchens,
     },
     {
-      path: '/projects/new',
-      name: 'NewProject',
-      component: Project,
+      path: '/kitchens/new',
+      name: 'NewKitchen',
+      component: Kitchen,
       props: { id: -1 }
     },
     {
-      path: '/projects/:id',
-      name: 'Project',
-      component: Project,
+      path: '/kitchens/:id',
+      name: 'Kitchen',
+      component: Kitchen,
+      props: route => ({ id: parseInt(route.params.id) })     
+    },
+    {
+      path: '/publicboards/current',
+      name: 'CurrentPublicboards',
+      component: Publicboards,
+      props: { onlyCurrentKitchens: true, publicboardsTitle: 'Current Publicboards' }
+    },
+    {
+      path: '/publicboards',
+      name: 'Publicboards',
+      component: Publicboards,
+    },
+    {
+      path: '/publicboards/new',
+      name: 'NewPublicboard',
+      component: Publicboard,
+      props: { id: -1 }
+    },
+    {
+      path: '/publicboards/:id',
+      name: 'Publicboard',
+      component: Publicboard,
+      props: route => ({ id: parseInt(route.params.id) })     
+    },
+    {
+      path: '/Menus/current',
+      name: 'CurrentMenus',
+      component: Menus,
+      props: { onlyCurrentMenus: true, MenusTitle: 'Current Menus' }
+    },
+    {
+      path: '/menus',
+      name: 'Menus',
+      component: Menus,
+    },
+    {
+      path: '/menus/new',
+      name: 'NewMenu',
+      component: Menu,
+      props: { id: -1 }
+    },
+    {
+      path: '/menus/:id',
+      name: 'Menu',
+      component: Menu,
       props: route => ({ id: parseInt(route.params.id) })     
     },
     {
@@ -85,7 +136,7 @@ const router = createRouter({
       // Replaced with the following line to ensure that id is a number
       props: route => ({ id: parseInt(route.params.id) })
     }, 
-    {
+    /*{
       path: '/projects/:id/tasks',
       name: 'ProjectTasks',
       component: ProjectTasks,
@@ -96,17 +147,23 @@ const router = createRouter({
       name: 'NewTaskOfProject',
       component: Task,
       props: route => ({ id:-1, fixedProject:  parseInt(route.params.id) })
+    },*/
+    {
+      path: '/orders/current',
+      name: 'CurrentOrders',
+      component: Orders,
+      props: { onlyCurrentOrders: true, ordersTitle: 'Current Orders' }
     },
     {
-      path: '/tasks/new',
-      name: 'NewTask',
-      component: Task,
+      path: '/orders/new',
+      name: 'NewOrder',
+      component: Order,
       props: { id: -1 }
     },
     {
-      path: '/tasks/:id',
-      name: 'Task',
-      component: Task,
+      path: '/orders/:id',
+      name: 'Order',
+      component: Order,
       props: route => ({ id: parseInt(route.params.id) })    
     },
     {

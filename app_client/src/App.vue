@@ -5,19 +5,21 @@ import { useUserStore } from "./stores/user.js"
 import { useProjectsStore } from "./stores/projects.js"
 
 const router = useRouter()  
+const axios = inject("axios")
 const toast = inject("toast")
 const userStore = useUserStore()
 const projectsStore = useProjectsStore()
 
+
 const buttonSidebarExpand = ref(null)
 
 const logout = async () => {
-  if (await userStore.logout()) {
-    toast.success("User has logged out of the application.")
-    clickMenuOption()
-    router.push({name: 'home'})
-  } else {
-    toast.error("There was a problem logging out of the application!")
+  try {
+    await axios.post('logout')
+    toast.success('User has logged out of the application.')
+    delete axios.defaults.headers.common.Authorization
+  } catch (error) {
+    toast.error('There was a problem logging out of the application!')
   }
 }
 
@@ -111,7 +113,7 @@ const clickMenuOption = () => {
                 <a class="dropdown-item" @click.prevent="logout">
                   <i class="bi bi-arrow-right"></i>Logout
                 </a>
-              </li>
+            </li>
             </ul>
           </li>
         </ul>
@@ -138,28 +140,47 @@ const clickMenuOption = () => {
             <li class="nav-item">
               <router-link
                 class="nav-link"
-                :class="{ active: $route.name === 'CurrentTasks' }"
-                :to="{ name: 'CurrentTasks' }"
+                :class="{ active: $route.name === 'CurrentOrders' }"
+                :to="{ name: 'CurrentOrders' }"
                 @click="clickMenuOption"
               >
                 <i class="bi bi-list-stars"></i>
-                Current Tasks
+                Current Orders
               </router-link>
             </li>
             <li class="nav-item d-flex justify-content-between align-items-center pe-3">
               <router-link
                 class="nav-link w-100 me-3"
-                :class="{ active: $route.name === 'Tasks' }"
-                :to="{ name: 'Tasks' }"
+                :class="{ active: $route.name === 'Orders' }"
+                :to="{ name: 'Orders' }"
                 @click="clickMenuOption"
               >
                 <i class="bi bi-list-check"></i>
-                Tasks
+                Orders
               </router-link>
               <router-link
                 class="link-secondary"
-                :to="{ name: 'NewTask' }"
-                aria-label="Add a new task"
+                :to="{ name: 'NewOrder' }"
+                aria-label="Add a new Order"
+                @click="clickMenuOption"
+              >
+                <i class="bi bi-xs bi-plus-circle"></i>
+              </router-link>
+            </li>
+            <li class="nav-item d-flex justify-content-between align-items-center pe-3">
+              <router-link
+                class="nav-link w-100 me-3"
+                :class="{ active: $route.name === 'PublicBoards' }"
+                :to="{ name: 'PublicBoards' }"
+                @click="clickMenuOption"
+              >
+                <i class="bi bi-list-check"></i>
+                Public Board
+              </router-link>
+              <router-link
+                class="link-secondary"
+                :to="{ name: 'NewPublicBoards' }"
+                aria-label="Add a new PublicBoards"
                 @click="clickMenuOption"
               >
                 <i class="bi bi-xs bi-plus-circle"></i>
@@ -168,12 +189,12 @@ const clickMenuOption = () => {
             <li class="nav-item">
               <router-link
                 class="nav-link"
-                :class="{ active: $route.name === 'Projects' }"
-                :to="{ name: 'Projects' }"
+                :class="{ active: $route.name === 'kitchens' }"
+                :to="{ name: 'kitchens' }"
                 @click="clickMenuOption"
               >
                 <i class="bi bi-files"></i>
-                Projects
+                kitchens
               </router-link>
             </li>
             <li class="nav-item">
@@ -196,7 +217,7 @@ const clickMenuOption = () => {
             </li>
           </ul>
 
-          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+          <!--<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
               v-if="userStore.user">
             <span>My Projects</span>
             <router-link
@@ -207,8 +228,8 @@ const clickMenuOption = () => {
             >
               <i class="bi bi-xs bi-plus-circle"></i>
             </router-link>
-          </h6>
-          <ul class="nav flex-column mb-2">
+          </h6> -->
+          <!--<ul class="nav flex-column mb-2">
             <li class="nav-item" v-for="prj in projectsStore.myInprogressProjects" :key="prj.id">
               <router-link
                 class="nav-link w-100 me-3"
@@ -222,7 +243,7 @@ const clickMenuOption = () => {
                 {{ prj.name }}
               </router-link>
             </li>
-          </ul>
+          </ul>-->
 
           <div class="d-block d-md-none">
             <h6
