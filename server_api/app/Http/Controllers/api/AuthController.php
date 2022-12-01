@@ -6,29 +6,24 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-const PASSPORT_SERVER_URL = "http://server_api.test";
-const CLIENT_ID = 2;
-const CLIENT_SECRET = 'dmim4mbOcsF3QAZ6VJoYQTru40WUevsSxap51C7v';
-
 class AuthController extends Controller
 {
     private function passportAuthenticationData($username, $password) {
-       return [
-           'grant_type' => 'password',
-           'client_id' => CLIENT_ID,
-           'client_secret' => CLIENT_SECRET,
-           'username' => $username,
-           'password' => $password,
-           'scope' => ''
-       ];
+        return [
+            'grant_type' => 'password',
+            'client_id' => config('app.passport_client_id'),
+            'client_secret' => config('app.passport_client_secret'),
+            'username' => $username,
+            'password' => $password,
+            'scope' => ''
+        ];
     }
 
     public function login(Request $request)
     {
         try {
-            request()->request->add($this->passportAuthenticationData($request->username,
-            $request->password));
-            $request = Request::create(PASSPORT_SERVER_URL . '/oauth/token', 'POST');
+            request()->request->add($this->passportAuthenticationData($request->username, $request->password));
+            $request = Request::create(config('app.passport_url') . '/oauth/token', 'POST');
             $response = Route::dispatch($request);
             $errorCode = $response->getStatusCode();
             $auth_server_response = json_decode((string) $response->content(), true);
@@ -38,6 +33,7 @@ class AuthController extends Controller
             return response()->json('Authentication has failed!', 401);
         }
     }
+
 
     public function logout(Request $request)
     {
