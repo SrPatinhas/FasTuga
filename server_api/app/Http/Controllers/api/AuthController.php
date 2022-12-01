@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Route;
 class AuthController extends Controller
 {
     private function passportAuthenticationData($username, $password) {
-       return [
-           'grant_type' => 'password',
-           'client_id' => config('app.passport_client_id'),
-           'client_secret' => config('app.passport_client_secret'),
-           'username' => $username,
-           'password' => $password,
-           'scope' => ''
-       ];
+        return [
+            'grant_type' => 'password',
+            'client_id' => config('app.passport_client_id'),
+            'client_secret' => config('app.passport_client_secret'),
+            'username' => $username,
+            'password' => $password,
+            'scope' => ''
+        ];
     }
 
     public function login(Request $request)
@@ -33,6 +33,7 @@ class AuthController extends Controller
             return response()->json('Authentication has failed!', 401);
         }
     }
+
 
     public function logout(Request $request)
     {
