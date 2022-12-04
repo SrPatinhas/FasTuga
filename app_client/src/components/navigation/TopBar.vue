@@ -1,25 +1,3 @@
-<script setup>
-	import {useRouter, RouterLink} from "vue-router"
-	import {inject} from "vue"
-	import {useUserStore} from "../../stores/user.js"
-	import {useProjectsStore} from "../../stores/projects.js"
-
-	const router = useRouter()
-	const axios = inject("axios")
-	const toast = inject("toast")
-	const userStore = useUserStore()
-	const projectsStore = useProjectsStore()
-
-	const logout = async () => {
-		if (await userStore.logout()) {
-			toast.success('User has logged out of the application.')
-			router.push({name: 'home'})
-		} else {
-			toast.error('There was a problem logging out of the application!')
-		}
-	}
-</script>
-
 <template>
 	<nav class="navbar navbar-expand-lg fixed-top flex-md-nowrap shadow-sm">
 		<div class="container">
@@ -55,6 +33,16 @@
 						<router-link class="nav-link" :class="{ active: $route.name === 'Login' }" :to="{ name: 'Login' }">
 							<i class="bi-box-arrow-in-right"></i>
 							Login
+						</router-link>
+					</li>
+					<li class="nav-item" v-show="userStore.user">
+						<router-link class="nav-link position-relative" :class="{ active: $route.name === 'Cart' }" :to="{ name: 'Cart' }">
+							{{ orderStore.totalOrderCost }}
+							<i class="bi bi-bag"></i>
+							<span class="badge">
+								{{ orderStore.totalItems }}
+								<span class="visually-hidden">items on cart</span>
+							</span>
 						</router-link>
 					</li>
 					<li class="dropdown" v-show="userStore.user">
@@ -123,4 +111,25 @@
 		</div>
 	</nav>
 </template>
-  
+
+<script setup>
+	import {useRouter, RouterLink} from "vue-router"
+	import {inject} from "vue"
+	import {useUserStore} from "../../stores/user.js"
+	import {useOrdersStore} from "../../stores/order.js";
+
+	const router = useRouter()
+	const axios = inject("axios")
+	const toast = inject("toast")
+	const userStore = useUserStore()
+	const orderStore = useOrdersStore();
+
+	const logout = async () => {
+		if (await userStore.logout()) {
+			toast.success('User has logged out of the application.')
+			router.push({name: 'home'})
+		} else {
+			toast.error('There was a problem logging out of the application!')
+		}
+	}
+</script>

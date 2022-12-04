@@ -1,10 +1,8 @@
 import {ref, computed, inject} from 'vue'
 import {defineStore} from 'pinia'
 import avatarNoneUrl from '@/assets/avatar-none.png'
-import {useProjectsStore} from "./projects.js"
 
 export const useUserStore = defineStore('user', () => {
-	//const projectsStore = useProjectsStore()
 	const socket = inject("socket")
 	const axios = inject('axios')
 	const toast = inject("toast")

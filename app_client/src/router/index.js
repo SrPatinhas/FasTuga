@@ -8,6 +8,8 @@ import Publicboard from "../views/Board.vue";
 // import Publicboard from "../components/publicboard/Publicboard.vue";
 import Menus from "../views/Menu.vue";
 // import Menus from "../components/menu/Menus.vue";
+import MenuDetail from "../views/MenuDetail.vue";
+import Cart from "../views/Cart.vue";
 
 // protected
 import Dashboard from "../views/Dashboard.vue";
@@ -17,13 +19,10 @@ import Employee from "../views/Employee.vue";
 
 import Login from "../components/auth/Login.vue";
 import ChangePassword from "../components/auth/ChangePassword.vue";
-import Orders from "../components/order/Orders.vue";
 import Publicboards from "../components/publicboard/Publicboards.vue";
 import Users from "../components/users/Users.vue";
 import User from "../components/users/User.vue";
 import Kitchen from "../components/kitchen/Kitchen.vue";
-import Menu from "../components/menu/Menu.vue";
-import Order from "../components/order/Order.vue";
 import RouteRedirector from "../components/global/RouteRedirector.vue";
 
 /*OK-menu  OK-orders  OK-public-board  OK-kitchen  OK-users */
@@ -80,9 +79,14 @@ const router = createRouter({
 		},
 		{
 			path: '/menus/:id',
-			name: 'Menu',
-			component: Menu,
+			name: 'MenuDetail',
+			component: MenuDetail,
 			props: route => ({id: parseInt(route.params.id)})
+		},
+		{
+			path: '/cart',
+			name: 'Cart',
+			component: Cart,
 		},
 		{
 			path: '/users',
@@ -95,36 +99,6 @@ const router = createRouter({
 			component: User,
 			//props: true
 			// Replaced with the following line to ensure that id is a number
-			props: route => ({id: parseInt(route.params.id)})
-		},
-		/*{
-		  path: '/projects/:id/tasks',
-		  name: 'ProjectTasks',
-		  component: ProjectTasks,
-		  props: route => ({ id: parseInt(route.params.id) })
-		},
-		{
-		  path: '/projects/:id/tasks/new',
-		  name: 'NewTaskOfProject',
-		  component: Task,
-		  props: route => ({ id:-1, fixedProject:  parseInt(route.params.id) })
-		},*/
-		{
-			path: '/orders/current',
-			name: 'CurrentOrders',
-			component: Orders,
-			props: {onlyCurrentOrders: true, ordersTitle: 'Current Orders'}
-		},
-		{
-			path: '/orders/new',
-			name: 'NewOrder',
-			component: Order,
-			props: {id: -1}
-		},
-		{
-			path: '/orders/:id',
-			name: 'Order',
-			component: Order,
 			props: route => ({id: parseInt(route.params.id)})
 		},
 		{
