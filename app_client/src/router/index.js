@@ -16,6 +16,7 @@ import OrderDetail from "../views/OrderDetail.vue";
 import Dashboard from "../views/Dashboard.vue";
 import Kitchens from "../views/Kitchen.vue";
 import Employee from "../views/Employee.vue";
+import Orders from "../views/Orders.vue";
 
 import Login from "../components/auth/Login.vue";
 import Registration from "../components/auth/Registration.vue";
@@ -77,6 +78,11 @@ const router = createRouter({
 			path: '/dashboard',
 			name: 'Dashboard',
 			component: Dashboard
+		},
+		{
+			path: '/orders',
+			name: 'Orders',
+			component: Orders
 		},
 		{
 			path: '/kitchens/current',

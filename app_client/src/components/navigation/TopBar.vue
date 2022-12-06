@@ -18,7 +18,7 @@
 						<router-link class="nav-link" :class="{ active: $route.name === 'Menus' }"  :to="{ name: 'Menus' }">Menu</router-link>
 					</li>
 					<li class="nav-item" v-show="userStore.user">
-						<router-link class="nav-link" :to="{ name: 'Reports' }">Orders</router-link>
+						<router-link class="nav-link" :to="{ name: 'Orders' }">Orders</router-link>
 					</li>
 				</ul>
 
