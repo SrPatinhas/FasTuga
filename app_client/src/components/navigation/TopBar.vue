@@ -12,7 +12,7 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item">
-						<router-link class="nav-link" :class="{ active: $route.name === 'Dashboard' }" :to="{ name: 'Dashboard' }">Dashboard</router-link>
+						<router-link class="nav-link" :class="{ active: $route.name === 'Dashboard' }" :to="{ name: 'Dashboard' }">Public Board</router-link>
 					</li>
 					<li class="nav-item">
 						<router-link class="nav-link" :class="{ active: $route.name === 'Menus' }"  :to="{ name: 'Menus' }">Menu</router-link>
