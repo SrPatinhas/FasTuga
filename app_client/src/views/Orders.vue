@@ -14,8 +14,24 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content rounded-3 shadow">
       <div class="modal-body p-4 text-center">
-        <h5 class="mb-0">Enable this setting?</h5>
-        <p class="mb-0">You can always change your mind in your account settings.</p>
+        <span>#1</span>
+        <span style="color:#FF0000">&emsp; CANCELLED</span>
+        <p>2022/12/12 - 20:00</p>
+        <div class="description">
+          <div class="row">
+            <div class="column">
+            <b>Method:</b><p>Card</p>
+            <b>Price:</b>&nbsp<p>18€</p>
+            </div>
+            <div class="column">
+            <b>Paid:</b>&nbsp<p>20€</p>
+            <b>Employee:</b>&nbsp<p>Jéssica Grácio</p>
+            </div>
+            <div class="column">
+            <b>Points:</b>&nbsp<p>5</p>
+            </div>
+            </div>
+      </div>
       </div>
       <div class="modal-footer flex-nowrap p-0">
         <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end"><strong>Yes, enable</strong></button>
@@ -122,6 +138,10 @@ th, td {
 
 tr:nth-child(even) {
   background-color: #f2f2f2;
+}
+
+.description{
+  text-align: left;
 }
 </style>
   
