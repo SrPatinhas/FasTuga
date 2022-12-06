@@ -46,40 +46,27 @@ class AuthController extends Controller
 
     public function register(RegisterValidationForm $request)
     {
-        $registration = $request->only('fullname', 'password', 'email', 'photo_url', 'password_confirmation', 'type', 'address', 'phone', 'nif');
+        $registration = $request->only('name', 'password', 'email', 'photo_url', 'password_confirmation', 'type');
 
         $transation_result = DB::transaction(function () use ($registration) {
             $user = User::create([
-                'name' => $registration['fullname'],
+                'name' => $registration['name'],
                 'password' => Hash::make($registration['password']),
                 'email' => $registration['email'],
                 'photo_url' => isset($registration['photo_url']) ? $registration['photo_url'] : null
             ]);
-
             $customer = Customer::create([
-                'id' => $user->id,
-                'address' => $registration['address'],
-                'nif' => $registration['nif'],
-                'phone' => $registration['phone']
+                'id' => $user->id
             ]);
-
         });
 
-
-
         $user = User::where('email', $registration['email'])->first();
-
         $avatar = $request->file('photo');
 
         if($avatar != null){
-
             $filename = Storage::putFileAs('public/fotos', $request->photo, $user->id . time() . '.' . $avatar->getClientOriginalExtension());
-
-            //devolvia não só o nome mas também o caminho, então removemos...
             $filename = substr($filename, strrpos($filename, '/')+1, strlen($filename));
-
             $user->photo_url = $filename;
-
             $user->save();
         }
 
@@ -88,11 +75,11 @@ class AuthController extends Controller
             201
         );
     }
-    
+
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['fullname'],
+            'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password'])
         ]);
