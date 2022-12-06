@@ -147,10 +147,10 @@ router.beforeEach((to, from, next) => {
 		next()
 		return
 	}
-	if (!userStore.user) {
+	/*if (!userStore.user) {
 		next({name: 'Login'})
 		return
-	}
+	}*/
 	if (to.name == 'Reports') {
 		if (userStore.user.type != 'A') {
 			next({name: 'home'})

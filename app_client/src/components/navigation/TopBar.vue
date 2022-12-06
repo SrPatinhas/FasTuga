@@ -24,7 +24,7 @@
 
 				<ul class="navbar-nav">
 					<li class="nav-item" v-show="!userStore.user">
-						<router-link class="nav-link" :class="{ active: $route.name === 'Login' }" :to="{ name: 'Login' }">
+						<router-link class="nav-link" :class="{ active: $route.name === 'Registration' }" :to="{ name: 'Registration' }">
 							<i class="bi-person-check-fill"></i>
 							Register
 						</router-link>
