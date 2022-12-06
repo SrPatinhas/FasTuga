@@ -1,263 +1,93 @@
-<template>
-<div class="container">
-	<header>
-		<h1>
-			<a href="#">
-				<img src="http://tfgms.com/sandbox/dailyui/logo-1.png" alt="Authentic Collection">
-			</a>
-		</h1>
-	</header>
-	<h1 class="text-center">Register</h1>
-	<form class="registration-form">
-		<label class="col-one-half">
-			<span class="label-text">First Name</span>
-			<input type="text" name="firstName">
-		</label>
-		<label class="col-one-half">
-			<span class="label-text">Last Name</span>
-			<input type="text" name="lastName">
-		</label>
-		<label>
-			<span class="label-text">Email</span>
-			<input type="text" name="email">
-		</label>
-		<label class="password">
-			<span class="label-text">Password</span>
-			<button class="toggle-visibility" title="toggle password visibility" tabindex="-1">
-				<span class="glyphicon glyphicon-eye-close"></span>
-			</button>
-			<input type="password" name="password">
-		</label>
-		<label class="checkbox">
-			<input type="checkbox" name="newsletter">
-			<span>Sign me up for the weekly newsletter.</span>
-		</label>
-		<div class="text-center">
-			<button class="submit" name="register">Sign Me Up</button>
-		</div>
-	</form>
-</div>
-</template>
+<script setup>
+import {ref, inject} from 'vue'
+import {useRouter} from 'vue-router'
+//
 
-<script>
-  import validations from "@/utils/validations";
-  export default {
-    data() {
-      return {
-        showPassword: true,
-        userInfo: {
-          email: '',
-          password: ''
-        },
-        ...validations
-      }
-    },
-    props: ["submitForm", "buttonText", "hasName"]
-  }
+const router = useRouter()
+const axios = inject('axios')
+const toast = inject('toast')
+//const userStore = useUserStore()
+
+const credentials = ref({
+	name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    type: 'C',
+    photo: null
+})
+
+const emit = defineEmits(['registration'])
+
+	const registration=async() => {
+		const data = new FormData()
+		
+            data.append('photo', credentials.value.photo)
+            data.append('email', credentials.value.email)
+            data.append('name', credentials.value.name)
+            data.append('password', credentials.value.password)
+            data.append('type', credentials.value.type)
+			data.append('password_confirmation', credentials.value.password_confirmation)
+           /* if(!this.$store.state.user){
+                data.append('password_confirmation', credentials.value.password_confirmation)
+            }*/
+            this.$emit('registration', data)
+            /*credentials.value.password = '';
+            credentials.value.password_confirmation = '';*/
+	}
+   /* mounted() {
+        if(this.$store.state.user){
+            this.inputForm.fullname = this.$store.state.user.name;
+            this.inputForm.email = this.$store.state.user.email;
+            this.inputForm.type = this.$store.state.user.type;
+			this.inputForm.password = '';
+            this.inputForm.password_confirmation = '';
+        }
+    }*/
 </script>
 
-<style lang="scss" scoped>
-@import url(https://fonts.googleapis.com/css?family=Cookie|Raleway:300,700,400);
-*{
-	box-sizing: border-box;
-	font-size: 1em;
-	margin: 0;
-	padding: 0;
-}
-body{
-	background: url('http://tfgms.com/sandbox/dailyui/bg-1.jpg') center no-repeat;
-	background-size: cover;
-	color: #333;
-	font-size: 18px;
-	font-family: 'Raleway', sans-serif;
-}
-.container{
-	border-radius: 0.5em;
-	box-shadow: 0 0 1em 0 rgba(51,51,51,0.25);
-	display: block;
-	max-width: 480px;
-	overflow: hidden;
-	-webkit-transform: translate(-50%, -50%);
-	-ms-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-	padding: 2em;
-	position: absolute;
-		top: 50%;
-		left: 50%;
-		z-index: 1;
-	width: 98%;
-}
-.container:before{
-	background: url('http://tfgms.com/sandbox/dailyui/bg-1.jpg') center no-repeat;
-	background-size: cover;
-	content: '';
-	-webkit-filter: blur(10px);
-	filter: blur(10px);
-	height: 100vh;
-	position: absolute;
-		top: 50%;
-		left: 50%;
-		z-index: -1;
-	-webkit-transform: translate(-50%, -50%);
-	-ms-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-	width: 100vw;
-}
-.container:after{
-	background: rgba(255,255,255,0.6);
-	content: '';
-	display: block;
+<template>
+<div class="col-md-6 pt-4 mt-3 mt-md-0">
+            <h2 class="h4 mb-3">No account? Sign up</h2>
+            <p class="fs-sm text-muted mb-4">Create account to enjoy earning points.</p>
+            <form class="needs-validation" novalidate="">
+              <div class="row gx-4 gy-3">
+                <div class="col-sm-6">
+                  <label class="form-label" for="reg-fn">Name</label>
+                  <input class="form-control" type="text" required v-model="credentials.name"  id="reg-fn">
+                  <div class="invalid-feedback">Please enter your name!</div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="reg-email">E-mail Address</label>
+                  <input class="form-control" type="email" required v-model="credentials.email"  id="reg-email">
+                  <div class="invalid-feedback">Please enter valid email address!</div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="reg-password">Password</label>
+                  <input class="form-control" type="password" required v-model="credentials.password" id="reg-password">
+                  <div class="invalid-feedback">Please enter password!</div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="reg-password-confirm">Confirm Password</label>
+                  <input class="form-control" type="password" required v-model="credentials.password_confirmation" id="reg-password-confirm">
+                  <div class="invalid-feedback">Passwords do not match!</div>
+                </div>
+                <div class="col-12 text-end">
+                  <button type="button" value="Sign Up" class="btn btn-primary" @click="registration">Sign Up<i class="ci-user me-2 ms-n1"></i></button>
+                </div>
+              </div>
+            </form>
+          </div>
+</template>
+
+<style scoped>
+.col-md-6pt-4mt-3mt-md-0{
 	height: 100%;
-	position: absolute;
-		top: 0;
-		left: 0;
-		z-index: -1;
-	width: 100%;
-}
-form button.submit{
-	background: rgba(255,255,255,0.25);
-	border: 1px solid #333;
-	line-height: 1em;
-	padding: 0.5em 0.5em;
-	-webkit-transition: all 0.25s;
-	transition: all 0.25s;
-}
-form button:hover,
-form button:focus,
-form button:active,
-form button.loading{
-	background: #333;
-	color: #fff;
-	outline: none;
-}
-form button.success{
-	background: #27ae60;
-	border-color: #27ae60; 
-	color: #fff;
-}
-@-webkit-keyframes spin{
-	from{ transform: rotate(0deg); }
-	to{ transform: rotate(360deg); }
-}
-@keyframes spin{
-	from{ transform: rotate(0deg); }
-	to{ transform: rotate(360deg); }
-}
-form button span.loading-spinner{
-	-webkit-animation: spin 0.5s linear infinite;
-	animation: spin 0.5s linear infinite;
-	border: 2px solid #fff;
-	border-top-color: transparent;
-	border-radius: 50%;
-	display: inline-block;
-	height: 1em;
-	width: 1em;
-}
-
-form label{
-	border-bottom: 1px solid #333;
-	display: block;
-	font-size: 1.25em;
-	margin-bottom: 0.5em;
-	-webkit-transition: all 0.25s;
-	transition: all 0.25s;
-}
-form label.col-one-half{
-	float: left;
-	width: 50%;
-}
-form label.col-one-half:nth-of-type(even){
-	border-left: 1px solid #333;
-	padding-left: 0.25em;
-}
-form label input{
-	background: none;
-	border: none;
-	line-height: 1em;
-	font-weight: 300;
-	padding: 0.125em 0.25em;
-	width: 100%;
-}
-form label input:focus{
-	outline: none;
-}
-form label input:-webkit-autofill{
-	background-color: transparent !important;
-}
-form label span.label-text{
-	display: block;
-	font-size: 0.5em;
-	font-weight: bold;
-	padding-left: 0.5em;
-	text-transform: uppercase;
-	-webkit-transition: all 0.25s;
-	transition: all 0.25s;
-}
-form label.checkbox{
-	border-bottom: 0;
-	text-align: center;
-}
-form label.checkbox input{
-	display: none;
-}
-form label.checkbox span{
-	font-size: 0.5em;
-}
-form label.checkbox span:before{
-	content: '\e157';
-	display: inline-block;
-	font-family: 'Glyphicons Halflings';
-	font-size: 1.125em;
-	padding-right: 0.25em;
-	position: relative;
-		top: 1px;
-}
-form label.checkbox input:checked + span:before{content: '\e067';}
-form label.invalid{border-color: #c0392b !important;}
-form label.invalid span.label-text{color: #c0392b;}
-form label.password{position: relative;}
-form label.password button.toggle-visibility{
-	background: none;
-	border: none;
-	cursor: pointer;
-	font-size: 0.75em;
-	line-height: 1em;
-	position: absolute;
-		top: 50%;
-		right: 0.5em;
-	text-align: center;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-	-webkit-transition: all 0.25s;
-	transition: all 0.25s;
-}
-form label.password button.toggle-visibility:hover,
-form label.password button.toggle-visibility:focus,
-form label.password button.toggle-visibility:active{
-	color: #000;
-	outline: none;
-}
-form label.password button.toggle-visibility span{vertical-align: middle;}
-
-h1{
-	font-size: 3em;
-	margin: 0 0 0.5em 0;
-	text-align: center;
-	font-family: 'Cookie', cursive;
-}
-h1 img{
-	height: auto;
-	margin: 0 auto;
-	max-width: 240px;
-	width: 100%;
-}
-html{
-	font-size: 18px;
-	height: 100%;
-}
-
-.text-center{
-	text-align: center;
+	display: flex;
+	align-items: center;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	justify-content: center;
 }
 </style>
+
