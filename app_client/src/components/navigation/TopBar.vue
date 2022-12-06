@@ -35,8 +35,8 @@
 							Login
 						</router-link>
 					</li>
-					<li class="nav-item" v-show="userStore.user">
-						<router-link class="nav-link position-relative" :class="{ active: $route.name === 'Cart' }" :to="{ name: 'Cart' }">
+					<li class="nav-item">
+						<router-link class="nav-link position-relative" :class="{ active: $route.name === 'Bag' }" :to="{ name: 'Bag' }">
 							{{ orderStore.totalOrderCost }}
 							<i class="bi bi-bag"></i>
 							<span class="badge">

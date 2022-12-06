@@ -94,3 +94,23 @@ nav.navbar img.avatar-img {
 .product-title > a:hover {
   color: #fe696a;
 }
+
+.empty-menu {
+  width: 150px;
+}
+
+.form-check-input:checked[type=radio] {
+  background-image: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e);
+}
+.form-check-input:checked {
+  background-color: #fe696a;
+  border-color: #fe696a;
+}
+.form-check-input[type=radio] {
+  border-radius: 50%;
+}
+.form-check-input:focus {
+  border-color: rgba(var(--bs-primary-rgb), 0.35);
+  outline: 0;
+  box-shadow: 0 0 0 0 rgb(254 105 106 / 25%);
+}

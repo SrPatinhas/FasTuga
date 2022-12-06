@@ -8,13 +8,13 @@ import Publicboard from "../views/Board.vue";
 // import Publicboard from "../components/publicboard/Publicboard.vue";
 import Menus from "../views/Menu.vue";
 // import Menus from "../components/menu/Menus.vue";
-import MenuDetail from "../views/MenuDetail.vue";
 import Cart from "../views/Cart.vue";
+import Checkout from "../views/Checkout.vue";
+import OrderDetail from "../views/OrderDetail.vue";
 
 // protected
 import Dashboard from "../views/Dashboard.vue";
 import Kitchens from "../views/Kitchen.vue";
-// import Kitchens from "../components/kitchen/Kitchens.vue";
 import Employee from "../views/Employee.vue";
 
 import Login from "../components/auth/Login.vue";
@@ -41,6 +41,7 @@ const router = createRouter({
 			component: RouteRedirector,
 			props: route => ({redirectTo: route.params.redirectTo})
 		},
+		// Account for App
 		{
 			path: '/login',
 			name: 'Login',
@@ -52,14 +53,24 @@ const router = createRouter({
 			component: ChangePassword
 		},
 		{
+			path: '/users',
+			name: 'Users',
+			component: Users,
+		},
+		{
+			path: '/users/:id',
+			name: 'User',
+			component: User,
+			//props: true
+			// Replaced with the following line to ensure that id is a number
+			props: route => ({id: parseInt(route.params.id)})
+		},
+
+		// For Restaurant employees/kitchen
+		{
 			path: '/dashboard',
 			name: 'Dashboard',
 			component: Dashboard
-		},
-		{
-			path: '/menus',
-			name: 'Menus',
-			component: Menus,
 		},
 		{
 			path: '/kitchens/current',
@@ -77,43 +88,40 @@ const router = createRouter({
 			name: 'Publicboards',
 			component: Publicboards,
 		},
+
+		// Display restaurant Items
 		{
-			path: '/menus/:id',
-			name: 'MenuDetail',
-			component: MenuDetail,
-			props: route => ({id: parseInt(route.params.id)})
+			path: '/menus',
+			name: 'Menus',
+			component: Menus,
 		},
+		// Check bag with items
 		{
-			path: '/cart',
-			name: 'Cart',
+			path: '/bag',
+			name: 'Bag',
 			component: Cart,
 		},
+		// Pay Order
 		{
-			path: '/users',
-			name: 'Users',
-			component: Users,
-		},
-		{
-			path: '/users/:id',
-			name: 'User',
-			component: User,
-			//props: true
-			// Replaced with the following line to ensure that id is a number
+			path: '/checkout',
+			name: 'Checkout',
+			component: Checkout,
 			props: route => ({id: parseInt(route.params.id)})
 		},
+		// After buy (detail)
+		{
+			path: '/order/:id',
+			name: 'OrderDetail',
+			component: OrderDetail,
+			props: route => ({id: parseInt(route.params.id)})
+		},
+
 		{
 			path: '/reports',
 			name: 'Reports',
-			component: () => import('../views/AboutView.vue')
+			component: () => import('../views/Board.vue')
 		},
-		{
-			path: '/about',
-			name: 'about',
-			// route level code-splitting
-			// this generates a separate chunk (About.[hash].js) for this route
-			// which is lazy-loaded when the route is visited.
-			component: () => import('../views/AboutView.vue')
-		}
+
 	]
 })
 
