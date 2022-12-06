@@ -5,45 +5,72 @@
 <div class="row">
   <div class="column">
 <h3>Waiting list</h3>
-<table class="table-fill">
-<tbody class="table-hover">
-<tr>
-<td class="text-left">#4</td>
-</tr>
-<tr>
-<td class="text-left">#5</td>
-</tr>
-<tr>
-<td class="text-left">#6</td>
-</tr>
-</tbody>
-</table>
-</div>
+<ul class="list-group">
+			<li class="list-group-item d-flex justify-content-between align-items-start">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold h3">
+						<span class="h5 text-muted">#</span>4
+					</div>
+				</div>
+				<span class="text-muted">13:32</span>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold h3">
+						<span class="h5 text-muted">#</span>5
+					</div>
+				</div>
+				<span class="text-muted">13:35</span>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold h3">
+						<span class="h5 text-muted">#</span>6
+					</div>
+				</div>
+				<span class="text-muted">13:35</span>
+      </li>
+		</ul>
+	</div>
 
   <div class="column">
 <h3>Orders to make</h3>
-<table class="table-fill">
-<tbody class="table-hover">
-<tr>
-<td class="text-left">#2</td>
-</tr>
-<tr>
-<td class="text-left">#3</td>
-</tr>
-</tbody>
-</table>
-</div>
+<ul class="list-group">
+			<li class="list-group-item d-flex justify-content-between align-items-start">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold h3">
+						<span class="h5 text-muted">#</span>2
+					</div>
+				</div>
+				<span class="text-muted">13:32</span>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold h3">
+						<span class="h5 text-muted">#</span>3
+					</div>
+				</div>
+				<span class="text-muted">13:35</span>
+      </li>
+		</ul>
+	</div>
 
   <div class="column">
 <h3>Finished orders</h3>
-<table class="table-fill">
-<tbody class="table-hover">
-<tr>
-<td class="text-left">#1</td>
-</tr>
-</tbody>
-</table>
-</div>
+<ul class="list-group">
+			<li class="list-group-item d-flex justify-content-between align-items-start">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold h3">
+						<span class="h5 text-muted">#</span>1
+					</div>
+				</div>
+				<span class="text-muted">13:32</span>
+      </li>
+		</ul>
+	</div>
 </div>
 </template>
 
@@ -83,6 +110,10 @@ th, td {
 
 tr:nth-child(even) {
   background-color: #f2f2f2;
+}
+
+body{
+	background: gray;
 }
 </style>
   
