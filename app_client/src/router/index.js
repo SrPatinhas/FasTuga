@@ -18,6 +18,7 @@ import Kitchens from "../views/Kitchen.vue";
 import Employee from "../views/Employee.vue";
 
 import Login from "../components/auth/Login.vue";
+import Registration from "../components/auth/Registration.vue";
 import ChangePassword from "../components/auth/ChangePassword.vue";
 import Publicboards from "../components/publicboard/Publicboards.vue";
 import Users from "../components/users/Users.vue";
@@ -46,6 +47,11 @@ const router = createRouter({
 			name: 'Login',
 			component: Login
 		},
+		{
+			path: '/registration',
+			name: 'Registration',
+			component: Registration
+		  },
 		{
 			path: '/password',
 			name: 'ChangePassword',

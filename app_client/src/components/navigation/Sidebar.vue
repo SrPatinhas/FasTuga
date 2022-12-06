@@ -94,8 +94,8 @@
 						</a>
 					</li>
 					<li class="nav-item" v-show="!userStore.user">
-						<router-link class="nav-link" :class="{ active: $route.name === 'Login' }"
-									 :to="{ name: 'Login' }" @click="clickMenuOption">
+						<router-link class="nav-link" :class="{ active: $route.name === 'Registration' }"
+									 :to="{ name: 'Registration' }" @click="clickMenuOption">
 							<i class="bi bi-box-arrow-in-right"></i>
 							Login
 						</router-link>
