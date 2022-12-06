@@ -114,7 +114,7 @@ const login = async () => {
 </section>
 </template>
 
-<style>
+<style scoped>
 html,
 body {
 	height: 100%;

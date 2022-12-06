@@ -9,6 +9,7 @@ export const useOrdersStore = defineStore('orders', () => {
 	const order = ref({
 		id: 0,
 		status: undefined,
+		notes: undefined,
 		items: []
 	});
 	const status = ref([]);
@@ -34,8 +35,27 @@ export const useOrdersStore = defineStore('orders', () => {
 
 	const orderStatus = computed(() => {
 		return status.value.at(-1);
-	})
+	});
 
+	const orderPoints = computed(() => {
+		let totalCost = 0;
+		order.value.items.forEach( item => totalCost += item.price * item.count);
+		const points = totalCost / 10;
+		return Math.floor(points);
+	});
+	//- The registered customer will get
+	//- 1 point for each 10 € spent on one order
+	//- (e.g., orders with total = 20,5€ or total = 29,5€ will get 2 points; total = 9,5€ will get 0 points)
+	//- points are gained on one order only
+	//- values spent on several orders are not accumulated
+	//(if a customer makes 20 orders of 9€ each, he will have 0 points)
+
+	/**
+	 * order notes for kitchen
+	 **/
+	function orderNotes(note) {
+		order.value.notes = note;
+	}
 
 	/**
 	 * add item or quantity to the order
@@ -101,8 +121,8 @@ export const useOrdersStore = defineStore('orders', () => {
 
 	return {
 		order, status,
-		orderItems, totalItems, totalOrderCost, orderStatus,
-		addItemToOrder, updateQuantityItemOnOrder, deleteItemOnOrder, cancelOrder,
+		orderItems, totalItems, totalOrderCost, orderStatus, orderPoints,
+		addItemToOrder, updateQuantityItemOnOrder, deleteItemOnOrder, cancelOrder, orderNotes,
 		completeOrder
 	}
 })
