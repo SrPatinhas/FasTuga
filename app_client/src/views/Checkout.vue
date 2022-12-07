@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3">
 		<router-link class="btn " :to="{ name: 'Bag' }">
 			<i class="bi-chevron-left"></i>
 			Back to bag
@@ -7,7 +7,7 @@
 		<h1 class="h2 text-uppercase text-bold">Checkout</h1>
 		<div class="empty-menu"></div>
 	</div>
-	<div class="rounded-3 shadow-lg mt-4 mb-5">
+	<div class="card border-0 shadow-sm mt-4">
 		<form class="needs-validation px-3 px-sm-4 px-xl-5 pt-sm-1 pb-4 pb-sm-5" novalidate="" @submit.prevent>
 			<div class="row pb-4 pt-3">
 				<div class="col-sm-6 mb-4">
@@ -23,40 +23,56 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-6 mb-4 mb-sm-0">
-					<h2 class="h5 mt-3 pt-4 pb-2">Online payment</h2>
-					<span class="mb-2 d-block">Pay with:</span>
-					<div class="mb-3">
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="payment" id="online_visa" value="visa" v-model="order.payment.type" @change="order.payment.account = ''">
-							<label class="form-check-label" for="online_visa">Visa</label>
+					<h2 class="h5 mt-3 pt-4 pb-2">Order Payment</h2>
+					<div class="accordion accordio-flush shadow-sm rounded-3 mb-4" id="payment-methods">
+						<div class="accordion-item border-bottom">
+							<div class="accordion-header py-3 px-3">
+								<div class="form-check d-table" data-bs-toggle="collapse" data-bs-target="#credit-card" aria-expanded="false">
+									<input class="form-check-input" type="radio" name="license" id="payment-card" value="visa" v-model="order.payment.type" @change="order.payment.account = ''">
+									<label class="form-check-label fw-medium text-dark" for="payment-card">
+										Credit card<i class="bi-credit-card text-muted fs-lg align-middle mt-n1 ms-2"></i>
+									</label>
+								</div>
+							</div>
+							<div class="collapse" id="credit-card" data-bs-parent="#payment-methods" style="">
+								<div class="accordion-body py-2">
+									<input class="form-control bg-image-none mb-3" type="text" v-model="order.payment.account" placeholder="4xxxxxxxxxxxxxxx">
+								</div>
+							</div>
 						</div>
-						<div v-if="order.payment.type == 'visa'">
-							<label class="form-label small" for="fd-phone">Card Number<sup class="text-danger ms-1">*</sup></label>
-							<input class="form-control" type="text" required="" id="fd-phone" v-model="order.payment.account" placeholder="4xxxxxxxxxxxxxxx">
+						<div class="accordion-item border-bottom">
+							<div class="accordion-header py-3 px-3">
+								<div class="form-check d-table collapsed" data-bs-toggle="collapse" data-bs-target="#paypal" aria-expanded="false">
+									<input class="form-check-input" type="radio" name="license" id="payment-paypal" value="paypal" v-model="order.payment.type" @change="order.payment.account = ''">
+									<label class="form-check-label fw-medium text-dark" for="payment-paypal">
+										PayPal<i class="bi-paypal text-muted fs-base align-middle mt-n1 ms-2"></i>
+									</label>
+								</div>
+							</div>
+							<div class="collapse" id="paypal" data-bs-parent="#payment-methods" style="">
+								<div class="accordion-body pt-2">
+									<input class="form-control" type="text" required="" id="fd-phone" v-model="order.payment.account" placeholder="email@email.com">
+								</div>
+							</div>
 						</div>
-					</div>
-					<div class="mb-3">
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="payment" id="online_mbway" value="mbway" v-model="order.payment.type" @change="order.payment.account = ''">
-							<label class="form-check-label" for="online_mbway">MbWay</label>
-						</div>
-						<div v-if="order.payment.type == 'mbway'">
-							<label class="form-label small" for="fd-phone">Phone number<sup class="text-danger ms-1">*</sup></label>
-							<input class="form-control" type="text" required="" id="fd-phone" v-model="order.payment.account" placeholder="9xxxxxxxx">
-						</div>
-					</div>
-					<div class="mb-3">
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="payment" id="online_paypal" value="paypal" v-model="order.payment.type" @change="order.payment.account = ''">
-							<label class="form-check-label" for="online_paypal">PayPal</label>
-						</div>
-						<div v-if="order.payment.type == 'paypal'">
-							<label class="form-label small" for="fd-phone">Paypal Email account<sup class="text-danger ms-1">*</sup></label>
-							<input class="form-control" type="text" required="" id="fd-phone" v-model="order.payment.account" placeholder="email@email.com">
+						<div class="accordion-item">
+							<div class="accordion-header py-3 px-3">
+								<div class="form-check d-table collapsed" data-bs-toggle="collapse" data-bs-target="#cash" aria-expanded="false">
+									<input class="form-check-input" type="radio" name="license" id="payment-mbway" value="mbway" v-model="order.payment.type" @change="order.payment.account = ''">
+									<label class="form-check-label fw-medium text-dark" for="payment-mbway">
+										MbWay<i class="bi-qr-code text-muted fs-lg align-middle mt-n1 ms-2"></i>
+									</label>
+								</div>
+							</div>
+							<div class="collapse" id="cash" data-bs-parent="#payment-methods" style="">
+								<div class="accordion-body pt-2">
+									<input class="form-control" type="text" required="" v-model="order.payment.account" placeholder="9xxxxxxxx">
+								</div>
+							</div>
 						</div>
 					</div>
 
-					<button class="btn btn-primary d-block w-100 mt-3" type="submit" :disabled="checkoutDisabled" @click="submitOrder">Complete order</button>
+					<button class="btn btn-primary d-block w-100 mt-3" type="submit" :disabled="checkoutDisabled" @click="submitOrder">Place Order</button>
 				</div>
 				<div class="col-sm-6">
 					<div class="d-fle flex-column h-100 rounded-3 bg-secondary px-3 px-sm-4 py-4">

@@ -29,7 +29,7 @@
 		</div>
 	</div>
 	<div v-else>
-		<div class="bg-light p-5 rounded mt-3">
+		<div class="card border-0 shadow-sm p-5 mt-3">
 			<h1>No items on your bag</h1>
 			<p class="lead">Go to the menu to add items to your bag</p>
 			<router-link class="btn btn-outline-primary" :to="{ name: 'Menus' }">
