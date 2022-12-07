@@ -1,8 +1,13 @@
 <template>
-	<div v-if="orderStore.totalItems > 0">
+	<div v-if="orderStore.totalItems > 0" class="card border-0 shadow-sm px-sm-4 py-4">
 		<!-- Item-->
-		<div v-for="item of orderStore.orderItems" class="d-sm-flex justify-content-between align-items-center mt-3 mb-4 pb-3 border-bottom">
-			<div class="d-block d-sm-flex align-items-center text-center text-sm-start"><a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="#"><img src="img/food-delivery/cart/01.jpg" width="120" alt="Pizza"></a>
+		<div v-for="(item, index) in orderStore.orderItems"
+			 :key="index"
+			 class="d-sm-flex justify-content-between align-items-center" :class="{ 'mt-3': index > 0 && index < orderStore.orderItems.length, 'mb-4 pb-3 border-bottom': index != orderStore.orderItems.length - 1 }">
+			<div class="d-block d-sm-flex align-items-center text-center text-sm-start">
+				<a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="#">
+					<img src="img/food-delivery/cart/01.jpg" width="120" alt="Pizza">
+				</a>
 				<div class="pt-2">
 					<h3 class="product-title fs-base mb-2"><a href="#">{{ item.name }}</a></h3>
 					<div class="fs-sm"><span class="text-muted me-2">Size:</span>Medium</div>
@@ -12,19 +17,19 @@
 			</div>
 			<div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-start" style="max-width: 9rem;">
 				<label class="form-label" for="quantity1">Quantity</label>
-				<div class="d-flex align-items-center gap-2">
-					<button class="btn btn-icon" :disabled="item.count === 1" @click="updateItem(item, -1)">
+				<div class="d-flex align-items-center width-110 justify-content-between">
+					<button class="btn btn-icon btn-small" :disabled="item.count === 1" @click="updateItem(item, -1)">
 						<i class="bi-dash"></i>
 					</button>
-					<span>{{ item.count }}</span>
-					<button class="btn btn-icon" @click="updateItem(item, 1)">
+					<span class="px-2">{{ item.count }}</span>
+					<button class="btn btn-icon btn-small" @click="updateItem(item, 1)">
 						<i class="bi-plus"></i>
 					</button>
 				</div>
-				<button class="btn btn-link px-0 text-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="itemToDelete(item)">
+				<a class="btn btn-link mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="itemToDelete(item)">
 					<i class="ci-close-circle me-2"></i>
 					<span class="fs-sm">Remove</span>
-				</button>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -86,7 +91,3 @@
 		deleteItem.value = {};
 	}
 </script>
-
-<style scoped>
-
-</style>

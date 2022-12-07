@@ -6,7 +6,7 @@
 
 <template>
 	<TopBar />
-	<div class="container mt-5 pt-5">
+	<div class="container mt-5 py-5">
 		<router-view />
 	</div>
 </template>

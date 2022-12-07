@@ -9,7 +9,7 @@
     </div>
 	<div class="row">
 		<!-- Items in cart-->
-		<div class="col-lg-8 col-md-7 pt-sm-2">
+		<div class="col-lg-8 col-md-7 pt-3 pt-sm-4">
 			<cart-list/>
 		</div>
 		<!-- Sidebar-->

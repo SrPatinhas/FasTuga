@@ -149,6 +149,7 @@ body {
   --bs-btn-hover-border-color: transparent;
   --bs-btn-active-color: var(--bs-link-hover-color);
   --bs-btn-active-border-color: transparent;
+  --bs-btn-active-bg: transparent;
   --bs-btn-disabled-color: #7d879c;
   --bs-btn-disabled-border-color: transparent;
   --bs-btn-box-shadow: none;
@@ -215,6 +216,10 @@ fieldset:disabled .btn {
   justify-content: center;
   background: var(--bs-primary);
   color: #fff;
+}
+.btn.btn-icon.btn-small {
+  width: 30px;
+  height: 30px;
 }
 
 .btn.btn-icon:hover {
@@ -352,4 +357,8 @@ fieldset:disabled .btn {
 }
 .input-group .position-absolute {
   z-index: 6;
+}
+
+.width-110{
+  width: 110px;
 }
