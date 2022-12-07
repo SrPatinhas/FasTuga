@@ -15,10 +15,10 @@
 						<router-link class="nav-link" :class="{ active: $route.name === 'Menus' }"  :to="{ name: 'Menus' }">Menu</router-link>
 					</li>
 					<li class="nav-item">
-						<router-link class="nav-link" :class="{ active: $route.name === 'Dashboard' }" :to="{ name: 'Dashboard' }">Public Board</router-link>
+						<router-link class="nav-link" :class="{ active: $route.name === 'PublicBoard' }" :to="{ name: 'PublicBoard' }">Public Board</router-link>
 					</li>
 					<li class="nav-item" v-show="userStore.user">
-						<router-link class="nav-link" :to="{ name: 'Orders' }">Orders</router-link>
+						<router-link class="nav-link" :to="{ name: 'Dashboards' }">Dashboard</router-link>
 					</li>
 				</ul>
 

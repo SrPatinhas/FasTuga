@@ -13,15 +13,14 @@ import Checkout from "../views/Checkout.vue";
 import OrderDetail from "../views/OrderDetail.vue";
 
 // protected
-import Dashboard from "../views/Dashboard.vue";
+import PublicBoard from "../views/PublicBoard.vue";
 import Kitchens from "../views/Kitchen.vue";
 import Employee from "../views/Employee.vue";
-import Orders from "../views/Orders.vue";
+import Dashboards from "../views/Dashboard.vue";
 
 import Login from "../components/auth/Login.vue";
 import Registration from "../components/auth/Registration.vue";
 import ChangePassword from "../components/auth/ChangePassword.vue";
-import Publicboards from "../components/publicboard/Publicboards.vue";
 import Users from "../components/users/Users.vue";
 import User from "../components/users/User.vue";
 import Kitchen from "../components/kitchen/Kitchen.vue";
@@ -75,14 +74,14 @@ const router = createRouter({
 
 		// For Restaurant employees/kitchen
 		{
-			path: '/dashboard',
-			name: 'Dashboard',
-			component: Dashboard
+			path: '/publicBoard',
+			name: 'PublicBoard',
+			component: PublicBoard
 		},
 		{
-			path: '/orders',
-			name: 'Orders',
-			component: Orders
+			path: '/dashboard',
+			name: 'Dashboards',
+			component: Dashboards
 		},
 		{
 			path: '/kitchens/current',
@@ -94,13 +93,7 @@ const router = createRouter({
 			path: '/kitchens',
 			name: 'Kitchens',
 			component: Kitchens,
-		},
-		{
-			path: '/publicboards',
-			name: 'Publicboards',
-			component: Publicboards,
-		},
-
+		},	
 		// Display restaurant Items
 		{
 			path: '/menus',
