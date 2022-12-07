@@ -7,8 +7,6 @@
 <template>
 	<TopBar />
 	<div class="container mt-5 pt-5">
-		<div class="row">
-			<router-view />
-		</div>
+		<router-view />
 	</div>
 </template>

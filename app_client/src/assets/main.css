@@ -5,7 +5,8 @@
   overflow-y: auto;
 }
 nav.navbar {
-  background-color: #ffe9c4;
+  background-color: #ebebeb;
+  box-shadow: 0 0.125rem 0.25rem #9f9b9b;
 }
 nav.navbar img {
   object-fit: contain;
@@ -15,6 +16,11 @@ nav.navbar img.avatar-img {
   margin: 0 10px 0;
   width: 32px;
   height: 32px;
+}
+
+nav.navbar  .nav-link{
+  align-items: center;
+  display: flex;
 }
 
 
@@ -55,8 +61,8 @@ nav.navbar img.avatar-img {
   object-fit: cover;
 }
 .card-item .card-body {
-  box-shadow: 0 0 5px #cdcccc;
-  background-color: #f5f5f5;
+  box-shadow: 0 -1px 7px #ffffff;
+  background-color: #ffffff;
 }
 .card-item .card-text {
   max-height: 50px;
@@ -68,8 +74,8 @@ nav.navbar img.avatar-img {
 }
 
 .nav-item .badge {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   padding: 0;
   font-size: 12px;
   font-weight: 100;
@@ -77,9 +83,9 @@ nav.navbar img.avatar-img {
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background: #f77325;
+  top: 3px;
+  left: 20px;
+  background: var(--bs-primary);
   border-radius: 50%;
 }
 

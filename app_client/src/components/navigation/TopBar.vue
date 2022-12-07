@@ -1,5 +1,5 @@
 <template>
-	<nav class="navbar navbar-expand-lg fixed-top flex-md-nowrap shadow-sm">
+	<nav class="navbar navbar-expand-lg fixed-top flex-md-nowrap">
 		<div class="container">
 			<router-link class="text-dark text-decoration-none col-md-3 col-lg-2 d-flex align-items-center gap-2" :to="{ name: 'home' }">
 				<img src="@/assets/logo.png" alt="" width="38" height="38" class="d-inline-block align-text-top"/>
@@ -12,10 +12,10 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item">
-						<router-link class="nav-link" :class="{ active: $route.name === 'Dashboard' }" :to="{ name: 'Dashboard' }">Public Board</router-link>
+						<router-link class="nav-link" :class="{ active: $route.name === 'Menus' }"  :to="{ name: 'Menus' }">Menu</router-link>
 					</li>
 					<li class="nav-item">
-						<router-link class="nav-link" :class="{ active: $route.name === 'Menus' }"  :to="{ name: 'Menus' }">Menu</router-link>
+						<router-link class="nav-link" :class="{ active: $route.name === 'Dashboard' }" :to="{ name: 'Dashboard' }">Public Board</router-link>
 					</li>
 					<li class="nav-item" v-show="userStore.user">
 						<router-link class="nav-link" :to="{ name: 'Orders' }">Orders</router-link>
@@ -25,24 +25,22 @@
 				<ul class="navbar-nav">
 					<li class="nav-item" v-show="!userStore.user">
 						<router-link class="nav-link" :class="{ active: $route.name === 'Registration' }" :to="{ name: 'Registration' }">
-							<i class="bi-person-check-fill"></i>
 							Register
 						</router-link>
 					</li>
 					<li class="nav-item" v-show="!userStore.user">
 						<router-link class="nav-link" :class="{ active: $route.name === 'Login' }" :to="{ name: 'Login' }">
-							<i class="bi-box-arrow-in-right"></i>
 							Login
 						</router-link>
 					</li>
 					<li class="nav-item">
-						<router-link class="nav-link position-relative" :class="{ active: $route.name === 'Bag' }" :to="{ name: 'Bag' }">
-							{{ orderStore.totalOrderCost }}
-							<i class="bi bi-bag"></i>
+						<router-link class="nav-link position-relative gap-1" :class="{ active: $route.name === 'Bag' }" :to="{ name: 'Bag' }">
+							<i class="fs-5 bi bi bi-bag"></i>
 							<span class="badge">
 								{{ orderStore.totalItems }}
 								<span class="visually-hidden">items on cart</span>
 							</span>
+							{{ orderStore.totalOrderCost }}
 						</router-link>
 					</li>
 					<li class="dropdown" v-show="userStore.user">
