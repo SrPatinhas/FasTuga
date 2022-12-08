@@ -12,12 +12,12 @@
 			<div class="row pb-4 pt-3">
 				<div class="col-sm-6 mb-4">
 					<label class="form-label" for="fd-name">Your name<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="text" required="" id="fd-name" v-model="order.name">
+					<input class="form-control" type="text" required="" id="fd-name" v-model="orderCheckout.name">
 					<div class="invalid-feedback">Please enter your name!</div>
 				</div>
 				<div class="col-sm-6 mb-4">
 					<label class="form-label" for="fd-phone">Phone number<sup class="text-danger ms-1">*</sup></label>
-					<input class="form-control" type="text" required="" id="fd-phone" v-model="order.phone">
+					<input class="form-control" type="text" required="" id="fd-phone" v-model="orderCheckout.phone">
 					<div class="invalid-feedback">Please enter your phone number!</div>
 				</div>
 			</div>
@@ -28,7 +28,7 @@
 						<div class="accordion-item border-bottom">
 							<div class="accordion-header">
 								<div class="d-table accordion-button" data-bs-toggle="collapse" data-bs-target="#credit-card" aria-expanded="false">
-									<input class="form-check-input" type="radio" name="license" id="payment-card" value="visa" v-model="order.payment.type" @change="order.payment.account = ''">
+									<input class="form-check-input" type="radio" name="license" id="payment-card" value="visa" v-model="orderCheckout.payment.type" @change="orderCheckout.payment.account = ''">
 									<label class="form-check-label fw-medium" for="payment-card">
 										<i class="bi-credit-card text-muted fs-lg align-middle mt-n1 ms-2"></i>
 										Credit card
@@ -37,14 +37,14 @@
 							</div>
 							<div class="collapse" id="credit-card" data-bs-parent="#payment-methods">
 								<div class="accordion-body py-2">
-									<input class="form-control bg-image-none mb-3" type="text" v-model="order.payment.account" placeholder="4xxxxxxxxxxxxxxx">
+									<input class="form-control bg-image-none mb-3" type="text" v-model="orderCheckout.payment.account" placeholder="4xxxxxxxxxxxxxxx">
 								</div>
 							</div>
 						</div>
 						<div class="accordion-item border-bottom">
 							<div class="accordion-header">
 								<div class="d-table collapsed accordion-button" data-bs-toggle="collapse" data-bs-target="#paypal" aria-expanded="false">
-									<input class="form-check-input" type="radio" name="license" id="payment-paypal" value="paypal" v-model="order.payment.type" @change="order.payment.account = ''">
+									<input class="form-check-input" type="radio" name="license" id="payment-paypal" value="paypal" v-model="orderCheckout.payment.type" @change="orderCheckout.payment.account = ''">
 									<label class="form-check-label fw-medium" for="payment-paypal">
 										<i class="bi-paypal text-muted fs-base align-middle mt-n1 ms-2"></i>
 										PayPal
@@ -53,14 +53,14 @@
 							</div>
 							<div class="collapse" id="paypal" data-bs-parent="#payment-methods">
 								<div class="accordion-body pt-2">
-									<input class="form-control" type="text" required="" id="fd-phone" v-model="order.payment.account" placeholder="email@email.com">
+									<input class="form-control" type="text" required="" id="fd-phone" v-model="orderCheckout.payment.account" placeholder="email@email.com">
 								</div>
 							</div>
 						</div>
 						<div class="accordion-item border-bottom">
 							<div class="accordion-header">
 								<div class="d-table collapsed accordion-button" data-bs-toggle="collapse" data-bs-target="#cash" aria-expanded="false">
-									<input class="form-check-input" type="radio" name="license" id="payment-mbway" value="mbway" v-model="order.payment.type" @change="order.payment.account = ''">
+									<input class="form-check-input" type="radio" name="license" id="payment-mbway" value="mbway" v-model="orderCheckout.payment.type" @change="orderCheckout.payment.account = ''">
 									<label class="form-check-label fw-medium" for="payment-mbway">
 										<i class="bi-qr-code text-muted fs-lg align-middle mt-n1 ms-2"></i>
 										MbWay
@@ -69,7 +69,7 @@
 							</div>
 							<div class="collapse" id="cash" data-bs-parent="#payment-methods">
 								<div class="accordion-body pt-2">
-									<input class="form-control" type="text" required="" v-model="order.payment.account" placeholder="9xxxxxxxx">
+									<input class="form-control" type="text" required="" v-model="orderCheckout.payment.account" placeholder="9xxxxxxxx">
 								</div>
 							</div>
 						</div>
@@ -82,15 +82,17 @@
 							<div class="collapse" id="points" data-bs-parent="#payment-method">
 								<div class="accordion-body">
 									<div>
-										You currently have<span class="fw-medium">&nbsp;384</span>&nbsp;Reward Points to spend.
+										You currently have<span class="fw-medium">&nbsp;{{ userStore.availablePoints }}</span>&nbsp;Reward Points to spend.
 										<div class="align-items-center d-flex mb-3 small text-muted" role="alert">
 											<i class="mr-2 bi-info-circle"></i>
 											<div>For each 10 points, you will get a 5€ discount</div>
 										</div>
 									</div>
-									<div class="form-check d-block">
-										<input class="form-check-input" type="checkbox" id="use_points">
-										<label class="form-check-label" for="use_points">Use my Reward Points to pay for this order.</label>
+									<div class="d-block">
+										<label class="form-label" for="use_points">Ammount of Reward Points to use for this order</label>
+										<input type="range" class="form-range" id="use_points" step="1"
+											   v-model="orderCheckout.points" min="0" :max="userStore.availablePoints"
+											   :disabled="userStore.availablePoints === 0">
 									</div>
 								</div>
 							</div>
@@ -128,64 +130,66 @@
 </template>
 
 <script setup>
-	import {computed, ref} from "vue";
+	import {computed, inject, ref} from "vue";
 	import {useRouter} from "vue-router";
-	import {useOrdersStore} from "../stores/order.js";
 
+	const toast = inject("toast");
 	const router = useRouter();
+
+	import validations from "@/utils/validations";
+	import {useOrdersStore} from "@/stores/order";
+	import {useUserStore} from "@/stores/user";
+
+	const userStore = useUserStore();
 	const orderStore = useOrdersStore();
 
-	const order = ref({
+	const orderCheckout = ref({
 		payment: {
 			type: undefined,
 			account: undefined
 		},
-		name: undefined,
-		phone: undefined,
-		email: undefined
+		name: '',
+		phone: '',
+		email: '',
+		points: false
 	});
 
-	const validateEmail = (email) => {
-		return String(email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-	};
-
-	const validatePhoneNumber = (phone) => {
-		return phone.match(/^(9)[/0-9]{8}$/g);
-	}
-
-	const validateVisaCard = (card) => {
-		// Visa Card
-		const isVisa = card.match(/^4[0-9]{12}(?:[0-9]{3})?$/g);
-		// Visa Master Card:
-		const isVisaMaster = card.match(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$/g);
-		return isVisa || isVisaMaster;
-	}
 
 	const checkPayment = () => {
 		let paymentValid = false;
-		if(order.value.payment.account == undefined){
+		let paymentType = orderCheckout.value.payment.type;
+		let paymentAccount = orderCheckout.value.payment.account;
+
+		if(paymentAccount === undefined){
 			return paymentValid;
 		}
-		if (order.value.payment.type == "visa") { // for a Visa payment is the Visa Card ID with 16 digits;
-			paymentValid = validateVisaCard(order.value.payment.account);
-		} else if (order.value.payment.type == "mbway") { // the reference for the MbWay is the mobile phone number with 9 digits
-			paymentValid = validatePhoneNumber(order.value.payment.account);
-		} else if (order.value.payment.type == "paypal") { // the reference for the PayPal is a valid email
-			paymentValid = validateEmail(order.value.payment.account);
+		if (paymentType === "visa") { // for a Visa payment is the Visa Card ID with 16 digits;
+			paymentValid = validations.validateVisaCard(paymentAccount);
+		} else if (paymentType === "mbway") { // the reference for the MbWay is the mobile phone number with 9 digits
+			paymentValid = validations.validatePhoneNumber(paymentAccount);
+		} else if (paymentType === "paypal") { // the reference for the PayPal is a valid email
+			paymentValid = validations.validateEmail(paymentAccount);
 		}
 		return paymentValid;
 	}
 
 	const checkoutDisabled = computed(() => {
-		return (order.value.name == undefined || (order.value.name).trim() == '') && orderStore.totalItems == 0;
+		return orderCheckout.value.name.trim() === '' || orderStore.totalItems === 0 || !checkPayment();
 	});
 
 	const submitOrder = () => {
 		// TODO finish checkout miguel.cerejo
 		if(!checkPayment()) {
 			alert('Payment not accepted');
+			return false;
 		}
-		console.log('order submited');
-		router.push({name: "OrderDetail", params: {id: '1'}});
+		if( orderStore.completeOrder(orderCheckout)) {
+			toast.success(`The order (#${orderStore.order.id}) is now on the status ${order.status}!`)
+			console.log('order submited');
+			router.push({name: "OrderDetail", params: {id: '1'}});
+		} else {
+			console.log('order error payment');
+			toast.error(`There was an error with your order, please try again!`)
+		}
 	}
 </script>

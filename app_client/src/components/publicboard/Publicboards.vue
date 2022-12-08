@@ -2,8 +2,8 @@
   import { ref, computed, onMounted, inject } from 'vue'
   import {useRouter} from 'vue-router'
   import TaskTable from "./PublicboardTable.vue"
-  import { useUserStore } from "../../stores/user.js";
-  import { useProjectsStore } from "../../stores/projects.js"
+  import { useUserStore } from "@/stores/user";
+  import { useProjectsStore } from "@/stores/projects";
   
   const axios = inject('axios')
   const router = useRouter()

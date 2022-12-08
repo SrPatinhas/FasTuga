@@ -1,17 +1,21 @@
-import { ref, computed, inject } from 'vue';
+import {ref, computed, inject} from 'vue';
 import { defineStore } from 'pinia'
+import utils from "@/utils/utils";
 
 export const useOrdersStore = defineStore('orders', () => {
-	const socket = inject("socket")
-	const axios = inject('axios')
-	const toast = inject("toast")
+	const socket = inject("socket");
+	const axios = inject('axios');
+	const toast = inject("toast");
 
 	const order = ref({
 		id: 0,
+		user_id: undefined,
 		status: undefined,
 		notes: undefined,
-		items: []
+		items: [],
+		checkout: {}
 	});
+
 	const status = ref([]);
 
 	/**
@@ -55,6 +59,7 @@ export const useOrdersStore = defineStore('orders', () => {
 	 **/
 	function orderNotes(note) {
 		order.value.notes = note;
+		updateLocalStorage();
 	}
 
 	/**
@@ -67,6 +72,7 @@ export const useOrdersStore = defineStore('orders', () => {
 		} else {
 			order.value.items.push(addItem);
 		}
+		updateLocalStorage();
 	}
 	/**
 	 * remove item or quantity from the order
@@ -74,9 +80,9 @@ export const useOrdersStore = defineStore('orders', () => {
 	function updateQuantityItemOnOrder(itemUpdate, quantity) {
 		let idx = order.value.items.findIndex((item) => item.id === itemUpdate.id);
 		if (idx >= 0) {
-			order.value.items[idx].count += quantity;
-			if(order.value.items[idx].count === 0) {
-				deleteItemOnOrder(itemUpdate);
+			if(order.value.items[idx].count > 1 || quantity === 1) {
+				order.value.items[idx].count += quantity;
+				updateLocalStorage();
 			}
 		}
 	}
@@ -86,7 +92,8 @@ export const useOrdersStore = defineStore('orders', () => {
 	function deleteItemOnOrder(deleteItem) {
 		let idx = order.value.items.findIndex((item) => item.id === deleteItem.id)
 		if (idx >= 0) {
-			order.value.items.splice(idx, 1)
+			order.value.items.splice(idx, 1);
+			utils.debounce(() => updateLocalStorage());
 		}
 	}
 	/**
@@ -95,21 +102,42 @@ export const useOrdersStore = defineStore('orders', () => {
 	function cancelOrder() {
 		order.value = {
 			id: 0,
+			user_id: undefined,
 			status: undefined,
-			items: []
+			notes: undefined,
+			items: [],
+			checkout: {}
 		};
 		status.value = [];
+		sessionStorage.removeItem('order');
 	}
 
 	/**
 	 * complete order (after payment)
 	 **/
-	async function completeOrder() {
+	async function completeOrder(checkout) {
+		order.value.checkout = checkout;
 		// Note that when an error occours, the exception should be
 		// catch by the function that called the deleteProject
 		const response = await axios.post('/order', order)
-		order.value = response.data.data;
-		socket.emit('orderCompleted', response.data.data);
+		if(response.data.data.isPaid){
+			order.value = response.data.data;
+			socket.emit('orderNew', response.data.data);
+			status.value = response.data.data.status;
+			return true;
+		}
+		return false;
+	}
+
+	function updateLocalStorage() {
+		sessionStorage.setItem('order', JSON.stringify(order));
+	}
+
+	function restoreLocalStorage() {
+		let storedOrder = sessionStorage.getItem('order');
+		if(storedOrder) {
+			order.value = JSON.parse(storedOrder);
+		}
 	}
 	/**
 	 * update order status
@@ -117,12 +145,12 @@ export const useOrdersStore = defineStore('orders', () => {
 	socket.on('orderStatusUpdate', (order) => {
 		status.value.push(order);
 		toast.info(`The order (#${order.id}) is now on the status ${order.status}!`)
-	})
+	});
 
 	return {
 		order, status,
 		orderItems, totalItems, totalOrderCost, orderStatus, orderPoints,
 		addItemToOrder, updateQuantityItemOnOrder, deleteItemOnOrder, cancelOrder, orderNotes,
-		completeOrder
+		completeOrder, restoreLocalStorage
 	}
 })

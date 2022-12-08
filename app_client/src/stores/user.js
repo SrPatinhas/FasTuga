@@ -1,12 +1,16 @@
-import {ref, computed, inject} from 'vue'
-import {defineStore} from 'pinia'
-import avatarNoneUrl from '@/assets/avatar-none.png'
+import {ref, computed, inject} from 'vue';
+import {defineStore} from 'pinia';
+
+import {useOrdersStore} from "@/stores/order";
+import avatarNoneUrl from '@/assets/avatar-none.png';
 
 export const useUserStore = defineStore('user', () => {
-	const socket = inject("socket")
-	const axios = inject('axios')
-	const toast = inject("toast")
-	const serverBaseUrl = inject('serverBaseUrl')
+	const socket = inject("socket");
+	const axios = inject('axios');
+	const toast = inject("toast");
+	const serverBaseUrl = inject('serverBaseUrl');
+
+	const orderStore = useOrdersStore();
 
 	const user = ref(null)
 
@@ -19,7 +23,12 @@ export const useUserStore = defineStore('user', () => {
 
 	const userId = computed(() => {
 		return user.value?.id ?? -1
-	})
+	});
+
+
+	const availablePoints = computed(() => {
+		return user.value?.points ?? 5;
+	});
 
 	async function loadUser() {
 		try {
@@ -33,7 +42,7 @@ export const useUserStore = defineStore('user', () => {
 
 	function clearUser() {
 		delete axios.defaults.headers.common.Authorization
-		sessionStorage.removeItem('token')
+		sessionStorage.removeItem('token');
 		user.value = null
 	}
 
@@ -90,6 +99,7 @@ export const useUserStore = defineStore('user', () => {
 			await loadUser()
 			socket.emit('loggedIn', user.value)
 			//await projectsStore.loadProjects()
+			orderStore.restoreLocalStorage();
 			return true
 		}
 		clearUser()
@@ -107,5 +117,5 @@ export const useUserStore = defineStore('user', () => {
 		}
 	})
 
-	return {user, userId, userPhotoUrl, login, logout, restoreToken}
+	return {user, userId, userPhotoUrl, availablePoints, login, logout, restoreToken}
 })

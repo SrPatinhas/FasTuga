@@ -113,8 +113,8 @@
 <script setup>
 	import {useRouter, RouterLink} from "vue-router"
 	import {inject} from "vue"
-	import {useUserStore} from "../../stores/user.js"
-	import {useOrdersStore} from "../../stores/order.js";
+	import {useUserStore} from "@/stores/user";
+	import {useOrdersStore} from "@/stores/order";
 
 	const router = useRouter()
 	const axios = inject("axios")

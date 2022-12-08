@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-	import {useOrdersStore} from "../stores/order.js";
+	import {useOrdersStore} from "@/stores/order";
 	import CartList from "../components/order/cartList.vue";
 
 	const orderStore = useOrdersStore();

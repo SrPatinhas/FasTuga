@@ -21,7 +21,7 @@ import "./assets/dashboard.css";
 const app = createApp(App)
 
 
-app.provide('socket', io("http://127.0.0.1:8080"))
+app.provide('socket', io("http://127.0.0.1:3000"))
 
 const serverBaseUrl = 'http://server_api.test'
 app.provide('axios', axios.create({

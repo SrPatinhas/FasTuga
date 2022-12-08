@@ -1,8 +1,8 @@
 <script setup>
   import { ref, watch, computed, onMounted, inject } from 'vue'
   import { useRouter, onBeforeRouteLeave } from 'vue-router'  
-  import { useUserStore } from "../../stores/user.js"
-  import { useProjectsStore } from "../../stores/projects.js"
+  import { useUserStore } from "@/stores/user";
+  import { useProjectsStore } from "@/stores/projects"
   
 
   const router = useRouter()  

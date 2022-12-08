@@ -1,42 +1,43 @@
-import { ref, computed, inject } from 'vue';
-import { defineStore } from 'pinia'
+import {ref, computed, inject} from 'vue';
+import {defineStore} from 'pinia'
 
 export const useOrdersKitchenStore = defineStore('ordersKitchen', () => {
-	const socket = inject("socket")
-	const axios = inject('axios')
-	const toast = inject("toast")
+	const socket = inject("socket");
+	const axios = inject('axios');
+	const toast = inject("toast");
 
 	const ordersKitchen = ref([]);
 
 	/**
-	* share information in the app
-	**/
+	 * share information in the app
+	 **/
 	const orderKitchenItems = computed(() => {
 		return orderKitchenItems.value.items;
 	});
 
 	/**
-	* complete order (after payment)
-	**/
+	 * complete order (after payment)
+	 **/
 	async function completeOrder() {
 		// Note that when an error occours, the exception should be
 		// catch by the function that called the deleteProject
 		const response = await axios.post('/ordersKitchen', ordersKitchen)
-		order.value = response.data.data;
+		// TODO update single item
+		//order.value = response.data.data;
 		socket.emit('ordersKitchenCompleted', response.data.data);
 	}
 
 	/**
-	* update order status
-	**/
-	socket.on('orderStatusUpdate', (ordersKitchen) => {
-		orderKitchenItems.value.status.push(ordersKitchen);
-		toast.info(`The order (#${ordersKitchen.id}) is now on the status ${ordersKitchen.status}!`)
+	 * update order status
+	 **/
+	socket.on('orderStatusUpdate', (orderKitchen) => {
+		ordersKitchen.value.status.push(orderKitchen);
+		toast.info(`The order (#${orderKitchen.id}) is now on the status ${orderKitchen.status}!`)
 	})
-	
+
 	/**
-	* remove item from the order
-	*
+	 * remove item from the order
+	 *
 		async function cancelOrder() {
 			const response = await axios.post('/ordersKitchen', ordersKitchen)
 			ordersKitchen.value = response.data.data;
@@ -44,6 +45,6 @@ export const useOrdersKitchenStore = defineStore('ordersKitchen', () => {
 		}*/
 
 	return {
-		ordersKitchen, status, orderKitchenItems, completeOrdersKitchen
+		ordersKitchen, orderKitchenItems
 	}
 })

@@ -18,7 +18,7 @@
 	import {useOrdersStore} from "../../stores/order.js";
 	const orderStore = useOrdersStore();
 
-	const prod =defineProps({
+	const prod = defineProps({
 		id: String,
 		name: String,
 		image: String,
