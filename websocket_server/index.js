@@ -1,20 +1,31 @@
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const { instrument } = require("@socket.io/admin-ui");
 const axios = require("axios");
-const httpServer = require('http').createServer();
+
+const httpServer = createServer();
 
 const myEnv = require('./env.js');
 let urlAxios = myEnv.env().url;
 
-const io = require("socket.io")(httpServer, {
+const io = new Server(httpServer, {
     cors: {
-        // The origin is the same as the Vue app domain:
-        // Change if necessary
-        origin: "http://127.0.0.1:5173",
+        origin: [
+            "http://127.0.0.1:5173", // client app
+            "https://admin.socket.io" // Dashboard Socket.IO
+        ],
         methods: ["GET", "POST"],
-        //credentials: true
+        credentials: true
     }
-})
-httpServer.listen(8080, () =>{
-    console.log('listening on *:8080');
+});
+// Dashboard Socket.IO
+instrument(io, {
+    auth: false,
+    mode: "development",
+});
+
+httpServer.listen(3000, () =>{
+    console.log('listening on *:3000');
 });
 
 let SessionHandler = require("./SessionHandler.js");
@@ -102,7 +113,7 @@ io.on('connection', (socket) => {
         if(x == null){
             return; // user fez logout antes de fechar a página.
         }
-        console.log("[Disconnect] user_id: " + user.id + " | socketID: " + socket.id);
+        console.log("[Disconnect] user_id: " + x.id + " | socketID: " + socket.id);
         //axios.put(urlAxios + '/api/updateLoggedAt', {"user_id": x.id, "logged": 0}).then(response =>{
             if(x.type !== "A"){
                 io.to("restaurant").emit('update_incoming');
