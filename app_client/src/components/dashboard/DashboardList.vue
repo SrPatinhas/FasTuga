@@ -3,6 +3,7 @@
 		<!-- Item-->
 		<div v-for="(item, index) in orderStore.orderItems"
 			 :key="index"
+			 class="d-sm-flex justify-content-between align-items-center" :class="{ 'mt-3': index > 0 && index < orderStore.orderItems.length, 'mb-4 pb-3 border-bottom': index != orderStore.orderItems.length - 1 }">
 			<div class="d-block d-sm-flex align-items-center text-center text-sm-start">
 				<a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="#">
 					<img src="img/food-delivery/cart/01.jpg" width="120" alt="Pizza">

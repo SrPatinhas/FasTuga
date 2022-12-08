@@ -23,6 +23,7 @@ for (i = 0; i < acc.length; i++) {
     <a href="#" id="older">Delivery</a>
     <a href="#" id="older">Me</a>
 	</div>
+  <div class="card">
   <div class="row">
     <div class="column">
     <div class="modal modal-alert position-static d-block bg-secondary py-5" tabindex="-1" role="dialog" id="modalChoice">
@@ -66,7 +67,7 @@ for (i = 0; i < acc.length; i++) {
       <b>Points:</b>&nbsp<p>5</p>
     </div>
       </div>
-      
+    </div>
     
       <div class="modal-footer flex-nowrap p-0">
         <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end"><strong>[Kitchen] OK</strong></button>

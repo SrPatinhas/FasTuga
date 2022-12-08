@@ -14,7 +14,6 @@ import OrderDetail from "../views/OrderDetail.vue";
 
 // protected
 import PublicBoard from "../views/PublicBoard.vue";
-import Kitchens from "../views/Kitchen.vue";
 import Employee from "../views/Employee.vue";
 import Dashboards from "../views/Dashboard.vue";
 
@@ -23,10 +22,7 @@ import Registration from "../components/auth/Registration.vue";
 import ChangePassword from "../components/auth/ChangePassword.vue";
 import Users from "../components/users/Users.vue";
 import User from "../components/users/User.vue";
-import Kitchen from "../components/kitchen/Kitchen.vue";
 import RouteRedirector from "../components/global/RouteRedirector.vue";
-
-/*OK-menu  OK-orders  OK-public-board  OK-kitchen  OK-users */
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
