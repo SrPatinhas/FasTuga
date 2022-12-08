@@ -1,5 +1,4 @@
 <template>
-<div class="card">
   <div class="row">
     <div class="column">
     <div class="modal modal-alert position-static d-block bg-secondary py-5" tabindex="-1" role="dialog" id="modalChoice">
@@ -51,7 +50,7 @@
     </div>
   </div>
   </div>
-</div>
+
 </template>
 
 <script setup>
@@ -68,3 +67,82 @@
 	});
   
 </script>
+
+
+<style scoped>
+* {
+	box-sizing: border-box;
+}
+
+.row {
+	margin-left: -5px;
+	margin-right: -5px;
+}
+
+.column {
+	float: left;
+	width: 32%;
+	padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+	border: 1px solid #ddd;
+}
+
+th, td {
+	text-align: left;
+	padding: 16px;
+}
+
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+.title-left {
+	text-align: left;
+}
+
+.title-right {
+	text-align: right;
+}
+
+.title-center {
+	text-align: center;
+}
+
+.accordion {
+	background-color: #eee;
+	color: #444;
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;
+	transition: 0.4s;
+}
+
+.active, .accordion:hover {
+	background-color: #ccc;
+}
+
+.panel {
+	padding: 0 18px;
+	display: none;
+	background-color: white;
+	overflow: hidden;
+}
+</style>
+  
+  

@@ -57,7 +57,7 @@
 </script>
 
 <template>
-	<section id="store_menu" class="pt-5 pb-5">
+	<section id="store_orderKitchen">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
