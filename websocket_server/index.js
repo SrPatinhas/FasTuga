@@ -1,15 +1,20 @@
+const axios = require("axios");
 const httpServer = require('http').createServer();
+
+const myEnv = require('./env.js');
+let urlAxios = myEnv.env().url;
+
 const io = require("socket.io")(httpServer, {
     cors: {
         // The origin is the same as the Vue app domain:
         // Change if necessary
-        origin: "http://127.0.0.1:8080",
+        origin: "http://127.0.0.1:5173",
         methods: ["GET", "POST"],
-        credentials: true
+        //credentials: true
     }
 })
 httpServer.listen(8080, () =>{
-    console.log('listening on *:8080')
+    console.log('listening on *:8080');
 });
 
 let SessionHandler = require("./SessionHandler.js");
@@ -37,8 +42,8 @@ io.on('connection', (socket) => {
     /*
      * Events to the "client"
      */
-    socket.on('orderUpdateStatus', (idUser_Order, order) => {
-        const orderSession = sessions.getUserSession(idUser_Order);
+    socket.on('orderUpdateStatus', (order) => {
+        const orderSession = sessions.getUserSession(order.user_id);
         if(orderSession){ // receives the id of the user to be notified
             io.to(orderSession.socketID).emit('orderUpdateStatus', order); // sends the new order
         }
@@ -73,14 +78,15 @@ io.on('connection', (socket) => {
         if (user) {
             sessions.addUserSession(user, socket.id);
             socket.join(user.type);
+            console.log("[LoggedIn] user_id: " + user.id + " | socketID: " + socket.id);
             //updated user availability
-            axios.put(url + '/api/updateLoggedAt', {"user_id": user.id, "logged": 1}).then(response =>{
+            //axios.put(urlAxios + '/api/updateLoggedAt', {"user_id": user.id, "logged": 1}).then(response =>{
                 if (user.type == 'A') {
                     socket.join('administrator');
                 }
-            }).catch(error => {
-                console.log("Login - Error: " + error.data);
-            });
+            //}).catch(error => {
+            //    console.log("Login - Error: " + error.data);
+            //});
         }
     });
 
@@ -96,13 +102,14 @@ io.on('connection', (socket) => {
         if(x == null){
             return; // user fez logout antes de fechar a página.
         }
-        axios.put(url + '/api/updateLoggedAt', {"user_id": x.id, "logged": 0}).then(response =>{
+        console.log("[Disconnect] user_id: " + user.id + " | socketID: " + socket.id);
+        //axios.put(urlAxios + '/api/updateLoggedAt', {"user_id": x.id, "logged": 0}).then(response =>{
             if(x.type !== "A"){
                 io.to("restaurant").emit('update_incoming');
             }
-        }).catch(error => {
-            console.log("disconnect - Error: " + error.data);
-        });
+        //}).catch(error => {
+        //    console.log("disconnect - Error: " + error.data);
+        //});
     });
 
     socket.on('changeBlockedStatus', (user) => {

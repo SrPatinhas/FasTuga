@@ -7,6 +7,10 @@ class SessionHandler {
 		return this.users.get(userID);
 	}
 
+	getUserCount () {
+		return this.users.size;
+	}
+
 	addUserSession (user, socketID) {
 		// If already exists a session for this user ID, reuse the session
 		let userSession = this.getUserSession(user.id);
