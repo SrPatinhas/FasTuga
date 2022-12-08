@@ -12,36 +12,32 @@ class Order extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'ticket_number',
+
+        'order_id',
+        'order_local_number',
+        'product_id',
         'status',
-        'customer_id',
-        'total_price',
-        'total_paid',
-        'total_paid_with_points',
-        'points_gained',
-        'points_used_to_pay',
-        'payment_type',
-        'payment_reference',
-        'date',
-        'delivered_by',
-        'custom'
+        'price',
+        'preparation_by',
+        'notes',
+        'custom',
 
     ];
 
-    // P "Preparing", R "Ready", D "Delivered", C "Cancelled"
+    // W "Waiting", P "Preparing", R "Ready"
     public function getStatusNameAttribute()
     {
         switch ($this->status) {
+            case 'W':
+                return 'Waiting';
             case 'P':
                 return 'Preparing';
             case 'R':
                 return 'Ready';
-            case 'D':
-                return 'Delivered';
-            case 'C':
-                return 'Cancelled';
         }
     }
+
+
     //aquiii 
 
     public function owner()
@@ -70,10 +66,6 @@ class Order extends Model
 
 
 
-    public function customer()
-    {
-        return $this->belongsTo(Costumer::class);
-    }
 
     
 

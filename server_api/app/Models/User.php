@@ -17,13 +17,27 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'gender',
+        'type',
+        'blocked',
         'photo_url',
-        'type'
+        'custom',
     ];
+
+    // C "Customer"; EC "Employee - Chef"; ED "Employee - Delivery"; EM "Employee - Manager";
+    public function getTypeNameAttribute()
+    {
+        switch ($this->type) {
+            case 'C':
+                return 'Customer';
+            case 'EC':
+                return 'Employee - Chef';
+            case 'ED':
+                return 'Employee - Delivery';
+            case 'EM':
+                return 'Employee - Manager';
+        }
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -89,4 +103,24 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Task::class, 'task_user')->where('completed', 0);
     }
+
+
+
+
+
+
+
+
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class);
+    }
+
+
+
+
+   
+
+
 }

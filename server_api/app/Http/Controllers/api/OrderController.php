@@ -51,7 +51,7 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    //Duvida
+    
     public function update_completed(UpdateCompleteOrderRequest $request, Order $order)
     {
         $order->completed = $request->validated()['completed'];

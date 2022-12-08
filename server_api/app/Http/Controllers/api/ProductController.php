@@ -40,4 +40,11 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
+    public function update_completed(UpdateCompleteProductRequest $request, Product $product)
+    {
+        $product->completed = $request->validated()['completed'];
+        $product->save();
+        return new ProductResource($product);
+    }
+
 }
