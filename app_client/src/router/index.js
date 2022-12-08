@@ -79,17 +79,6 @@ const router = createRouter({
 			name: 'Dashboards',
 			component: Dashboards
 		},
-		{
-			path: '/kitchens/current',
-			name: 'CurrentKitchens',
-			component: Kitchens,
-			props: {onlyCurrentOrders: true, ordersTitle: 'Current Kitchens'}
-		},
-		{
-			path: '/kitchens',
-			name: 'Kitchens',
-			component: Kitchens,
-		},	
 		// Display restaurant Items
 		{
 			path: '/menus',

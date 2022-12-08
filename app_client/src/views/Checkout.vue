@@ -23,61 +23,88 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-6 mb-4 mb-sm-0">
-					<h2 class="h5 mt-3 pt-4 pb-2">Order Payment</h2>
+					<h2 class="h5 pb-2">Order Payment</h2>
 					<div class="accordion accordio-flush shadow-sm rounded-3 mb-4" id="payment-methods">
 						<div class="accordion-item border-bottom">
-							<div class="accordion-header py-3 px-3">
-								<div class="form-check d-table" data-bs-toggle="collapse" data-bs-target="#credit-card" aria-expanded="false">
+							<div class="accordion-header">
+								<div class="d-table accordion-button" data-bs-toggle="collapse" data-bs-target="#credit-card" aria-expanded="false">
 									<input class="form-check-input" type="radio" name="license" id="payment-card" value="visa" v-model="order.payment.type" @change="order.payment.account = ''">
-									<label class="form-check-label fw-medium text-dark" for="payment-card">
-										Credit card<i class="bi-credit-card text-muted fs-lg align-middle mt-n1 ms-2"></i>
+									<label class="form-check-label fw-medium" for="payment-card">
+										<i class="bi-credit-card text-muted fs-lg align-middle mt-n1 ms-2"></i>
+										Credit card
 									</label>
 								</div>
 							</div>
-							<div class="collapse" id="credit-card" data-bs-parent="#payment-methods" style="">
+							<div class="collapse" id="credit-card" data-bs-parent="#payment-methods">
 								<div class="accordion-body py-2">
 									<input class="form-control bg-image-none mb-3" type="text" v-model="order.payment.account" placeholder="4xxxxxxxxxxxxxxx">
 								</div>
 							</div>
 						</div>
 						<div class="accordion-item border-bottom">
-							<div class="accordion-header py-3 px-3">
-								<div class="form-check d-table collapsed" data-bs-toggle="collapse" data-bs-target="#paypal" aria-expanded="false">
+							<div class="accordion-header">
+								<div class="d-table collapsed accordion-button" data-bs-toggle="collapse" data-bs-target="#paypal" aria-expanded="false">
 									<input class="form-check-input" type="radio" name="license" id="payment-paypal" value="paypal" v-model="order.payment.type" @change="order.payment.account = ''">
-									<label class="form-check-label fw-medium text-dark" for="payment-paypal">
-										PayPal<i class="bi-paypal text-muted fs-base align-middle mt-n1 ms-2"></i>
+									<label class="form-check-label fw-medium" for="payment-paypal">
+										<i class="bi-paypal text-muted fs-base align-middle mt-n1 ms-2"></i>
+										PayPal
 									</label>
 								</div>
 							</div>
-							<div class="collapse" id="paypal" data-bs-parent="#payment-methods" style="">
+							<div class="collapse" id="paypal" data-bs-parent="#payment-methods">
 								<div class="accordion-body pt-2">
 									<input class="form-control" type="text" required="" id="fd-phone" v-model="order.payment.account" placeholder="email@email.com">
 								</div>
 							</div>
 						</div>
-						<div class="accordion-item">
-							<div class="accordion-header py-3 px-3">
-								<div class="form-check d-table collapsed" data-bs-toggle="collapse" data-bs-target="#cash" aria-expanded="false">
+						<div class="accordion-item border-bottom">
+							<div class="accordion-header">
+								<div class="d-table collapsed accordion-button" data-bs-toggle="collapse" data-bs-target="#cash" aria-expanded="false">
 									<input class="form-check-input" type="radio" name="license" id="payment-mbway" value="mbway" v-model="order.payment.type" @change="order.payment.account = ''">
-									<label class="form-check-label fw-medium text-dark" for="payment-mbway">
-										MbWay<i class="bi-qr-code text-muted fs-lg align-middle mt-n1 ms-2"></i>
+									<label class="form-check-label fw-medium" for="payment-mbway">
+										<i class="bi-qr-code text-muted fs-lg align-middle mt-n1 ms-2"></i>
+										MbWay
 									</label>
 								</div>
 							</div>
-							<div class="collapse" id="cash" data-bs-parent="#payment-methods" style="">
+							<div class="collapse" id="cash" data-bs-parent="#payment-methods">
 								<div class="accordion-body pt-2">
 									<input class="form-control" type="text" required="" v-model="order.payment.account" placeholder="9xxxxxxxx">
 								</div>
 							</div>
 						</div>
+						<div class="accordion-item">
+							<div class="accordion-header">
+								<div class="accordion-button fw-medium collapsed" data-bs-toggle="collapse" data-bs-target="#points" aria-expanded="false">
+									<i class="bi-gift me-2"></i>Redeem Reward Points
+								</div>
+							</div>
+							<div class="collapse" id="points" data-bs-parent="#payment-method">
+								<div class="accordion-body">
+									<div>
+										You currently have<span class="fw-medium">&nbsp;384</span>&nbsp;Reward Points to spend.
+										<div class="align-items-center d-flex mb-3 small text-muted" role="alert">
+											<i class="mr-2 bi-info-circle"></i>
+											<div>For each 10 points, you will get a 5€ discount</div>
+										</div>
+									</div>
+									<div class="form-check d-block">
+										<input class="form-check-input" type="checkbox" id="use_points">
+										<label class="form-check-label" for="use_points">Use my Reward Points to pay for this order.</label>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-
-					<button class="btn btn-primary d-block w-100 mt-3" type="submit" :disabled="checkoutDisabled" @click="submitOrder">Place Order</button>
+					<button class="btn btn-primary d-block w-100 mt-3" type="submit" :disabled="checkoutDisabled" @click="submitOrder">
+						Proceed to Checkout
+						<i class="bi-arrow-right-short"></i>
+					</button>
 				</div>
 				<div class="col-sm-6">
-					<div class="d-fle flex-column h-100 rounded-3 bg-secondary px-3 px-sm-4 py-4">
-						<h2 class="h5 pb-3">Your total</h2>
-						<div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
+					<h2 class="h5 pb-2">Your total</h2>
+					<div class="rounded-3 bg-secondary px-3 px-sm-4 py-4">
+						<div class="d-flex justify-content-between fs-md border-bottom mb-3">
 							<span>Subtotal:</span>
 							<span class="text-heading">{{ (orderStore.totalOrderCost).split(".")[0] }}.<small>{{ (orderStore.totalOrderCost).split(".")[1] }}</small></span>
 						</div>
@@ -87,9 +114,7 @@
 						</div>
 						<div class="align-items-center d-flex mb-3 small text-muted" role="alert">
 							<i class="mr-2 bi-info-circle"></i>
-							<div>
-								For each 10€, you will get 1 point
-							</div>
+							<div>For each 10€, you will get 1 point</div>
 						</div>
 						<div class="d-flex justify-content-between border-top pt-3 fs-md mb-2">
 							<span>Total:</span>

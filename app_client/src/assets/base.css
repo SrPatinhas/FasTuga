@@ -25,7 +25,7 @@
   --bs-gray-800: #373f50;
   --bs-gray-900: #2b3445;
   --bs-primary: #fe696a;
-  --bs-accent: #4e54c8;
+  --bs-accent: #c57f80;
   --bs-secondary: #f3f5f9;
   --bs-success: #42d697;
   --bs-info: #69b3fe;
@@ -358,7 +358,24 @@ fieldset:disabled .btn {
 .input-group .position-absolute {
   z-index: 6;
 }
-
+.width-25{
+  width: 25px;
+}
 .width-110{
   width: 110px;
+}
+.top-10 {
+  top: 10%;
+}
+.top-65px {
+  top: 65px;
+}
+
+.accordion {
+  --bs-accordion-btn-color: rgba(var(--bs-dark-rgb),var(--bs-text-opacity));
+  --bs-accordion-btn-focus-border-color: var(--bs-accent);
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgba(254, 105, 106, 0.25);
+  --bs-accordion-active-color: var(--bs-primary);
+  --bs-accordion-active-bg: #f3f3f3;
+  --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }

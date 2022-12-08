@@ -16,7 +16,7 @@ const credentials = ref({
 })
 
 //const userStore = useUserStore()
-const emit = defineEmits(['login'])
+const emit = defineEmits(['login']);
 
 const login = async () => {
 	credentials.value.loading = true;
@@ -31,6 +31,9 @@ const login = async () => {
 		credentials.value.password = ''
 		toast.error('User credentials are invalid!')
 	}
+}
+const loginGuest = () => {
+
 }
 </script>
 

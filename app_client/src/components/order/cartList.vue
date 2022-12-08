@@ -1,8 +1,7 @@
 <template>
 	<div v-if="orderStore.totalItems > 0" class="card border-0 shadow-sm px-sm-4 py-4">
 		<!-- Item-->
-		<div v-for="(item, index) in orderStore.orderItems"
-			 :key="index"
+		<div v-for="(item, index) in orderStore.orderItems" :key="index">
 			<div class="d-block d-sm-flex align-items-center text-center text-sm-start">
 				<a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="#">
 					<img src="img/food-delivery/cart/01.jpg" width="120" alt="Pizza">
