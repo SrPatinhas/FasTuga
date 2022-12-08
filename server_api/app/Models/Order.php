@@ -5,41 +5,43 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Order extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
-        'responsible_id',
+        'ticket,number',
         'status',
-        'preview_start_date',
-        'preview_end_date',
-        'real_start_date',
-        'real_end_date',
-        'total_hours',
-        'billed',
+        'customer_id',
         'total_price',
+        'total_paid',
+        'total_paid_with_points',
+        'points_gained',
+        'payment_type',
+        'payment_reference',
+        'date',
+        'delivered_by',
+        'custom',
+
     ];
 
+    // P "Preparing", R "Ready", D "Delivered", C "Cancelled"
     public function getStatusNameAttribute()
     {
         switch ($this->status) {
             case 'P':
-                return 'Pending';
-            case 'W':
-                return 'Work In Progress';
-            case 'C':
-                return 'Completed';
-            case 'I':
-                return 'Interrupted';
+                return 'Preparing';
+            case 'R':
+                return 'Ready';
             case 'D':
-                return 'Discarded';
+                return 'Delivered';
+            case 'C':
+                return 'Cancelled';
         }
     }
-
+    //aquiii 
     public function getTotalTasksAttribute()
     {
         return Task::where('project_id', $this->id)->count();

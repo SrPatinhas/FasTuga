@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCompleteTaskRequest extends FormRequest
+class StoreUpdateProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,12 +19,17 @@ class UpdateCompleteTaskRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function rules()
     {
         return [
-            'completed' => 'required|boolean',
+            'name' => 'required|string|unique',
+            'type' => 'required|in:hot dish,cold dish,drink,dessert',
+            'description' =>'required|string',
+            'photo_url' =>'required|string',
+            'price' =>'required|decimal|min:0',
+            'custom' =>'nullable|json',
         ];
     }
 }
