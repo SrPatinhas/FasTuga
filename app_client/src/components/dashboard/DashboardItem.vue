@@ -1,5 +1,5 @@
 <template>
- <div class="card">
+<div class="card">
   <div class="row">
     <div class="column">
     <div class="modal modal-alert position-static d-block bg-secondary py-5" tabindex="-1" role="dialog" id="modalChoice">
@@ -55,13 +55,9 @@
 </template>
 
 <script setup>
-	import {useOrdersStore} from "../../stores/order.js";
-  import {useDashboardStore} from "../../stores/dashboard.js";
-	const orderStore = useOrdersStore();
-  const dashboardStore = dashboardStore();
 
-	const prod =defineProps({
-		id: String,
+  const item =defineProps({
+		id: Number,
 		status: String,
 		employeeName: String,
 		method: String,
@@ -71,17 +67,4 @@
     numberOfPoints: Number
 	});
   
-	// 'http://server_api.test/products/'  + image
-/*	function addToCart(){
-		const item = {
-			id: prod.id,
-			name: prod.name,
-			image: prod.image,
-			price: prod.price,
-			type: prod.type,
-			description: prod.description,
-			count: 1
-		}
-		orderStore.addItemToOrder(item);
-	}*/
 </script>

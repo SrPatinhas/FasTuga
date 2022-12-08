@@ -1,6 +1,45 @@
 <script>
-var acc = document.getElementsByClassName("accordion");
-var i;
+	import { ref, computed } from 'vue'
+	import OrderKitchenItem from "../components/dashboard/dashboardItem.vue";
+	//import {useOrdersKitchenStore} from "@/stores/ordersKitchen";
+	//const orderKitchenStore = useOrdersKitchenStore();
+
+	const orderKitchenStatusList = ref(['Preparing', 'Ready', 'Delivered', 'Cancelled']);
+	const orderKitchenTypeActive  = ref('Preparing');
+  const orderKitchenList = ref([
+		{
+			id: 12,
+			date: '2022-12-08 20:00',
+			employeeName: 'Jéjé',
+      		method: 'Card',
+	  		type: 'Preparing',
+			price: 1.4,
+			paid: 2,
+			clientName: "Alice",
+      numberOfPoints: 10
+		},
+    {
+			id: 13,
+			date: '2022-12-08 20:00',
+			employeeName: 'Jéjé',
+      		method: 'Card',
+			type: 'Preparing',
+			price: 1.4,
+			paid: 2,
+			clientName: "Alice",
+      numberOfPoints: 10
+		}
+	]);
+
+	function changeTab(type) {
+    orderKitchenTypeActive.value = type;
+	}
+	const filterOrderKitchen = computed( () => {
+		return orderKitchenList.value.filter( item => item.type === orderKitchenTypeActive.value )
+	});
+
+const acc = document.getElementsByClassName("accordion");
+let i;
 
 for (i = 0; i < acc.length; i++) {
   acc[i].addEventListener("click", function() {
@@ -16,175 +55,29 @@ for (i = 0; i < acc.length; i++) {
 </script>
 
 <template>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <div id="filters">
-		<a href="#" id="newer" class="selected">All</a>
-		<a href="#" id="older">Kitchen</a>
-    <a href="#" id="older">Delivery</a>
-    <a href="#" id="older">Me</a>
-	</div>
-  <div class="card">
-  <div class="row">
-    <div class="column">
-    <div class="modal modal-alert position-static d-block bg-secondary py-5" tabindex="-1" role="dialog" id="modalChoice">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content rounded-3 shadow">
-      <div class="modal-body p-4 text-center">
-        <div class="column">
-        <div class="title-left">
-        <span>#1</span>
-      </div>
-    </div>
-    <div class="column">
-    <div class="title-center">
-    <span style="color:#FF0000"> Cancelled</span>
-        2022/12/12
-        20:00
-      </div>
-    </div>
-    <div class="column">
-      <div class="title-right">
-        <p>Jéssica Grácio</p>
-      </div>
-    </div>
-    <button class="accordion">Items</button>
-    <div class="panel">
-      <p>Item 1.</p>
-      <p>SubItem 1.</p>
-      <p>SubItem 1.</p>
-    </div>
+<section id="store_menu" class="pt-5 pb-5">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="text-uppercase text-bold">Menu</h1>
+				</div>
+			</div>
 
-    <button class="accordion">Payment</button>
-    <div class="panel">
-      <b>Method:</b><p>Card</p>
-      <b>Price:</b>&nbsp<p>18€</p>  
-      <b>Paid:</b>&nbsp<p>20€</p>  
-    </div>
+			<div class="row">
 
-    <button class="accordion">Client</button>
-    <div class="panel">
-      <b>Name:</b>&nbsp<p>XPTO</p>
-      <b>Points:</b>&nbsp<p>5</p>
-    </div>
-      </div>
-    </div>
-    
-      <div class="modal-footer flex-nowrap p-0">
-        <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end"><strong>[Kitchen] OK</strong></button>
-        <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal"><strong>[Delivery] OK</strong></button>
-      </div>
-    </div>
-  </div>
-  </div>
-</div>
-  
-    <div class="column">
-    <div class="modal modal-alert position-static d-block bg-secondary py-5" tabindex="-1" role="dialog" id="modalChoice">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content rounded-3 shadow">
-      <div class="modal-body p-4 text-center">
-        <div class="column">
-        <div class="title-left">
-        <span>#1</span>
-      </div>
-    </div>
-    <div class="column">
-    <div class="title-center">
-    <span style="color:#FF0000"> Cancelled</span>
-        2022/12/12
-        20:00
-      </div>
-    </div>
-    <div class="column">
-      <div class="title-right">
-        <p>Jéssica Grácio</p>
-      </div>
-    </div>
-    <button class="accordion">Items</button>
-    <div class="panel">
-      <p>Item 1.</p>
-      <p>SubItem 1.</p>
-      <p>SubItem 1.</p>
-    </div>
-
-    <button class="accordion">Payment</button>
-    <div class="panel">
-      <b>Method:</b><p>Card</p>
-      <b>Price:</b>&nbsp<p>18€</p>  
-      <b>Paid:</b>&nbsp<p>20€</p>  
-    </div>
-
-    <button class="accordion">Client</button>
-    <div class="panel">
-      <b>Name:</b>&nbsp<p>XPTO</p>
-      <b>Points:</b>&nbsp<p>5</p>
-    </div>
-      </div>
-      
-    
-      <div class="modal-footer flex-nowrap p-0">
-        <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end"><strong>[Kitchen] OK</strong></button>
-        <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal"><strong>[Delivery] OK</strong></button>
-      </div>
-    </div>
-  </div>
-  </div>
-</div>
-<div class="column">
-    <div class="modal modal-alert position-static d-block bg-secondary py-5" tabindex="-1" role="dialog" id="modalChoice">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content rounded-3 shadow">
-      <div class="modal-body p-4 text-center">
-        <div class="column">
-        <div class="title-left">
-        <span>#1</span>
-      </div>
-    </div>
-    <div class="column">
-    <div class="title-center">
-    <span style="color:#FF0000"> Cancelled</span>
-        2022/12/12
-        20:00
-      </div>
-    </div>
-    <div class="column">
-      <div class="title-right">
-        <p>Jéssica Grácio</p>
-      </div>
-    </div>
-    <button class="accordion">Items</button>
-    <div class="panel">
-      <p>Item 1.</p>
-      <p>SubItem 1.</p>
-      <p>SubItem 1.</p>
-    </div>
-
-    <button class="accordion">Payment</button>
-    <div class="panel">
-      <b>Method:</b><p>Card</p>
-      <b>Price:</b>&nbsp<p>18€</p>  
-      <b>Paid:</b>&nbsp<p>20€</p>  
-    </div>
-
-    <button class="accordion">Client</button>
-    <div class="panel">
-      <b>Name:</b>&nbsp<p>XPTO</p>
-      <b>Points:</b>&nbsp<p>5</p>
-    </div>
-      </div>
-      
-    
-      <div class="modal-footer flex-nowrap p-0">
-        <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end"><strong>[Kitchen] OK</strong></button>
-        <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal"><strong>[Delivery] OK</strong></button>
-      </div>
-    </div>
-  </div>
-  </div>
-</div>
-</div>
-
-
+				<ul class="nav nav-tabs justify-content-center menu_tab">
+					<li v-for="orderKitchenstatus of orderKitchenList" class="nav-item">
+						<a class="nav-link text-capitalize" :class="orderKitchenTypeActive === orderKitchenType && 'active'" aria-current="page" href="#" @click="changeTab(orderKitchenstatus)">{{ orderKitchenstatus }}</a>
+					</li>
+				</ul>
+			</div>
+			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
+				<div v-for="item of filterOrderKitchen" class="col">
+					<OrderKitchenItem v-bind="item"/>
+				</div>
+			</div>
+		</div>
+	</section>
 </template>
 
 <style scoped>
@@ -211,46 +104,37 @@ for (i = 0; i < acc.length; i++) {
 	color: #08c;
 	border-color: #08c;
 }
-
-
 * {
   box-sizing: border-box;
 }
-
 .row {
   margin-left:-5px;
   margin-right:-5px;
-}
-  
+} 
 .column {
   float: left;
   width: 32%;
   padding: 5px;
 }
-
 /* Clearfix (clear floats) */
 .row::after {
   content: "";
   clear: both;
   display: table;
 }
-
 table {
   border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
   border: 1px solid #ddd;
 }
-
 th, td {
   text-align: left;
   padding: 16px;
 }
-
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
-
 .description{
   text-align: left;
 }
@@ -260,11 +144,9 @@ tr:nth-child(even) {
 .title-right{
   text-align: right;
 }
-
 .title-center{
   text-align: center;
 }
-
 .accordion {
   background-color: #eee;
   color: #444;
@@ -277,18 +159,15 @@ tr:nth-child(even) {
   font-size: 15px;
   transition: 0.4s;
 }
-
 .active, .accordion:hover {
   background-color: #ccc; 
 }
-
 .panel {
   padding: 0 18px;
   display: none;
   background-color: white;
   overflow: hidden;
 }
-
 </style>
   
   
