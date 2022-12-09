@@ -90,17 +90,19 @@
 									</div>
 									<div class="d-block">
 										<label class="form-label" for="use_points">Ammount of Reward Points to use for this order</label>
-										<input type="range" class="form-range" id="use_points" step="1"
-											   v-model="orderCheckout.points" min="0" :max="userStore.availablePoints"
+										<input type="range" class="form-range" id="use_points" step="10"
+											   v-model.number="orderPoints" min="0" :max="userStore.availablePoints"
 											   :disabled="userStore.availablePoints === 0">
+										<span>{{ orderPoints }} points - {{ (orderPoints / 2) }}€</span>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<button class="btn btn-primary d-block w-100 mt-3" type="submit" :disabled="checkoutDisabled" @click="submitOrder">
+					<button class="btn btn-primary d-block w-100 mt-3" type="submit" :disabled="checkoutDisabled || paymentLoading" @click="submitOrder">
 						Proceed to Checkout
-						<i class="bi-arrow-right-short"></i>
+						<span v-if="paymentLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+						<i v-else class="bi-arrow-right-short"></i>
 					</button>
 				</div>
 				<div class="col-sm-6">
@@ -108,7 +110,7 @@
 					<div class="rounded-3 bg-secondary px-3 px-sm-4 py-4">
 						<div class="d-flex justify-content-between fs-md border-bottom mb-3">
 							<span>Subtotal:</span>
-							<span class="text-heading">{{ (orderStore.totalOrderCost).split(".")[0] }}.<small>{{ (orderStore.totalOrderCost).split(".")[1] }}</small></span>
+							<span class="text-heading">{{ (orderStore.totalOrderCost).split(".")[0] }}.<small>{{ (orderStore.totalOrderCost).split(".")[1] }}€</small></span>
 						</div>
 						<div class="d-flex justify-content-between fs-md pb-2">
 							<span>Points Earned:</span>
@@ -118,9 +120,13 @@
 							<i class="mr-2 bi-info-circle"></i>
 							<div>For each 10€, you will get 1 point</div>
 						</div>
+						<div class="d-flex justify-content-between fs-md py-2 border-top" v-if="orderPoints > 0">
+							<span>Discount from points:</span>
+							<span class="text-heading">-{{ (orderPoints / 2) }}€</span>
+						</div>
 						<div class="d-flex justify-content-between border-top pt-3 fs-md mb-2">
 							<span>Total:</span>
-							<span class="text-heading fw-medium">{{ (orderStore.totalOrderCost).split(".")[0] }}.<small>{{ (orderStore.totalOrderCost).split(".")[1] }}</small></span>
+							<span class="text-heading fw-medium">{{ orderTotal }}.<small>{{ orderTotal_cent }}€</small></span>
 						</div>
 					</div>
 				</div>
@@ -130,20 +136,22 @@
 </template>
 
 <script setup>
-	import {computed, inject, ref} from "vue";
+import {computed, inject, reactive, ref} from "vue";
 	import {useRouter} from "vue-router";
-
-	const toast = inject("toast");
-	const router = useRouter();
-
 	import validations from "@/utils/validations";
 	import {useOrdersStore} from "@/stores/order";
 	import {useUserStore} from "@/stores/user";
 
+	const toast = inject("toast");
+	const router = useRouter();
 	const userStore = useUserStore();
 	const orderStore = useOrdersStore();
 
-	const orderCheckout = ref({
+	const orderPoints = ref(0);
+
+	const paymentLoading = ref(false);
+
+	const orderCheckout = reactive({
 		payment: {
 			type: undefined,
 			account: undefined
@@ -151,14 +159,14 @@
 		name: '',
 		phone: '',
 		email: '',
-		points: false
+		points: 0
 	});
 
 
 	const checkPayment = () => {
 		let paymentValid = false;
-		let paymentType = orderCheckout.value.payment.type;
-		let paymentAccount = orderCheckout.value.payment.account;
+		let paymentType = orderCheckout.payment.type;
+		let paymentAccount = orderCheckout.payment.account;
 
 		if(paymentAccount === undefined){
 			return paymentValid;
@@ -174,22 +182,36 @@
 	}
 
 	const checkoutDisabled = computed(() => {
-		return orderCheckout.value.name.trim() === '' || orderStore.totalItems === 0 || !checkPayment();
+		return orderCheckout.name.trim() === '' || orderStore.totalItems === 0 || !checkPayment();
 	});
 
-	const submitOrder = () => {
-		// TODO finish checkout miguel.cerejo
+	const submitOrder = async () => {
+		paymentLoading.value = true;
 		if(!checkPayment()) {
 			alert('Payment not accepted');
+			paymentLoading.value = false;
 			return false;
 		}
-		if( orderStore.completeOrder(orderCheckout)) {
-			toast.success(`The order (#${orderStore.order.id}) is now on the status ${order.status}!`)
+
+		const orderPayment = await orderStore.completeOrder(orderCheckout);
+		if( orderPayment ) {
+			toast.success(`The order (#${orderStore.order.id}) is now on the status ${orderStore.order.status}!`)
 			console.log('order submited');
 			router.push({name: "OrderDetail", params: {id: '1'}});
+			paymentLoading.value = false;
 		} else {
 			console.log('order error payment');
-			toast.error(`There was an error with your order, please try again!`)
+			toast.error(`There was an error with your order, please try again!`);
+			paymentLoading.value = false;
 		}
 	}
+
+	const orderTotal = computed(() => {
+		const value = orderStore.totalOrderCost - (orderPoints.value / 2);
+		return (value.toFixed(2) + "").split(".")[0];
+	});
+	const orderTotal_cent = computed(() => {
+		const value = orderStore.totalOrderCost - (orderPoints.value / 2);
+		return (value.toFixed(2) + "").split(".")[1];
+	});
 </script>

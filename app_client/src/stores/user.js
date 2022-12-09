@@ -27,7 +27,7 @@ export const useUserStore = defineStore('user', () => {
 
 
 	const availablePoints = computed(() => {
-		return user.value?.points ?? 5;
+		return user.value?.points ?? 50;
 	});
 
 	async function loadUser() {
@@ -52,8 +52,7 @@ export const useUserStore = defineStore('user', () => {
 			axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
 			sessionStorage.setItem('token', response.data.access_token)
 			await loadUser();
-			console.log('load user');
-			socket.emit('loggedIn', user.value)
+			socket.emit('loggedIn', user.value);
 			//await projectsStore.loadProjects()
 			return true
 		} catch (error) {
@@ -100,11 +99,11 @@ export const useUserStore = defineStore('user', () => {
 			socket.emit('loggedIn', user.value)
 			//await projectsStore.loadProjects()
 			orderStore.restoreLocalStorage();
-			return true
+			return true;
 		}
-		clearUser()
+		clearUser();
 		//projectsStore.clearProjects()
-		return false
+		return false;
 	}
 
 	socket.on('updateUser', (updatedUser) => {
