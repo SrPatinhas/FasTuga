@@ -364,6 +364,9 @@ fieldset:disabled .btn {
 .width-110{
   width: 110px;
 }
+.width-150{
+  width: 150px;
+}
 .top-10 {
   top: 10%;
 }
@@ -397,4 +400,15 @@ fieldset:disabled .btn {
 }
 .last-item-no-border > div:last-child{
   border-bottom: none!important;
+}
+
+.page-content {
+  margin-top: 62px;
+}
+.page-content:not(.container) {
+  padding: 15px;
+}
+
+.row > .col{
+  --bs-gutter-y: 1.5rem;
 }

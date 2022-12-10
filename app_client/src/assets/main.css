@@ -73,7 +73,7 @@ nav.navbar  .nav-link{
   -webkit-box-orient: vertical;
 }
 
-.nav-item .badge {
+.navbar .nav-item .badge {
   width: 18px;
   height: 18px;
   padding: 0;
@@ -88,7 +88,9 @@ nav.navbar  .nav-link{
   background: var(--bs-primary);
   border-radius: 50%;
 }
-
+.nav-pills{
+  --bs-nav-pills-link-active-bg: var(--bs-primary);
+}
 /**
  Based on theme
  */

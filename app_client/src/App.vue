@@ -1,11 +1,15 @@
 <template>
 	<TopBar />
-	<div class="container mt-5 py-5">
+	<div class="page-content" :class="pageName !== 'Dashboard' && 'container'">
 		<router-view />
 	</div>
 </template>
 
 <script setup>
-	import {RouterView} from "vue-router"
+	import {computed} from "vue";
+	import {RouterView, useRoute} from "vue-router"
 	import TopBar from "./components/navigation/TopBar.vue";
+
+	const route = useRoute();
+	const pageName = computed(() => route.name);
 </script>

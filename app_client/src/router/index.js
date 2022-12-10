@@ -15,7 +15,7 @@ import OrderDetail from "../views/OrderDetail.vue";
 // protected
 import PublicBoard from "../views/PublicBoard.vue";
 import Employee from "../views/Employee.vue";
-import Dashboards from "../views/Dashboard.vue";
+import Dashboard from "../views/Dashboard.vue";
 
 import Login from "../components/auth/Login.vue";
 import Registration from "../components/auth/Registration.vue";
@@ -76,8 +76,8 @@ const router = createRouter({
 		},
 		{
 			path: '/dashboard',
-			name: 'Dashboards',
-			component: Dashboards
+			name: 'Dashboard',
+			component: Dashboard
 		},
 		// Display restaurant Items
 		{

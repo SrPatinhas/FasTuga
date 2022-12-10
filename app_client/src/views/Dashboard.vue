@@ -1,190 +1,258 @@
 <script setup>
-	import {ref, computed} from 'vue'
-	import OrderKitchenItem from "../components/dashboard/dashboardItem.vue";
-	import {useOrdersKitchenStore} from "@/stores/ordersKitchen";
+import {ref, computed} from 'vue'
+import DashboardItem from "@/components/dashboard/DashboardItem.vue";
 
-	const orderKitchenStore = useOrdersKitchenStore();
+import {useOrdersKitchenStore} from "@/stores/ordersKitchen";
 
-	const orderKitchenStatusList = ref(['Preparing', 'Ready', 'Delivered', 'Cancelled']);
-	const orderKitchenTypeActive = ref('Preparing');
-	const orderKitchenList = ref([
-		{
-			id: 12,
-			date: '2022-12-08 20:00',
-			employeeName: 'Jéjé',
-			method: 'Card',
-			type: 'Preparing',
-			price: 1.4,
-			paid: 2,
-			clientName: "Alice",
-			numberOfPoints: 10
-		},
-		{
-			id: 13,
-			date: '2022-12-08 20:00',
-			employeeName: 'Jéjé',
-			method: 'Card',
-			type: 'Preparing',
-			price: 1.4,
-			paid: 2,
-			clientName: "Alice",
-			numberOfPoints: 10
-		}
-	]);
+const orderKitchenStore = useOrdersKitchenStore();
 
-	function changeTab(type) {
-		orderKitchenTypeActive.value = type;
-	}
+const orderKitchenPlaceList = ref(['All', 'Kitchen', 'Delivered', 'Waiting']);
+const orderKitchenPlaceActive = ref('All');
 
-	const filterOrderKitchen = computed(() => {
-		return orderKitchenList.value.filter(item => item.type === orderKitchenTypeActive.value)
-	});
-
-	const acc = document.getElementsByClassName("accordion");
-	let i;
-
-	for (i = 0; i < acc.length; i++) {
-		acc[i].addEventListener("click", function () {
-			this.classList.toggle("active");
-			var panel = this.nextElementSibling;
-			if (panel.style.display === "block") {
-				panel.style.display = "none";
-			} else {
-				panel.style.display = "block";
+const orderKitchenStatusList = ref(['Preparing', 'Ready', 'Delivered', 'Cancelled']);
+const orderKitchenTypeActive = ref('Preparing');
+const orderKitchenList = ref([
+	{
+		id: 12,
+		date: '2022-12-08 20:00',
+		employeeName: 'Jéjé',
+		method: 'Card',
+		place: 'Kitchen',
+		type: 'Preparing',
+		status: 'waiting',
+		price: 1.4,
+		paid: 2,
+		clientName: "Alice",
+		numberOfPoints: 10,
+		items: [
+			{
+				"id": 152,
+				"name": "Alheira",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 9.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
 			}
-		});
+		]
+	},
+	{
+		id: 13,
+		date: '2022-12-08 20:00',
+		employeeName: 'Jéjé',
+		method: 'Card',
+		place: 'Kitchen',
+		type: 'Preparing',
+		status: 'waiting',
+		price: 1.4,
+		paid: 2,
+		clientName: "Alice",
+		numberOfPoints: 10,
+		items: [
+			{
+				"id": 153,
+				"name": "Alheira 2",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 19.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			},
+			{
+				"id": 152,
+				"name": "Alheira",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 9.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			}
+		]
+	},
+	{
+		id: 14,
+		date: '2022-12-08 20:00',
+		employeeName: 'Jéjé',
+		method: 'Card',
+		place: 'Delivered',
+		type: 'Preparing',
+		status: 'waiting',
+		price: 1.4,
+		paid: 2,
+		clientName: "Alice",
+		numberOfPoints: 10,
+		items: [
+			{
+				"id": 153,
+				"name": "Alheira 2",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 19.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			},
+			{
+				"id": 152,
+				"name": "Alheira",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 9.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			}
+		]
+	},
+	{
+		id: 15,
+		date: '2022-12-08 20:00',
+		employeeName: 'Jéjé',
+		method: 'Card',
+		place: 'Delivered',
+		type: 'Preparing',
+		price: 1.4,
+		paid: 2,
+		clientName: "Alice",
+		numberOfPoints: 10,
+		items: [
+			{
+				"id": 153,
+				"name": "Alheira 2",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 19.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			},
+			{
+				"id": 152,
+				"name": "Alheira",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 9.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			}
+		]
+	},
+	{
+		id: 16,
+		date: '2022-12-08 20:00',
+		employeeName: 'Jéjé',
+		method: 'Card',
+		place: 'Delivered',
+		type: 'Preparing',
+		price: 1.4,
+		paid: 2,
+		clientName: "Alice",
+		numberOfPoints: 10,
+		items: [
+			{
+				"id": 153,
+				"name": "Alheira 2",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 19.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			},
+			{
+				"id": 152,
+				"name": "Alheira",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 9.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			}
+		]
+	},
+	{
+		id: 17,
+		date: '2022-12-08 20:00',
+		employeeName: 'Jéjé',
+		method: 'Card',
+		place: 'Waiting',
+		type: 'Preparing',
+		price: 1.4,
+		paid: 2,
+		clientName: "Alice",
+		numberOfPoints: 10,
+		items: [
+			{
+				"id": 153,
+				"name": "Alheira 2",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 19.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			},
+			{
+				"id": 152,
+				"name": "Alheira",
+				"image": "jBMVpJbZ8uJMRE8N.jpg",
+				"price": 9.9,
+				"type": "hot dish",
+				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
+				"count": 3
+			}
+		]
 	}
+]);
+
+function changeTab(type) {
+	orderKitchenTypeActive.value = type;
+}
+
+const filterOrderKitchen = computed(() => {
+	return orderKitchenList.value.filter(item => item.type === orderKitchenTypeActive.value)
+});
+
 </script>
 
 <template>
-	<section id="store_orderKitchen">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<h1 class="text-uppercase text-bold">Menu</h1>
-				</div>
-			</div>
+	<section>
+		<div class="align-items-center d-flex justify-content-between">
+			<h4 class="text-uppercase text-bold">Dashboard</h4>
+			<ul class="nav nav-pills tabs-filter gap-4">
+				<li class="nav-item" role="presentation" v-for="(orderKitchenstatus, index) of orderKitchenStatusList"
+					:key="'tabs_' + index">
+					<button class="nav-link btn rounded-pill d-flex gap-2 align-items-center"
+							:class="(orderKitchenTypeActive === orderKitchenstatus ? 'btn-secondary active' : 'btn-outline-secondary')"
+							:id="'pills-' + orderKitchenstatus + '-tab'" type="button"
+							@click="changeTab(orderKitchenstatus)">
+						{{ orderKitchenstatus }}<span class="badge "
+													  :class="orderKitchenTypeActive === orderKitchenstatus ? 'bg-white text-primary' : 'bg-primary'">4</span>
+					</button>
+				</li>
+			</ul>
+			<div class="width-150"></div>
+		</div>
 
-			<div class="row">
-
-				<ul class="nav nav-tabs justify-content-center menu_tab">
-					<li v-for="orderKitchenstatus of orderKitchenList" class="nav-item">
-						<a class="nav-link text-capitalize"
-						   :class="orderKitchenTypeActive === orderKitchenType && 'active'" aria-current="page" href="#"
-						   @click="changeTab(orderKitchenstatus)">{{ orderKitchenstatus }}</a>
-					</li>
-				</ul>
+		<div class="row row-cols-3 mt-3 m-0">
+			<div class="column px-2 row row-cols-2">
+				<DashboardItem v-for="item of filterOrderKitchen" v-bind="item"/>
 			</div>
-			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-				<div v-for="item of filterOrderKitchen" class="col">
-					<OrderKitchenItem v-bind="item"/>
-				</div>
+			<div class="column px-2">
+			</div>
+			<div class="column px-2">
 			</div>
 		</div>
 	</section>
 </template>
 
 <style scoped>
-#filters {
-	height: 2em;
-	text-align: center;
-	margin-bottom: 1.5em;
+.tabs-filter {
+	display: flex;
+	position: relative;
+	background-color: #fff;
+	box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+	padding: 0.75rem;
+	border-radius: 99px;
 }
 
-#filters a {
-	font: bold 1.2em Arial, sans-serif;
-	display: inline-block;
-	height: 2em;
-	line-height: 2;
-	text-align: center;
-	padding: 0 1em;
-	margin-left: 1em;
-	border: 2px solid #ccc;
-	color: #000;
-	text-decoration: none;
-}
-
-#filters a.selected {
-	color: #08c;
-	border-color: #08c;
-}
-
-* {
-	box-sizing: border-box;
-}
-
-.row {
-	margin-left: -5px;
-	margin-right: -5px;
-}
-
-.column {
-	float: left;
-	width: 32%;
-	padding: 5px;
-}
-
-/* Clearfix (clear floats) */
-.row::after {
-	content: "";
-	clear: both;
-	display: table;
-}
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-	width: 100%;
-	border: 1px solid #ddd;
-}
-
-th, td {
-	text-align: left;
-	padding: 16px;
-}
-
-tr:nth-child(even) {
-	background-color: #f2f2f2;
-}
-
-.description {
-	text-align: left;
-}
-
-.title-left {
-	text-align: left;
-}
-
-.title-right {
-	text-align: right;
-}
-
-.title-center {
-	text-align: center;
-}
-
-.accordion {
-	background-color: #eee;
-	color: #444;
-	cursor: pointer;
-	padding: 18px;
-	width: 100%;
-	border: none;
-	text-align: left;
-	outline: none;
-	font-size: 15px;
-	transition: 0.4s;
-}
-
-.active, .accordion:hover {
-	background-color: #ccc;
-}
-
-.panel {
-	padding: 0 18px;
-	display: none;
-	background-color: white;
-	overflow: hidden;
+.tabs * {
+	z-index: 2;
 }
 </style>
   
