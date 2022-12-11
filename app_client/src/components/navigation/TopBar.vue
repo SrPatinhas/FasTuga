@@ -51,8 +51,10 @@
 						<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" style="width: 200px;">
 							<li><h6 class="dropdown-header">Account</h6></li>
 							<li>
-								<a class="dropdown-item d-flex align-items-center" href="dashboard-settings.html">
-									<i class="bi-gear opacity-50 me-2"></i>Settings
+								<a class="dropdown-item d-flex align-items-center bi-gear" >
+									<router-link class="nav-link" :class="{ active: $route.name === 'Settings' }" :to="{ name: 'Settings' }">
+							Settings
+						</router-link>
 								</a>
 							</li>
 							<li>
@@ -61,9 +63,9 @@
 								</a>
 							</li>
 							<li>
-								<a class="dropdown-item d-flex align-items-center" href="dashboard-favorites.html">
+								<div class="dropdown-item d-flex align-items-center">
 									<i class="bi-coin opacity-50 me-2"></i>Points<span class="ms-auto opacity-50">4</span>
-								</a>
+								</div>
 							</li>
 
 							<li>
