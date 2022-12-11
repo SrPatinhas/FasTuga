@@ -12,7 +12,7 @@ class Order extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'user_id'
+        'user_id',
         'phone',
         'points',
         'nif',
@@ -21,8 +21,8 @@ class Order extends Model
         'custom'
     ];
 
-    
-    //aquiii 
+
+    //aquiii
 
     public function owner()
     {
@@ -61,6 +61,6 @@ class Order extends Model
      return $this->hasMany(Order::class);
  }
 
-    
+
 
 }

@@ -1,55 +1,47 @@
 <?php
-use App\Models\User;
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\ProductController;
+use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\OrderController;
 
-
-use App\Http\Controllers\api\UserController;
-use App\Http\Controllers\api\AuthController;
-use Illuminate\Support\Facades\Hash;
-
-
-use App\Http\Controllers\api\ProductController;
-
-/*Route::get('pass', function (){
-    $pass = Hash::make('123');
-    User::where('id', '<>', 1)->update(['password' => $pass]);
-    return $pass;
-});*/
-
 Route::post('login', [AuthController::class, 'login']);
+Route::post('login-guest', [AuthController::class, 'loginAsGuest']);
+Route::post('register', [AuthController::class, 'register']);
 
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('users/me', [UserController::class, 'show_me']);
 
-    Route::get('users', [UserController::class, 'index']);
-    Route::get('users/{user}', [UserController::class, 'show'])
-        ->middleware('can:view,user'); // <--Para quem esta logado
-    Route::put('users/{user}', [UserController::class, 'update'])
-        ->middleware('can:update,user');
-    Route::patch('users/{user}/password', [UserController::class, 'update_password'])
-        ->middleware('can:updatePassword,user');
+    Route::controller(UserController::class)->group(function () {
+        Route::get('users',                     'index');
+        Route::get('users/{user}',              'show')->middleware('can:view,user'); // <--Para quem esta logado
+        Route::put('users/{user}',              'update')->middleware('can:update,user');
+        Route::patch('users/{user}/password',   'update_password')->middleware('can:updatePassword,user');
+    });
 
     //--PRODUCTS
-    Route::get('products', [ProductController::class, 'index']);
-    Route::get('products/{product}', [ProductController::class, 'show']);
-    Route::post('products', [ProductController::class, 'store']);
-    Route::put('products/{product}', [ProductController::class, 'update']);
-    Route::delete('products/{product}', [ProductController::class, 'destroy']);
-         
+    Route::controller(ProductController::class)->prefix('products')->group(function () {
+        Route::get('/',             'index');
+        Route::get('/{product}',    'show');
+        Route::post('/',            'store');
+        Route::put('/{product}',    'update');
+        Route::delete('/{product}', 'destroy');
+    });
     //--END PRODUCTS
 
 
     //--ORDERS
-    Route::get('products/{product}/orders', [OrderController::class, 'getOrdersOfProduct']);
-    Route::get('orders', [OrderController::class, 'index']);
-    Route::get('orders/{order}', [OrderController::class, 'show']);
-    Route::post('orders', [OrderController::class, 'store']);
-    Route::put('orders/{order}', [OrderController::class, 'update']);
-    Route::delete('orders/{order}', [OrderController::class, 'destroy']);
-
+    Route::controller(OrderController::class)->prefix('products')->group(function () {
+        Route::get('products/{product}/orders', 'getOrdersOfProduct');
+        Route::get('orders', 'index');
+        Route::get('orders/{order}', 'show');
+        Route::post('orders', 'store');
+        Route::put('orders/{order}', 'update');
+        Route::delete('orders/{order}', 'destroy');
+    });
     //--END ORDERS
 
 
@@ -72,6 +64,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('users/{user}/projects', [ProjectController::class, 'getProjectsOfUser']);
     Route::get('users/{user}/projects/inprogress', [ProjectController::class, 'getProjectsInProgressOfUser']);
  */
-    
+
 });
 
