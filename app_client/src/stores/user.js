@@ -116,5 +116,21 @@ export const useUserStore = defineStore('user', () => {
 		}
 	})
 
-	return {user, userId, userPhotoUrl, availablePoints, login, logout, restoreToken}
+	async function changePassword (passwords) {
+       errors.value = null
+        if (passwords.password != passwords.password_confirmation) {
+            return false
+        }
+        try {
+            await axios.patch('users/' +userId.value + '/password', passwords)
+            return true;
+        } catch (error) {
+            if (error.response.status == 422) {
+                errors.value = error.response.data.errors
+            }
+            return false
+        }
+    }
+
+	return {user, userId, userPhotoUrl, availablePoints, login, logout, restoreToken, changePassword}
 })
