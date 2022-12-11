@@ -1,77 +1,66 @@
 <script setup>
+import {ref, computed} from 'vue'
+import PublicBoardItem from "@/components/publicBoard/PublicBoardItem.vue";
+
+import {useOrdersStore} from "@/stores/order";
+
+const orderStore = useOrdersStore();
+
+const orderStatusList = ref(['Preparing', 'Ready', 'Delivered']);
+const orderTypeActive = ref('Preparing');
+
+const orderList = ref([
+	{
+		id: 1,
+		date: '20:00',
+		status: 'Preparing'
+	},
+	{
+		id: 2,
+		date: '20:02',
+		status: 'Preparing'
+	},
+	{
+		id: 3,
+		date: '20:15',
+		status: 'Ready'
+	},
+	{
+		id: 4,
+		date: '21:00',
+		status: 'Delivered'
+	},
+	])
+
+	
+const filterOrder = computed(() => {
+	return orderList.value.filter(item => item.type === orderTypeActive.value)
+});
+
 </script>
 
 <template>
-<div class="row">
-  <div class="column">
-<h3>Waiting list</h3>
-<ul class="list-group">
-			<li class="list-group-item d-flex justify-content-between align-items-start">
-				<div class="ms-2 me-auto">
-					<div class="fw-bold h3">
-						<span class="h5 text-muted">#</span>4
-					</div>
-				</div>
-				<span class="text-muted">13:32</span>
-      </li>
+	<section>
+		<div class="align-items-center d-flex justify-content-between">
+			<h4 class="text-uppercase text-bold">Public Board</h4>
+			<ul class="nav nav-pills tabs-filter gap-4">
+				<li class="nav-item" role="presentation" v-for="(orderStatus, index) of orderStatusList"
+					:key="'tabs_' + index">
+				</li>
+			</ul>
+			<div class="width-150"></div>
+		</div>
 
-      <li class="list-group-item d-flex justify-content-between align-items-start">
-				<div class="ms-2 me-auto">
-					<div class="fw-bold h3">
-						<span class="h5 text-muted">#</span>5
-					</div>
-				</div>
-				<span class="text-muted">13:35</span>
-      </li>
-
-      <li class="list-group-item d-flex justify-content-between align-items-start">
-				<div class="ms-2 me-auto">
-					<div class="fw-bold h3">
-						<span class="h5 text-muted">#</span>6
-					</div>
-				</div>
-				<span class="text-muted">13:35</span>
-      </li>
-		</ul>
-	</div>
-
-  <div class="column">
-<h3>Orders to make</h3>
-<ul class="list-group">
-			<li class="list-group-item d-flex justify-content-between align-items-start">
-				<div class="ms-2 me-auto">
-					<div class="fw-bold h3">
-						<span class="h5 text-muted">#</span>2
-					</div>
-				</div>
-				<span class="text-muted">13:32</span>
-      </li>
-
-      <li class="list-group-item d-flex justify-content-between align-items-start">
-				<div class="ms-2 me-auto">
-					<div class="fw-bold h3">
-						<span class="h5 text-muted">#</span>3
-					</div>
-				</div>
-				<span class="text-muted">13:35</span>
-      </li>
-		</ul>
-	</div>
-
-  <div class="column">
-<h3>Finished orders</h3>
-<ul class="list-group">
-			<li class="list-group-item d-flex justify-content-between align-items-start">
-				<div class="ms-2 me-auto">
-					<div class="fw-bold h3">
-						<span class="h5 text-muted">#</span>1
-					</div>
-				</div>
-				<span class="text-muted">13:32</span>
-      </li>
-		</ul>
-	</div>
-</div>
+		<div class="row row-cols-3 mt-3 m-0">
+			<div class="column px-2 row row-cols-2">
+				<PublicBoardItem v-for="item of filterOrder" v-bind="item"/>
+			</div>
+			<div class="column px-2">
+			</div>
+			<div class="column px-2">
+			</div>
+		</div>
+	</section>
 </template>
 
 <style scoped>* {
