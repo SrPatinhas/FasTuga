@@ -1,11 +1,9 @@
 <template>
-	<li class="list-group-item d-flex justify-content-between align-items-start">
-			<div class="ms-2 me-auto">
-				<div class="fw-bold h3">
-					<span class="h5 text-muted">#</span> {{ id }}
-				</div>
-			</div>
-			<span class="text-muted">{{ hour }}</span>
+	<li class="align-items-center card d-flex flex-row justify-content-around p-5">
+		<div class="align-items-center d-flex fw-bold h1 mb-0" :class="status === 'Ready' && 'text-success'">
+			<span class="h5 mb-0 mx-1 text-muted">#</span>{{ id }}
+		</div>
+		<span class="text-muted">{{ date }}</span>
     </li>
 
 </template>
@@ -14,7 +12,7 @@
 const item = defineProps({
 	id: Number,
 	status: String,
-	hour: String
+	date: String
 });
 
 </script>

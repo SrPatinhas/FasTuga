@@ -222,7 +222,7 @@ const filterOrderKitchen = computed(() => {
 							:id="'pills-' + orderKitchenstatus + '-tab'" type="button"
 							@click="changeTab(orderKitchenstatus)">
 						{{ orderKitchenstatus }}<span class="badge "
-													  :class="orderKitchenTypeActive === orderKitchenstatus ? 'bg-white text-primary' : 'bg-primary'">4</span>
+													  :class="orderKitchenTypeActive === orderKitchenstatus ? 'bg-white text-primary' : 'bg-primary'">{{ filterOrderKitchen.length }}</span>
 					</button>
 				</li>
 			</ul>
@@ -242,18 +242,6 @@ const filterOrderKitchen = computed(() => {
 </template>
 
 <style scoped>
-.tabs-filter {
-	display: flex;
-	position: relative;
-	background-color: #fff;
-	box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
-	padding: 0.75rem;
-	border-radius: 99px;
-}
-
-.tabs * {
-	z-index: 2;
-}
 </style>
   
   

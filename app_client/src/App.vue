@@ -1,6 +1,6 @@
 <template>
 	<TopBar />
-	<div class="page-content" :class="pageName !== 'Dashboard' && 'container'">
+	<div class="page-content" :class="(pageName !== 'Dashboard' && pageName !== 'PublicBoard') && 'container'">
 		<router-view />
 	</div>
 </template>
