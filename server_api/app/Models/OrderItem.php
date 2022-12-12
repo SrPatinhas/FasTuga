@@ -5,68 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class OrderItem extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
 
     protected $fillable = [
-
         'order_id',
         'order_local_number',
         'product_id',
+        'product_quantity',
         'status',
         'price',
         'preparation_by',
         'notes',
         'custom',
-
     ];
 
-    // W "Waiting", P "Preparing", R "Ready"
-    public function getStatusNameAttribute()
+    public function employee()
     {
-        switch ($this->status) {
-            case 'W':
-                return 'Waiting';
-            case 'P':
-                return 'Preparing';
-            case 'R':
-                return 'Ready';
-        }
+        return $this->belongsTo(User::class, 'preparation_by');
     }
 
-
-    //aquiii 
-
-    public function owner()
+    public function order()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(Order::class, 'order_id');
     }
-
-    public function getTotalTasksAttribute()
-    {
-        return Task::where('project_id', $this->id)->count();
-    }
-
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
-    }
-
-    public function responsible()
-    {
-        return $this->belongsTo(User::class, 'responsible_id');
-    }
-
-
-
-
-
-
-
-
-    
-
 }

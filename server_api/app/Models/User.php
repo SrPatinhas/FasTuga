@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 // Remove Sanctum Tokens
 //use Laravel\Sanctum\HasApiTokens;
 // Add Laravel Tokens
@@ -63,64 +64,24 @@ class User extends Authenticatable
         return $this->gender == 'M' ? 'Masculine' : 'Feminine';
     }
 
-    public function projects()
-    {
-        return $this->hasMany(Project::class, 'responsible_id');
-    }
-
-    public function tasks()
-    {
-        return $this->hasMany(Task::class, 'owner_id');
-    }
-
-    public function assigedTasks()
-    {
-        return $this->belongsToMany(Task::class, 'task_user');
-    }
-
-    // Relations that return only a subset of the tasks
-
-    // Owner and Completed
-    public function tasksCompleted()
-    {
-        return $this->hasMany(Task::class, 'owner_id')->where('completed', 1);
-    }
-
-    // Owner and NOT Completed
-    public function tasksNotCompleted()
-    {
-        return $this->hasMany(Task::class, 'owner_id')->where('completed', 0);
-    }
-
-    // Assigned and Completed
-    public function assigedTasksCompleted()
-    {
-        return $this->belongsToMany(Task::class, 'task_user')->where('completed', 1);
-    }
-
-    // Assigned and Not Completed
-    public function assigedTasksNotCompleted()
-    {
-        return $this->belongsToMany(Task::class, 'task_user')->where('completed', 0);
-    }
-
-
-
-
-
-
-
-
 
     public function customer()
     {
-        return $this->hasOne(Customer::class);
+        return $this->hasOne(Customer::class, 'user_id');
+    }
+
+    public function orderItem()
+    {
+        return $this->hasMany(OrderItem::class, 'preparation_by');
+    }
+
+    public function delivering()
+    {
+        return $this->hasMany(Order::class, 'delivered_by');
     }
 
 
 
-
-   
 
 
 }

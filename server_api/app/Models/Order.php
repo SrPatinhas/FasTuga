@@ -42,39 +42,38 @@ class Order extends Model
                 return 'Cancelled';
         }
     }
-    //aquiii 
 
-    public function owner()
+    public function customer()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
-
-    public function getTotalTasksAttribute()
-    {
-        return Task::where('project_id', $this->id)->count();
-    }
-
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
-    }
-
     public function responsible()
     {
         return $this->belongsTo(User::class, 'responsible_id');
     }
-
-
-
-
-
-
-
-    public function customer()
+    public function orderItems()
     {
-        return $this->belongsTo(Costumer::class);
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
-
-    
-
+    /*
+     * This will be used like
+     *
+     * Order::where(...)->ordersPreparing()->get()
+     */
+    public function scopeOrdersPreparing($query)
+    {
+        return $query->where('status', '=', 'P');
+    }
+    public function scopeOrdersReady($query)
+    {
+        return $query->where('status', '=', 'R');
+    }
+    public function scopeOrdersDelivered($query)
+    {
+        return $query->where('status', '=', 'D');
+    }
+    public function scopeOrdersCancelled($query)
+    {
+        return $query->where('status', '=', 'C');
+    }
 }

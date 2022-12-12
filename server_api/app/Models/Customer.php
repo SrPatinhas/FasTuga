@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class  Customer extends Model
 {
     use HasFactory;
 
@@ -21,46 +21,13 @@ class Order extends Model
         'custom'
     ];
 
-
-    //aquiii
-
-    public function owner()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function getTotalTasksAttribute()
-    {
-        return Task::where('project_id', $this->id)->count();
-    }
-
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
-    }
-
-    public function responsible()
-    {
-        return $this->belongsTo(User::class, 'responsible_id');
-    }
-
-
-
-
-
-
-
- //cust
- public function user()
- {
-     return $this->belongsTo(User::class);
- }
-
- public function orders()
- {
-     return $this->hasMany(Order::class);
- }
-
-
-
+     public function orders()
+     {
+         return $this->hasMany(Order::class, 'customer_id');
+     }
 }

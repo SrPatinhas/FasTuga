@@ -29,18 +29,20 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/',            'store');
         Route::put('/{product}',    'update');
         Route::delete('/{product}', 'destroy');
+
+        // TODO
+        // talvez para estatisticas?
+        Route::get('products/{product}/orders', 'getOrdersOfProduct');
     });
     //--END PRODUCTS
 
-
     //--ORDERS
-    Route::controller(OrderController::class)->prefix('products')->group(function () {
-        Route::get('products/{product}/orders', 'getOrdersOfProduct');
-        Route::get('orders', 'index');
-        Route::get('orders/{order}', 'show');
-        Route::post('orders', 'store');
-        Route::put('orders/{order}', 'update');
-        Route::delete('orders/{order}', 'destroy');
+    Route::controller(OrderController::class)->prefix('orders')->group(function () {
+        Route::get('/', 'index');
+        Route::get('/{order}', 'show');
+        Route::post('/', 'store');
+        Route::put('/{order}', 'update');
+        Route::delete('/{order}', 'destroy');
     });
     //--END ORDERS
 
