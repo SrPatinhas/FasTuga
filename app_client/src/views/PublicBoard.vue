@@ -27,8 +27,8 @@
 			id: 4,
 			date: '21:00',
 			status: 'Ready'
-		},
-		])
+		}
+	]);
 
 	const filterOrder_Preparing = computed(() => {
 		return orderList.value.filter(item => item.status === 'Preparing')

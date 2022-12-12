@@ -3,29 +3,31 @@
 		<!-- Item-->
 		<div v-for="(item, index) in orderStore.orderItems" :key="index"  class="d-sm-flex justify-content-between align-items-center" :class="{ 'mt-3': index > 0 && index < orderStore.orderItems.length, 'mb-4 pb-3 border-bottom': index != orderStore.orderItems.length - 1 }">
 			<div class="d-block d-sm-flex align-items-center text-center text-sm-start">
-				<a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="#">
+				<div class="d-inline-block flex-shrink-0 mx-auto me-sm-4">
 					<img src="img/food-delivery/cart/01.jpg" width="120" alt="Pizza">
-				</a>
+				</div>
 				<div class="pt-2">
-					<h3 class="product-title fs-base mb-2"><a href="#">{{ item.name }}</a></h3>
-					<div class="fs-sm"><span class="text-muted me-2">Size:</span>Medium</div>
-					<div class="fs-sm"><span class="text-muted me-2">Base:</span>Standard</div>
-					<div class="fs-lg text-accent pt-2">€{{ (item.count * item.price).toFixed(2).split(".")[0] }}.<small>{{ (item.count * item.price).toFixed(2).split(".")[1] }}</small></div>
+					<div class="fs-4 fw-medium mb-0 product-title">{{ item.name }}</div>
+					<div v-if="item.type !== 'hot dish'">
+						<label class="form-label" for="quantity1">Quantity</label>
+						<div class="d-flex align-items-center width-110 justify-content-between">
+							<button class="btn btn-icon btn-small" :disabled="item.count === 1" @click="updateItem(item, -1)">
+								<i class="bi-dash"></i>
+							</button>
+							<span class="px-2">{{ item.count }}</span>
+							<button class="btn btn-icon btn-small" @click="updateItem(item, 1)">
+								<i class="bi-plus"></i>
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-start" style="max-width: 9rem;">
-				<label class="form-label" for="quantity1">Quantity</label>
-				<div class="d-flex align-items-center width-110 justify-content-between">
-					<button class="btn btn-icon btn-small" :disabled="item.count === 1" @click="updateItem(item, -1)">
-						<i class="bi-dash"></i>
-					</button>
-					<span class="px-2">{{ item.count }}</span>
-					<button class="btn btn-icon btn-small" @click="updateItem(item, 1)">
-						<i class="bi-plus"></i>
-					</button>
+			<div  class="text-center">
+				<div class="fs-3 text-black">
+					€{{ (item.count * item.price).toFixed(2).split(".")[0] }}.<small>{{ (item.count * item.price).toFixed(2).split(".")[1] }}</small>
 				</div>
-				<a class="btn btn-link mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="itemToDelete(item)">
-					<i class="ci-close-circle me-2"></i>
+				<a class="btn btn-link text-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="itemToDelete(item)">
+					<i class="bi-trash me-2"></i>
 					<span class="fs-sm">Remove</span>
 				</a>
 			</div>

@@ -9,14 +9,16 @@
 			</div>
 			<div class="card-body">
 				<div v-if="items.length > 0" class="accordion_items">
-					<div class="d-flex align-items-center mb-2 border-bottom">
-						<span class="fw-bold flex-1 mb-0">Item</span>
-						<span class="fw-bold mb-0">Quantity</span>
+					<div class="d-flex align-items-center mb-2 border-bottom fw-bold ">
+						<span class="flex-1 mb-0">Item</span>
+						<span class="mb-0">Status</span>
 					</div>
 					<div v-for="(item, index) in items" :key="index" class="py-2 border-bottom">
-						<div class="d-flex align-items-center">
-							<span class="text-900 fw-semi-bold flex-1 mb-0">{{ item.name }}</span>
-							<span class="text-900 fw-semi-bold mb-0">{{ item.count }}</span>
+						<div class="d-flex align-items-center" :class="item.type !== 'hot dish' && 'opacity-25 text-decoration-line-through'">
+							<span class="flex-1 mb-0" :class="item.type === 'hot dish' && 'text-900 fw-semi-bold'">{{ item.name }}</span>
+							<span class="mb-0" v-if="item.type === 'hot dish'">
+								<button class="btn btn-primary">Ready</button>
+							</span>
 						</div>
 					</div>
 				</div>

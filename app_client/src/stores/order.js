@@ -92,11 +92,15 @@ export const useOrdersStore = defineStore('orders', () => {
 	 * add item or quantity to the order
 	 **/
 	function addItemToOrder(addItem) {
-		let idx = order.value.items.findIndex((item) => item.id === addItem.id)
-		if (idx >= 0) {
-			order.value.items[idx].count += 1;
-		} else {
+		if(addItem.type === 'hot dish') {
 			order.value.items.push(addItem);
+		} else {
+			let idx = order.value.items.findIndex((item) => item.id === addItem.id)
+			if (idx >= 0) {
+				order.value.items[idx].count += 1;
+			} else {
+				order.value.items.push(addItem);
+			}
 		}
 		updateBagLocalStorage();
 	}

@@ -87,9 +87,7 @@
 					<h1 class="text-uppercase text-bold">Menu</h1>
 				</div>
 			</div>
-
 			<div class="row">
-
 				<ul class="nav nav-tabs justify-content-center menu_tab">
 					<li v-for="foodType of foodTypeList" class="nav-item">
 						<a class="nav-link text-capitalize" :class="foodTypeActive === foodType && 'active'" aria-current="page" href="#" @click="changeTab(foodType)">{{ foodType }}</a>

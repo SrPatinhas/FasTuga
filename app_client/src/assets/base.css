@@ -298,6 +298,12 @@ fieldset:disabled .btn {
 .fw-medium {
   font-weight: 500 !important;
 }
+.fw-semi-bold {
+  font-weight: 700 !important;
+}
+.fw-bold {
+  font-weight: 900 !important;
+}
 
 .navbar {
   --bs-navbar-color: rgba(0, 0, 0, 0.65);

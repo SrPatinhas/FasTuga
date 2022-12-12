@@ -70,8 +70,8 @@ const loginGuest = () => {
 						</form>
 					</div>
 				</div>
-				<router-link class="btn btn-link text-muted mx-auto mt-3 d-block" :to="{ name: 'Registration' }">
-					Or Register
+				<router-link class="btn btn-link mx-auto mt-3 d-block" :to="{ name: 'Registration' }">
+					Or Register <i class="ml-2 bi-box-arrow-up-right text-muted"></i>
 				</router-link>
 			</div>
 			<div class="user_options-text">

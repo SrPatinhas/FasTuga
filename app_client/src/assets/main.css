@@ -135,3 +135,16 @@ nav.navbar  .nav-link{
 .tabs-filter * {
   z-index: 2;
 }
+
+.sticky-header {
+  top: 62px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 1020;
+  background: var(--bs-body-bg);
+  padding: 20px 0 10px;
+  box-shadow: 0 4px 2px -2px #d5d5d5;
+}
