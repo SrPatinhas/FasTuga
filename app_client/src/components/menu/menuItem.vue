@@ -1,5 +1,5 @@
 <template>
-	<div class="card h-100 card-item">
+	<div class="card h-100 card-item p-0">
 		<img src="https://nsm09.casimages.com/img/2021/06/26//21062602461725998217475199.jpg" class="card-img-top" :alt="name">
 		<div class="card-body">
 			<h5 class="card-title">{{ name }} </h5>
