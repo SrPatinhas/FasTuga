@@ -1,102 +1,57 @@
 <script setup>
-	import { ref, computed } from 'vue'
-	import MenuItem from "../components/menu/menuItem.vue";
+	import MenuItem from "@/components/menu/menuItem.vue";
+	import {useMenuStore} from "@/stores/menu";
+	import {ref} from "vue";
 
-	const foodTypeList = ref(['hot dish', 'cold dish', 'drink', 'dessert']);
+	const menuStore = useMenuStore();
+
 	const foodTypeActive = ref('hot dish');
-	const foodList = ref([
-		{
-			id: 12,
-			name: '7-Up',
-			image: 'KPNzRRCrbwnrxbgk.jpg',
-			price: 1.4,
-			type: 'drink',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-		{
-			id: 123,
-			name: 'Água das Pedras',
-			image: 'KPNzRRCrbwnrxbgk.jpg',
-			price: 1.4,
-			type: 'drink',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-		{
-			id: 142,
-			name: 'Água do Luso',
-			image: 'KPNzRRCrbwnrxbgk.jpg',
-			price: 1.4,
-			type: 'drink',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-		{
-			id: 121,
-			name: 'Aletria',
-			image: 'QSJ8nyCgMiw40EkV.jpg',
-			price: 3.40,
-			type: 'dessert',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-		{
-			id: 152,
-			name: 'Alheira',
-			image: 'jBMVpJbZ8uJMRE8N.jpg',
-			price: 9.90,
-			type: 'hot dish',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-		{
-			id: 125,
-			name: 'Arroz de Marisco',
-			image: 'RmoYdKAGJzm10l9J.jpg',
-			price: 9.90,
-			type: 'hot dish',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-		{
-			id: 212,
-			name: 'Salada decNoodles',
-			image: 'ulSMYjBpImeqSSEE.jpg',
-			price: 9.90,
-			type: 'cold dish',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-		{
-			id: 126,
-			name: 'Salada Fria de Frango',
-			image: 'Vt0rlSQBE3jfJniu.jpg',
-			price: 4.00,
-			type: 'cold dish',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-	]);
 
 	function changeTab(type) {
 		foodTypeActive.value = type;
 	}
-	const filterFood = computed( () => {
-		return foodList.value.filter( item => item.type === foodTypeActive.value )
-	});
 </script>
 
 <template>
-	<section id="store_menu" class="pt-5 pb-5">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<h1 class="text-uppercase text-bold">Menu</h1>
+	<section id="store_menu" class="row pt-3 pb-5">
+		<div class="sticky-header">
+			<h4 class="text-uppercase text-bold">Menu</h4>
+			<ul class="nav nav-pills tabs-filter gap-4" role="tablist">
+				<li class="nav-item" role="presentation" v-for="(foodType, index) of menuStore.productTypes" :key="'tabs_' + index">
+					<button class="nav-link btn rounded-pill d-flex gap-2 align-items-center"
+							:class="(foodTypeActive === foodType ? 'btn-secondary active' : 'btn-outline-secondary')"
+							:id="'pills-' + foodType.replace(' ', '_') + '-tab'" type="button"
+							data-bs-toggle="tab" :data-bs-target="'#' + foodType.replace(' ', '_') + '-tab-pane'"
+							role="tab" :aria-controls="foodType.replace(' ', '_') + '-tab-pane'" :aria-selected="foodTypeActive === foodType"
+							@click="changeTab(foodType)">
+						{{ foodType }}
+						<span class="badge" :class="foodTypeActive === foodType ? 'bg-white text-primary' : 'bg-primary'">
+							{{ menuStore.getProductsByFilterTotal(foodType) }}
+						</span>
+					</button>
+				</li>
+			</ul>
+			<div class="width-150"></div>
+		</div>
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active" id="hot_dish-tab-pane" role="tabpanel" aria-labelledby="hot_dish-tab" tabindex="0">
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
+					<MenuItem v-for="food of menuStore.getProductsByFilter('hot dish')" v-bind="food"/>
 				</div>
 			</div>
-			<div class="row">
-				<ul class="nav nav-tabs justify-content-center menu_tab">
-					<li v-for="foodType of foodTypeList" class="nav-item">
-						<a class="nav-link text-capitalize" :class="foodTypeActive === foodType && 'active'" aria-current="page" href="#" @click="changeTab(foodType)">{{ foodType }}</a>
-					</li>
-				</ul>
+			<div class="tab-pane fade" id="cold_dish-tab-pane" role="tabpanel" aria-labelledby="cold_dish-tab" tabindex="0">
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
+					<MenuItem v-for="food of menuStore.getProductsByFilter('cold dish')" v-bind="food"/>
+				</div>
 			</div>
-			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-				<div v-for="food of filterFood" class="col">
-					<MenuItem v-bind="food"/>
+			<div class="tab-pane fade" id="drink-tab-pane" role="tabpanel" aria-labelledby="drink-tab" tabindex="0">
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
+					<MenuItem v-for="food of menuStore.getProductsByFilter('drink')" v-bind="food"/>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="dessert-tab-pane" role="tabpanel" aria-labelledby="dessert-tab" tabindex="0">
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
+					<MenuItem v-for="food of menuStore.getProductsByFilter('dessert')" v-bind="food"/>
 				</div>
 			</div>
 		</div>
