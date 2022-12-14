@@ -23,7 +23,14 @@ import ChangePassword from "../components/auth/ChangePassword.vue";
 import Users from "../components/users/Users.vue";
 import User from "../components/users/User.vue";
 import RouteRedirector from "../components/global/RouteRedirector.vue";
+
+// Settings 
 import Settings from "../views/Settings.vue";
+import SettingsAccount from "../views/SettingsAccount.vue";
+import SettingsPurchases from "../views/SettingsPurchases.vue";
+import SettingsDashboardManager from "../views/SettingsDashboardManager.vue";
+
+SettingsDashboardManager
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,11 +66,6 @@ const router = createRouter({
 			path: '/users',
 			name: 'Users',
 			component: Users,
-		},
-		{
-			path: '/settings',
-			name: 'Settings',
-			component: Settings,
 		},
 		{
 			path: '/users/:id',
@@ -117,7 +119,27 @@ const router = createRouter({
 			name: 'Reports',
 			component: () => import('../views/Board.vue')
 		},
-
+		// Settings
+		{
+			path: '/settings',
+			name: 'Settings',
+			component: Settings,
+		}, 
+		{
+			path: '/settingsaccount',
+			name: 'SettingsAccount',
+			component: SettingsAccount,
+		},
+		{
+			path: '/settingspurchases',
+			name: 'SettingsPurchases',
+			component: SettingsPurchases,
+		},
+		{
+			path: '/settingsdashboardmanager',
+			name: 'SettingsDashboardManager',
+			component: SettingsDashboardManager,
+		},
 	]
 })
 

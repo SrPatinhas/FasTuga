@@ -1,5 +1,5 @@
 <script setup>
-
+ import SettingsBar from "../components/navigation/SettingsBar.vue"
 </script>
 
 <template>
@@ -9,7 +9,9 @@
             <!-- Sidebar-->
             <SettingsBar></SettingsBar>
             <!-- Content-->
-            
+            <section class="col-lg-8 pt-lg-4 pb-4 mb-3">
+              <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
+                <h2 class="h3 py-2 text-center text-sm-start">Settings</h2>
                 <!-- Tabs-->
                 <ul class="nav nav-tabs nav-justified" role="tablist">
                   <li class="nav-item" role="presentation"><a class="nav-link px-0 active" href="#profile" data-bs-toggle="tab" role="tab" aria-selected="true">
@@ -159,6 +161,8 @@
                     <div class="text-sm-end"><a class="btn btn-primary" href="#add-payment" data-bs-toggle="modal">Add payment method</a></div>
                   </div>
                 </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>

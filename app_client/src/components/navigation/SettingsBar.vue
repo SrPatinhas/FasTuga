@@ -10,23 +10,33 @@
                     <h3 class="fs-sm mb-0 text-muted">Account</h3>
                   </div>
                   <ul class="list-unstyled mb-0">
-                    <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 active" href=""><i class="ci-settings opacity-60 me-2"></i>Settings</a></li>
+                    <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 active" href=""><i class="ci-settings opacity-60 me-2"></i>
+                      <router-link :class="{ active: $route.name === 'SettingsAccount' }" :to="{ name: 'SettingsAccount' }">
+                        Settings
+                  </router-link></a></li>
                   </ul>
                   <div class="bg-secondary p-4">
                     <h3 class="fs-sm mb-0 text-muted">Orders</h3>
                   </div>
                   <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
-                        Purchase history
-                  
-                  <span class="fs-sm text-muted ms-auto"></span></a></li>
+                  <router-link :class="{ active: $route.name === 'SettingsPurchases' }" :to="{ name: 'SettingsPurchases' }">
+                    Purchase history
+                  </router-link>
+                  <span class="fs-sm text-muted ms-auto"></span></a></li>  
                   </ul>
 				  <div class="nav-item" v-show="userStore.user?.type == 'EM'">
 					<div class="bg-secondary p-4">
-                    <h3 class="fs-sm mb-0 text-muted">Management</h3>
+                    <h3 class="fs-sm mb-0 text-muted">
+                      Management
+                    </h3>
                   </div>
 				  <ul class="list-unstyled mb-0">
-                    <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>Dashboard Manager<span class="fs-sm text-muted ms-auto"></span></a></li>
+                    <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
+                      <router-link :class="{ active: $route.name === 'SettingsDashboardManager' }" :to="{ name: 'SettingsDashboardManager' }">
+                        Dashboard Manager
+                  </router-link>
+                  <span class="fs-sm text-muted ms-auto"></span></a></li>
                   </ul>
                   <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>Users account<span class="fs-sm text-muted ms-auto"></span></a></li>
