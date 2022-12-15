@@ -108,7 +108,7 @@ nav.navbar  .nav-link{
 }
 
 .form-check-input:checked[type=radio] {
-  background-image: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e");
 }
 .form-check-input:checked {
   background-color: #fe696a;
@@ -147,4 +147,16 @@ nav.navbar  .nav-link{
   background: var(--bs-body-bg);
   padding: 20px 0 10px;
   box-shadow: 0 4px 2px -2px #d5d5d5;
+}
+
+.bg-faded-info {
+  --bs-bg-opacity: 0.09;
+  background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important;
+}
+.bg-faded-warning {
+  --bs-bg-opacity: 0.09;
+  background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+}
+.mb-grid-gutter {
+  margin-bottom: 1.875rem !important;
 }
