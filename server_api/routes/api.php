@@ -1,71 +1,87 @@
 <?php
 
+use App\Http\Controllers\api\CustomerController;
+use App\Http\Controllers\api\EmployeeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\OrderController;
 
-Route::post('login', [AuthController::class, 'login']);
-Route::post('login-guest', [AuthController::class, 'loginAsGuest']);
-Route::post('register', [AuthController::class, 'register']);
+Route::controller(AuthController::class)->group(function () {
+    Route::post('login',        'login');
+    Route::post('register',     'register');
+});
 
+Route::controller(OrderController::class)->prefix('orders')->group(function () {
+    Route::get('/guest/{order}',        'showGuest')->whereNumber('order');
+    Route::post('/guest/payment',       'paymentGuest');
+    Route::get('/guest/{order}/status', 'getOrderStatusGuest')->whereNumber('order');
+});
+
+// Leave this 3 requests public so anyone can get them
+Route::controller(ProductController::class)->prefix('products')->group(function () {
+    Route::get('/',             'index');
+    Route::get('/trending',     'trending');
+    Route::get('/{product}',    'show')->whereNumber('product');
+});
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('users/me', [UserController::class, 'show_me']);
+    //--USER
+    Route::controller(UserController::class)->prefix('users')->group(function () {
+        Route::get('/me',                  'show_me');
+        Route::get('/',                    'index');
+        Route::get('/{user}',              'show')->middleware('can:view,user')->whereNumber('user'); // <--Para quem esta logado
+        Route::put('/{user}',              'update')->middleware('can:update,user')->whereNumber('user');
+        Route::patch('/{user}/password',   'update_password')->middleware('can:updatePassword,user')->whereNumber('user');
 
-    Route::controller(UserController::class)->group(function () {
-        Route::get('users',                     'index');
-        Route::get('users/{user}',              'show')->middleware('can:view,user'); // <--Para quem esta logado
-        Route::put('users/{user}',              'update')->middleware('can:update,user');
-        Route::patch('users/{user}/password',   'update_password')->middleware('can:updatePassword,user');
+        Route::post('/photo',              'uploadPhoto');
     });
-
+    //--END USER
+    //--CUSTOMER
+    Route::controller(CustomerController::class)->prefix('customers')->group(function () {
+        Route::get('/{customer}/order/{order}', 'order')->whereNumber('customer');
+        Route::get('/{customer}/orders',        'orders')->whereNumber('customer');
+        Route::post('/{customer}/block',        'block')->whereNumber('customer');
+        Route::post('/{customer}/unblock',      'unblock')->whereNumber('customer');
+    });
+    //--END CUSTOMER
+    //--EMPLOYEE
+    Route::controller(EmployeeController::class)->prefix('employees')->group(function () {
+        // Restaurant / Manager routes
+        Route::get('/',                 'index');
+        Route::post('/',                'create');
+        Route::get('/{employee}',       'show')->whereNumber('employee');
+        Route::put('/{employee}',       'update')->whereNumber('employee');
+        Route::delete('/{employee}',    'delete')->whereNumber('employee');
+    });
+    //--END EMPLOYEE
     //--PRODUCTS
     Route::controller(ProductController::class)->prefix('products')->group(function () {
-        Route::get('/',             'index');
-        Route::get('/{product}',    'show');
-        Route::post('/',            'store');
-        Route::put('/{product}',    'update');
-        Route::delete('/{product}', 'destroy');
-
-        // TODO
-        // talvez para estatisticas?
-        Route::get('products/{product}/orders', 'getOrdersOfProduct');
+        // Only a manager can use this ones
+        Route::post('/',                    'store');
+        Route::put('/{product}',            'update')->whereNumber('product');
+        Route::post('/{product}/photos',   'updatePhoto')->whereNumber('product');
+        Route::delete('/{product}',         'destroy')->whereNumber('product');
+        // TODO -> talvez para estatisticas?
+        Route::get('/top-items',        'getTopItems');
+        Route::get('/{product}/orders', 'getOrdersOfProduct')->whereNumber('product');
     });
     //--END PRODUCTS
-
     //--ORDERS
     Route::controller(OrderController::class)->prefix('orders')->group(function () {
-        Route::get('/', 'index');
-        Route::get('/{order}', 'show');
-        Route::post('/', 'store');
-        Route::put('/{order}', 'update');
-        Route::delete('/{order}', 'destroy');
+        Route::get('/',             'index');
+        Route::get('/{order}',      'show')->whereNumber('order');
+        Route::post('/payment',     'payment');
+        Route::put('/{order}',      'update')->whereNumber('order');
+        Route::delete('/{order}',   'destroy')->whereNumber('order');
+
+        // Requests for the kitchen
+        Route::get('/board',                        'getBoardItems');
+        Route::get('/active',                       'getActiveOrders');
+        Route::get('/{order}/status',               'getOrderStatus')->whereNumber('order');
+        Route::post('/{order}/status',              'setOrderStatus')->whereNumber('order');
     });
     //--END ORDERS
-
-
-
-
-    /*
-    Route::get('users/{user}/tasks', [TaskController::class, 'getTasksOfUser']);
-    Route::get('tasks/{task}', [TaskController::class, 'show']);
-    Route::post('tasks', [TaskController::class, 'store']);
-    Route::delete('tasks/{task}', [TaskController::class, 'destroy']);
-    Route::put('tasks/{task}', [TaskController::class, 'update']);
-    Route::patch('tasks/{task}/completed', [TaskController::class, 'update_completed']);
-
-    Route::get('projects', [ProjectController::class, 'index']);
-    Route::get('projects/{project}', [ProjectController::class, 'show']);
-    Route::get('projects/{project}/tasks', [ProjectController::class, 'showWithTasks']);
-    Route::post('projects', [ProjectController::class, 'store']);
-    Route::delete('projects/{project}', [ProjectController::class, 'destroy']);
-    Route::put('projects/{project}', [ProjectController::class, 'update']);
-    Route::get('users/{user}/projects', [ProjectController::class, 'getProjectsOfUser']);
-    Route::get('users/{user}/projects/inprogress', [ProjectController::class, 'getProjectsInProgressOfUser']);
- */
-
 });
-
