@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-	import {useOrdersStore} from "../../stores/order.js";
+	import {useOrdersStore} from "@/stores/order";
 	const orderStore = useOrdersStore();
 
 	const prod = defineProps({
