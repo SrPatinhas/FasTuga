@@ -19,14 +19,15 @@
 			<ul class="nav nav-pills tabs-filter gap-4" role="tablist">
 				<li class="nav-item" role="presentation" v-for="(foodType, index) of menuStore.productTypes" :key="'tabs_' + index">
 					<button class="nav-link btn rounded-pill d-flex gap-2 align-items-center"
-							:class="(foodTypeActive === foodType ? 'btn-secondary active' : 'btn-outline-secondary')"
-							:id="'pills-' + foodType.replace(' ', '_') + '-tab'" type="button"
-							data-bs-toggle="tab" :data-bs-target="'#' + foodType.replace(' ', '_') + '-tab-pane'"
-							role="tab" :aria-controls="foodType.replace(' ', '_') + '-tab-pane'" :aria-selected="foodTypeActive === foodType"
-							@click="changeTab(foodType)">
-						{{ foodType }}
-						<span class="badge" :class="foodTypeActive === foodType ? 'bg-white text-primary' : 'bg-primary'">
-							{{ menuStore.getProductsByFilterTotal(foodType) }}
+							:class="(foodTypeActive === foodType.type ? 'btn-secondary active' : 'btn-outline-secondary')"
+							:id="'pills-' + foodType.type.replace(' ', '_') + '-tab'" type="button"
+							data-bs-toggle="tab" :data-bs-target="'#' + foodType.type.replace(' ', '_') + '-tab-pane'"
+							role="tab" :aria-controls="foodType.type.replace(' ', '_') + '-tab-pane'" :aria-selected="foodTypeActive === foodType.type"
+							@click="changeTab(foodType.type)">
+						<i :class="'bi ' + foodType.icon"></i>
+						{{ foodType.type }}
+						<span class="badge" :class="foodTypeActive === foodType.type ? 'bg-white text-primary' : 'bg-primary'">
+							{{ menuStore.getProductsByFilterTotal(foodType.type) }}
 						</span>
 					</button>
 				</li>

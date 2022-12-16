@@ -1,13 +1,15 @@
 <template>
-	<div class="card h-100 card-item p-0">
-		<img src="https://nsm09.casimages.com/img/2021/06/26//21062602461725998217475199.jpg" class="card-img-top" :alt="name">
-		<div class="card-body">
-			<h5 class="card-title">{{ name }} </h5>
-			<p class="card-text text-muted">{{ description }}</p>
-			<div class="d-flex justify-content-between align-items-center">
-				<span class="fs-2 text-bold text-primary">{{ price.toFixed(2) }}<span class="fs-5">€</span></span>
-				<div class="btn btn-icon" @click="addToCart">
-					<i class="bi-bag"></i>
+	<div class="col">
+		<div class="card card-item h-100 shadow-sm">
+			<img src="https://nsm09.casimages.com/img/2021/06/26//21062602461725998217475199.jpg" class="card-img-top" :alt="name">
+			<div class="card-body">
+				<h5 class="card-title">{{ name }} </h5>
+				<p class="card-text text-muted">{{ description }}</p>
+				<div class="d-flex justify-content-between align-items-center">
+					<span class="fs-2 text-bold text-primary">{{ price.toFixed(2) }}<span class="fs-5">€</span></span>
+					<div class="btn btn-icon" @click="addToCart">
+						<i class="bi-bag"></i>
+					</div>
 				</div>
 			</div>
 		</div>
