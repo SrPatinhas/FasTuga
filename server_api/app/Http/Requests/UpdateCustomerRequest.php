@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterUserRequest extends FormRequest
+class UpdateCustomerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,14 @@ class RegisterUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'min:3', 'max:255', 'regex:/^(?![\s.]+$)[a-zA-Z\s.]*$/'],
-            'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'confirmed', 'min:4'],
-            'password_confirmation' => ['required','same:password'],
+            'name' => ['required', 'min:3', 'regex:/^(?![\s.]+$)[a-zA-Z\s.]*$/'],
+            'email' => ['required', 'email'],
+            'password' => ['nullable','confirmed', 'min:4'],
 
             'phone' => ['required', 'between:9,13'],
             'nif' => ['nullable','size:9'],
             'photo_file' => ['nullable','file','image'],
+
             'gender' => ['required', 'in:M,F'],
 
             'pay_type' => ['required', 'in:visa,mbway,paypal'],
@@ -48,11 +48,9 @@ class RegisterUserRequest extends FormRequest
 
             'email.required' => "You have to provide your email",
             'email.email' => "Provide a valid email",
-            'email.unique' => "This email is already in use",
 
-            'password.required' => "You have to provide your password",
-            'password.confirmed' => "Passwords do not match",
             'password.min' => "Password needs to be at least 4 characters",
+            'password.confirmed' => "Passwords do not match",
 
             'phone.required' => "You have to provide your phone",
             'phone.between' => "Insert a valid phone number",
