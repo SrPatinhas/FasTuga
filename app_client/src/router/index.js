@@ -29,8 +29,8 @@ import Settings from "../views/Settings.vue";
 import SettingsAccount from "../views/SettingsAccount.vue";
 import SettingsPurchases from "../views/SettingsPurchases.vue";
 import SettingsDashboardManager from "../views/SettingsDashboardManager.vue";
+import SettingsUsersAccount from "../views/SettingsUsersAccount.vue";
 
-SettingsDashboardManager
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -140,6 +140,11 @@ const router = createRouter({
 			name: 'SettingsDashboardManager',
 			component: SettingsDashboardManager,
 		},
+		{
+			path: '/settingsusersaccount',
+			name: 'SettingsUsersAccount',
+			component: SettingsUsersAccount,
+		}
 	]
 })
 
