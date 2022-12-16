@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterUserRequest extends FormRequest
+class CreateEmployeeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,12 +29,7 @@ class RegisterUserRequest extends FormRequest
             'password' => ['required', 'confirmed', 'min:4'],
             'password_confirmation' => ['required','same:password'],
 
-            'phone' => ['required', 'between:9,13'],
-            'nif' => ['nullable','size:9'],
-            'photo_file' => ['nullable','file','image'],
-
-            'pay_type' => ['required', 'in:visa,mbway,paypal'],
-            'pay_reference' => ['required'],
+            'type' => ['required', 'in:EC,ED,EM'],
         ];
     }
 
@@ -53,15 +48,8 @@ class RegisterUserRequest extends FormRequest
             'password.confirmed' => "Passwords do not match",
             'password.min' => "Password needs to be at least 4 characters",
 
-            'phone.required' => "You have to provide your phone",
-            'phone.between' => "Insert a valid phone number",
-
-            'nif.size' => "A NIF consists of 9 numbers",
-
-            'pay_type.required' => "You have to provide your default payment type",
-            'pay_type.in' => "The payment type needs to be 'VISA', 'MBWay' or 'Paypal'",
-
-            'pay_reference.required' => "You have to provide your default payment reference"
+            'type.required' => "You have to provide the user type",
+            'type.in' => "The payment type needs to be 'EC', 'ED' or 'EM'"
         ];
     }
 }

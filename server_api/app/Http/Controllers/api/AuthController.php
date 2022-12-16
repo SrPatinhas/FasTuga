@@ -27,8 +27,7 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 'type' => 'C',
                 'blocked' => false,
-                'photo_url' => null,
-                'gender' => $request->gender,
+                'photo_url' => null
             ]);
 
             Customer::create([
@@ -37,8 +36,7 @@ class AuthController extends Controller
                 'points'                        => 0,
                 'nif'                           => $request->nif,
                 'default_payment_type'          => $request->pay_type,
-                'default_payment_reference'     => $request->pay_reference,
-                'custom'                        => ''
+                'default_payment_reference'     => $request->pay_reference
             ]);
 
             $res = $this->authUser($request->email, $request->password);
@@ -48,7 +46,6 @@ class AuthController extends Controller
             return response()->json('Registration has failed!', 401);
         }
     }
-
 
     public function logout(Request $request)
     {
@@ -62,7 +59,6 @@ class AuthController extends Controller
     /*
      * Private Functions
      */
-
     private function passportAuthenticationData($username, $password) {
         return [
             'grant_type' => 'password',

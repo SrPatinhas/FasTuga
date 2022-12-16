@@ -30,21 +30,22 @@ Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     //--USER
     Route::controller(UserController::class)->prefix('users')->group(function () {
-        Route::get('/me',                  'show_me');
+        Route::get('/me',                  'userInfo');
         Route::get('/',                    'index');
         Route::get('/{user}',              'show')->middleware('can:view,user')->whereNumber('user'); // <--Para quem esta logado
         Route::put('/{user}',              'update')->middleware('can:update,user')->whereNumber('user');
         Route::patch('/{user}/password',   'update_password')->middleware('can:updatePassword,user')->whereNumber('user');
 
         Route::post('/photo',              'uploadPhoto');
+
+        Route::post('/{user}/block',       'block')->whereNumber('user');
+        Route::post('/{user}/unblock',     'unblock')->whereNumber('user');
     });
     //--END USER
     //--CUSTOMER
     Route::controller(CustomerController::class)->prefix('customers')->group(function () {
         Route::get('/{customer}/order/{order}', 'order')->whereNumber('customer');
         Route::get('/{customer}/orders',        'orders')->whereNumber('customer');
-        Route::post('/{customer}/block',        'block')->whereNumber('customer');
-        Route::post('/{customer}/unblock',      'unblock')->whereNumber('customer');
     });
     //--END CUSTOMER
     //--EMPLOYEE
