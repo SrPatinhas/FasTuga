@@ -30,6 +30,7 @@ import SettingsAccount from "../views/SettingsAccount.vue";
 import SettingsPurchases from "../views/SettingsPurchases.vue";
 import SettingsDashboardManager from "../views/SettingsDashboardManager.vue";
 import SettingsUsersAccount from "../views/SettingsUsersAccount.vue";
+import SettingsMenu from "../views/SettingsMenu.vue";
 
 
 const router = createRouter({
@@ -144,6 +145,11 @@ const router = createRouter({
 			path: '/settingsusersaccount',
 			name: 'SettingsUsersAccount',
 			component: SettingsUsersAccount,
+		},
+		{
+			path: '/settingsmenu',
+			name: 'SettingsMenu',
+			component: SettingsMenu,
 		}
 	]
 })

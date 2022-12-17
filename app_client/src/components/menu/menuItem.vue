@@ -5,7 +5,7 @@
 			<h5 class="card-title">{{ name }} </h5>
 			<p class="card-text text-muted">{{ description }}</p>
 			<div class="d-flex justify-content-between align-items-center">
-				<span class="fs-2 text-bold text-primary">{{ price.toFixed(2) }}<span class="fs-5">€</span></span>
+				<span class="fs-2 text-bold text-primary">{{ price }}<span class="fs-5">€</span></span>
 				<div class="btn btn-icon" @click="addToCart">
 					<i class="bi-bag"></i>
 				</div>

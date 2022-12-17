@@ -31,7 +31,7 @@
                       Management
                     </h3>
                   </div>
-				  <ul class="list-unstyled mb-0">
+				          <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
                       <router-link :class="{ active: $route.name === 'SettingsDashboardManager' }" :to="{ name: 'SettingsDashboardManager' }">
                         Dashboard Manager
@@ -42,10 +42,14 @@
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
                       <router-link :class="{ active: $route.name === 'SettingsUsersAccount' }" :to="{ name: 'SettingsUsersAccount' }">
                         Users account
-                  </router-link><span class="fs-sm text-muted ms-auto"></span></a></li>
+                  </router-link>
+                  <span class="fs-sm text-muted ms-auto"></span></a></li>
                   </ul>
 				  <ul class="list-unstyled mb-0">
-                    <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>Menu<span class="fs-sm text-muted ms-auto"></span></a></li>
+                    <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
+                      <router-link :class="{ active: $route.name === 'SettingsMenu' }" :to="{ name: 'SettingsMenu' }">
+                        Menu
+                  </router-link><span class="fs-sm text-muted ms-auto"></span></a></li>
                   </ul>
 				  <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>Cancelling order<span class="fs-sm text-muted ms-auto"></span></a></li>
