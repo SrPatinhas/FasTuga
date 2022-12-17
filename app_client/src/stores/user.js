@@ -18,7 +18,9 @@ export const useUserStore = defineStore('user', () => {
 		image: 'KPNzRRCrbwnrxbgk.jpg',
 		email: 'je@je.com',
 		type: 'EM'
-		},)
+	});
+
+	const userIsGuest = ref( false);
 
 	const userPhotoUrl = computed(() => {
 		if (!user.value?.photo_url) {
@@ -60,6 +62,7 @@ export const useUserStore = defineStore('user', () => {
 			await loadUser();
 			socket.emit('loggedIn', user.value);
 			//await projectsStore.loadProjects()
+			userIsGuest.value = false;
 			return true
 		} catch (error) {
 			clearUser()
@@ -68,21 +71,8 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
-	async function loginAsGuest() {
-		try {
-			const response = await axios.post('login-guest', {});
-			axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
-			sessionStorage.setItem('token', response.data.access_token)
-			await loadUser();
-			console.log('load user');
-			socket.emit('loggedIn', user.value)
-			//await projectsStore.loadProjects()
-			return true
-		} catch (error) {
-			clearUser()
-			//projectsStore.clearProjects()
-			return false
-		}
+	function loginAsGuest() {
+		userIsGuest.value = true;
 	}
 
 	async function logout() {
@@ -101,10 +91,11 @@ export const useUserStore = defineStore('user', () => {
 		let storedToken = sessionStorage.getItem('token')
 		if (storedToken) {
 			axios.defaults.headers.common.Authorization = "Bearer " + storedToken
-			await loadUser()
+			await loadUser();
 			socket.emit('loggedIn', user.value)
 			//await projectsStore.loadProjects()
 			orderStore.restoreLocalStorage();
+			userIsGuest.value = false;
 			return true;
 		}
 		clearUser();
@@ -138,5 +129,9 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-	return {user, userId, userPhotoUrl, availablePoints, login, logout, restoreToken, changePassword}
+	return {
+		user, userId, userPhotoUrl, userIsGuest,
+		availablePoints,
+		login, loginAsGuest, logout, restoreToken, changePassword
+	}
 })
