@@ -53,7 +53,28 @@ class OrderGuestController extends Controller
         return new OrderResource($order);
     }
 
+    //ORDERGUESTCONTROLLER aquii
+    public function paymentGuest(){
 
+    }
+
+    public function showGuest (Order $order){
+
+        return new OrderResource($order);
+    }
+
+    public function getOrderStatusGuest(Order $order){
+
+        //É os status da order? por isso passamos o resource todo certo ?
+        return new OrderResource($order);   
+    }
+
+    public function getBoardItems (Request $request){
+
+        return new OrderResource($request->order());
+    }
+
+//ate aqui
 
     public function getOrdersOfProduct(Request $request, Product $product)
     {
