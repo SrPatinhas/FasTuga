@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'type' => $this->type,
             'blocked' => $this->blocked,
-            'photo_url' => $this->photo_url,
+            'photo_url' => env('LOCAL_FILE_PATH_AVATARS') . $this->photo_url,
             'custom' =>$this->custom,
         ];
     }
