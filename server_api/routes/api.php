@@ -7,13 +7,14 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\OrderController;
+use App\Http\Controllers\api\OrderGuestController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login',        'login');
     Route::post('register',     'register');
 });
 
-Route::controller(OrderController::class)->prefix('orders')->group(function () {
+Route::controller(OrderGuestController::class)->prefix('orders')->group(function () {
     Route::post('/guest/payment',       'paymentGuest');
     Route::get('/guest/{order}',        'showGuest')->whereNumber('order');
     Route::get('/guest/{order}/status', 'getOrderStatusGuest')->whereNumber('order');// Requests for the kitchen
