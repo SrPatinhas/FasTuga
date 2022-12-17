@@ -1,6 +1,6 @@
 <script setup>
 import {ref, computed} from 'vue'
-import DashboardItem from "@/components/dashboard/DashboardItem.vue";
+import RestaurantBoardItem from "@/components/restaurantBoard/RestaurantBoardItem.vue";
 
 import {useOrdersKitchenStore} from "@/stores/ordersKitchen";
 
@@ -213,7 +213,7 @@ const filterOrderKitchen = computed(() => {
 <template>
 	<section>
 		<div class="sticky-header">
-			<h4 class="text-uppercase text-bold">Dashboard</h4>
+			<h4 class="text-uppercase text-bold">Restaurant Board</h4>
 			<ul class="nav nav-pills tabs-filter gap-4">
 				<li class="nav-item" role="presentation" v-for="(orderKitchenstatus, index) of orderKitchenStatusList"
 					:key="'tabs_' + index">
@@ -231,7 +231,7 @@ const filterOrderKitchen = computed(() => {
 
 		<div class="m-0 mt-5 row row-cols-3">
 			<div class="column px-2 row row-cols-2">
-				<DashboardItem v-for="item of filterOrderKitchen" v-bind="item"/>
+				<RestaurantBoardItem v-for="item of filterOrderKitchen" v-bind="item"/>
 			</div>
 			<div class="column px-2">
 			</div>
