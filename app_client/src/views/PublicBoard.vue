@@ -43,17 +43,21 @@
 		<h4 class="text-uppercase text-bold">Public Board</h4>
 
 		<div class="row row-cols-2 mt-3 m-0">
-			<div class="column px-2 row row-cols-3 gap-2">
-				<div class="bg-white border m-auto mb-3 p-2 shadow-sm text-center w-75 fs-4">
+			<div class="col border-end border-r-2">
+				<div class="bg-white m-auto mb-3 p-2 shadow-sm text-center w-75 fs-3">
 					Preparing<span class="badge bg-primary mx-2">{{ filterOrder_Preparing.length }}</span>
 				</div>
-				<PublicBoardItem v-for="item of filterOrder_Preparing" v-bind="item"/>
+				<div class="column px-2 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+					<PublicBoardItem v-for="(item, index) of filterOrder_Preparing" v-bind="item" :key="'board_preparing_' + index"/>
+				</div>
 			</div>
-			<div class="column px-2 row row-cols-3 gap-2">
-				<div class="bg-white border m-auto mb-3 p-2 shadow-sm text-center w-75 fs-4">
+			<div class="col">
+				<div class="bg-white m-auto mb-3 p-2 shadow-sm text-center w-75 fs-3">
 					Ready<span class="badge bg-primary mx-2">{{ filterOrder_Ready.length }}</span>
 				</div>
-				<PublicBoardItem v-for="item of filterOrder_Ready" v-bind="item"/>
+				<div class="column px-2 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+					<PublicBoardItem v-for="(item, index) of filterOrder_Ready" v-bind="item" :key="'board_ready_' + index"/>
+				</div>
 			</div>
 		</div>
 	</section>

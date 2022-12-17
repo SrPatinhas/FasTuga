@@ -1,20 +1,20 @@
 <script setup>
-import { useRouter } from "vue-router"
-import { onMounted } from "vue"
-import { useUserStore } from "@/stores/user";
+	import {useRouter} from "vue-router";
+	import {onMounted} from "vue";
+	import {useUserStore} from "@/stores/user";
 
-const router = useRouter()  
-const userStore = useUserStore()
+	const router = useRouter();
+	const userStore = useUserStore();
 
-const props = defineProps(['redirectTo'])
+	const props = defineProps(['redirectTo']);
 
-onMounted(async ()=>{
-  await userStore.restoreToken()
-  if (props.redirectTo) {
-    router.push(props.redirectTo)
-  }
-})
+	onMounted(async () => {
+		await userStore.restoreToken();
+		if (props.redirectTo) {
+			router.push(props.redirectTo);
+		}
+	});
 </script>
 <template>
-  <p><small>... Redirecting ...</small></p>
+	<p><small>... Redirecting ...</small></p>
 </template>

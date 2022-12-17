@@ -449,3 +449,57 @@ fieldset:disabled .btn {
   font-size: .875rem;
   font-weight: normal;
 }
+.border-l-1,
+.border-l-2,
+.border-l-3,
+.border-l-4,
+.border-l-5 {
+  border-left-style: solid;
+}
+.border-l-1 {
+  border-left-width: 1px;
+  --bs-border-width: 1px;
+}
+.border-l-2 {
+  border-left-width: 2px;
+  --bs-border-width: 2px;
+}
+.border-l-3 {
+  border-left-width: 3px;
+  --bs-border-width: 3px;
+}
+.border-l-4 {
+  border-left-width: 4px;
+  --bs-border-width: 4px;
+}
+.border-l-5 {
+  border-left-width: 5px;
+  --bs-border-width: 5px;
+}
+.border-r-1,
+.border-r-2,
+.border-r-3,
+.border-r-4,
+.border-r-5 {
+  border-right-style: solid;
+}
+.border-r-1 {
+  border-right-width: 1px;
+  --bs-border-width: 1px;
+}
+.border-r-2 {
+  border-right-width: 2px;
+  --bs-border-width: 2px;
+}
+.border-r-3 {
+  border-right-width: 3px;
+  --bs-border-width: 3px;
+}
+.border-r-4 {
+  border-right-width: 4px;
+  --bs-border-width: 4px;
+}
+.border-r-5 {
+  border-right-width: 5px;
+  --bs-border-width: 5px;
+}
