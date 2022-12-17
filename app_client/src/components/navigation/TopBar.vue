@@ -18,7 +18,7 @@
 						<router-link class="nav-link" :class="{ active: $route.name === 'PublicBoard' }" :to="{ name: 'PublicBoard' }">Public Board</router-link>
 					</li>
 					<li class="nav-item" v-show="userStore.user">
-						<router-link class="nav-link" :to="{ name: 'Dashboard' }">Dashboard</router-link>
+						<router-link class="nav-link" :to="{ name: 'RestaurantBoard' }">Restaurant Board</router-link>
 					</li>
 				</ul>
 
@@ -76,7 +76,7 @@
 							</li>
 
 							<li><hr class="dropdown-divider"></li>
-							<li><h6 class="dropdown-header">Dashboard</h6></li>
+							<li><h6 class="dropdown-header">Restaurant Board</h6></li>
 							<li>
 								<a class="dropdown-item d-flex align-items-center" href="dashboard-sales.html">
 									<i class="bi-currency-dollar opacity-50 me-2"></i>Reveneu<span class="ms-auto opacity-50">$1,375.00</span>
