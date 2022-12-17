@@ -31,7 +31,7 @@ import SettingsPurchases from "../views/SettingsPurchases.vue";
 import SettingsDashboardManager from "../views/SettingsDashboardManager.vue";
 import SettingsUsersAccount from "../views/SettingsUsersAccount.vue";
 import SettingsMenu from "../views/SettingsMenu.vue";
-
+import SettingsCancellingOrder from "../views/SettingsCancellingOrder.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -150,7 +150,13 @@ const router = createRouter({
 			path: '/settingsmenu',
 			name: 'SettingsMenu',
 			component: SettingsMenu,
+		},
+		{
+			path: '/settingscancellingorder',
+			name: 'SettingsCancellingOrder',
+			component: SettingsCancellingOrder,
 		}
+		
 	]
 })
 
