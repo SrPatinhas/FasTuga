@@ -55,6 +55,18 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class, 'order_id');
     }
+
+    public function products()
+    {
+        return $this->hasManyThrough(
+            Product::class,
+            OrderItem::class,
+            'order_id', // Foreign key on OrderItem table
+            'id', // Local key on products table
+            'id', // Local key on orders table
+            'product_id' // Foreign key on OrderItem table
+        );
+    }
     /*
      * This will be used like
      *

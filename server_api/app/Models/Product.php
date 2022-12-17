@@ -20,17 +20,26 @@ class Product extends Model
             'custom',
     ];
 
-    //aquiii 
+    //aquiii
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
-    public function assignedUsers()
+    public function employee()
     {
-        return $this->belongsToMany(User::class, 'task_user');
+        return $this->belongsTo(User::class,'delivered_by');
     }
 
-
-    
+    public function orders()
+    {
+        return $this->hasManyThrough(
+            Order::class,
+            OrderItem::class,
+            'order_id', // Foreign key on OrderItem table
+            'id', // Local key on Order table
+            'id', // Local key on orders table
+            'product_id' // Foreign key on OrderItem table
+        );
+    }
 }
