@@ -12,7 +12,13 @@ export const useUserStore = defineStore('user', () => {
 
 	const orderStore = useOrdersStore();
 
-	const user = ref(null)
+	const user = ref( {
+		id: 12,
+		name: 'Jéssica',
+		image: 'KPNzRRCrbwnrxbgk.jpg',
+		email: 'je@je.com',
+		type: 'EM'
+		},)
 
 	const userPhotoUrl = computed(() => {
 		if (!user.value?.photo_url) {

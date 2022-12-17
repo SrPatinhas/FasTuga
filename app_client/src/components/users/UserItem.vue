@@ -1,7 +1,7 @@
 <template>
-	<div class="d-block d-sm-flex align-items-center py-4 border-bottom"><a class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" href="marketplace-single.html" style="width: 12.5rem;"><img class="rounded-3" src="img/marketplace/products/th08.jpg" alt="Product"></a>
+	<div class="d-block d-sm-flex align-items-center py-4 border-bottom"><a class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" href="" style="width: 12.5rem;"><img class="rounded-3" src="img/marketplace/products/th08.jpg" alt="Product"></a>
                   <div class="text-center text-sm-start">
-                    <h3 class="h6 product-title mb-2"><a href="marketplace-single.html">{{ name }} </a></h3>
+                    <h3 class="h6 product-title mb-2">{{ name }}</h3>
                     <div class="d-inline-block text-accent">{{ email }}</div>
                     <div class="d-inline-block text-muted fs-ms border-start ms-2 ps-2">Type: <span class="fw-medium">{{ type }}</span></div>
                     <div class="d-flex justify-content-center justify-content-sm-start pt-3">
@@ -21,6 +21,6 @@
 		name: String,
 		email: String,
 		type: Number,
-		img: String,
+		img: String
 	});
 </script>
