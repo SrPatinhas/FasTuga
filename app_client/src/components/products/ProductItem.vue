@@ -1,7 +1,7 @@
 <template>
 	<div class="col">
 		<div class="card card-item h-100 shadow-sm">
-			<img src="https://nsm09.casimages.com/img/2021/06/26//21062602461725998217475199.jpg" class="card-img-top" :alt="name">
+			<img :src="photo_url" class="card-img-top" :alt="name">
 			<div class="card-body">
 				<h5 class="card-title">{{ name }} </h5>
 				<p class="card-text text-muted">{{ description }}</p>
@@ -23,7 +23,7 @@
 	const prod = defineProps({
 		id: String,
 		name: String,
-		image: String,
+		photo_url: String,
 		price: Number,
 		type: String,
 		description: String
@@ -33,7 +33,7 @@
 		const item = {
 			id: prod.id,
 			name: prod.name,
-			image: prod.image,
+			photo_url: prod.photo_url,
 			price: prod.price,
 			type: prod.type,
 			description: prod.description,

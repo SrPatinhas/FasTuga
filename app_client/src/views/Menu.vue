@@ -1,5 +1,5 @@
 <script setup>
-	import MenuItem from "@/components/menu/menuItem.vue";
+	import ProductItem from "@/components/products/ProductItem.vue";
 	import {useMenuStore} from "@/stores/menu";
 	import {ref} from "vue";
 
@@ -37,22 +37,22 @@
 		<div class="tab-content" id="myTabContent">
 			<div class="tab-pane fade show active" id="hot_dish-tab-pane" role="tabpanel" aria-labelledby="hot_dish-tab" tabindex="0">
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-					<MenuItem v-for="food of menuStore.getProductsByFilter('hot dish')" v-bind="food"/>
+					<ProductItem v-for="food of menuStore.getProductsByFilter('hot dish')" v-bind="food"/>
 				</div>
 			</div>
 			<div class="tab-pane fade" id="cold_dish-tab-pane" role="tabpanel" aria-labelledby="cold_dish-tab" tabindex="0">
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-					<MenuItem v-for="food of menuStore.getProductsByFilter('cold dish')" v-bind="food"/>
+					<ProductItem v-for="food of menuStore.getProductsByFilter('cold dish')" v-bind="food"/>
 				</div>
 			</div>
 			<div class="tab-pane fade" id="drink-tab-pane" role="tabpanel" aria-labelledby="drink-tab" tabindex="0">
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-					<MenuItem v-for="food of menuStore.getProductsByFilter('drink')" v-bind="food"/>
+					<ProductItem v-for="food of menuStore.getProductsByFilter('drink')" v-bind="food"/>
 				</div>
 			</div>
 			<div class="tab-pane fade" id="dessert-tab-pane" role="tabpanel" aria-labelledby="dessert-tab" tabindex="0">
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-					<MenuItem v-for="food of menuStore.getProductsByFilter('dessert')" v-bind="food"/>
+					<ProductItem v-for="food of menuStore.getProductsByFilter('dessert')" v-bind="food"/>
 				</div>
 			</div>
 		</div>

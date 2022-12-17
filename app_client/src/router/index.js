@@ -7,7 +7,6 @@ import HomeView from "../views/HomeView.vue";
 import Publicboard from "../views/Board.vue";
 // import Publicboard from "../components/publicboard/Publicboard.vue";
 import Menus from "../views/Menu.vue";
-// import Menus from "../components/menu/Menus.vue";
 import Cart from "../views/Cart.vue";
 import Checkout from "../views/Checkout.vue";
 import OrderDetail from "../views/OrderDetail.vue";

@@ -1,6 +1,6 @@
 <script setup>
 	import { ref } from 'vue'
-	import MenuItem from "../components/menu/menuItem.vue";
+	import ProductItem from "@/components/products/ProductItem.vue";
 
 	const foodTypeList = ref(['hot', 'cold', 'drinks', 'desserts']);
 	const foodTypeActive = ref('hot');
@@ -34,7 +34,7 @@
 					<div class="tab-pane fade show active" id="breakfast" role="tabpanel" aria-labelledby="breakfast-tab">
 						<div class="row">
 							<div v-for="food of foodList" class="col-md-6">
-								<MenuItem />
+								<ProductItem />
 							</div>
 						</div>
 					</div>

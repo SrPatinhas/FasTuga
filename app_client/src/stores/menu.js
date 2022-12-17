@@ -6,138 +6,12 @@ export const useMenuStore = defineStore('menu', () => {
     const axios = inject('axios');
     const toast = inject("toast");
     
-    const products = ref([
-        {
-            id: 12,
-            name: '7-Up',
-            image: 'KPNzRRCrbwnrxbgk.jpg',
-            price: 1.4,
-            type: 'drink',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 123,
-            name: 'Água das Pedras',
-            image: 'KPNzRRCrbwnrxbgk.jpg',
-            price: 1.4,
-            type: 'drink',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 142,
-            name: 'Água do Luso',
-            image: 'KPNzRRCrbwnrxbgk.jpg',
-            price: 1.4,
-            type: 'drink',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 121,
-            name: 'Aletria',
-            image: 'QSJ8nyCgMiw40EkV.jpg',
-            price: 3.40,
-            type: 'dessert',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 152,
-            name: 'Alheira',
-            image: 'jBMVpJbZ8uJMRE8N.jpg',
-            price: 9.90,
-            type: 'hot dish',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 125,
-            name: 'Arroz de Marisco',
-            image: 'RmoYdKAGJzm10l9J.jpg',
-            price: 9.90,
-            type: 'hot dish',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 212,
-            name: 'Salada decNoodles',
-            image: 'ulSMYjBpImeqSSEE.jpg',
-            price: 9.90,
-            type: 'cold dish',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 126,
-            name: 'Salada Fria de Frango',
-            image: 'Vt0rlSQBE3jfJniu.jpg',
-            price: 4.00,
-            type: 'cold dish',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-    ]);
-    const productsTrending = ref([
-        {
-            id: 12,
-            name: '7-Up',
-            image: 'KPNzRRCrbwnrxbgk.jpg',
-            price: 1.4,
-            type: 'drink',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 123,
-            name: 'Água das Pedras',
-            image: 'KPNzRRCrbwnrxbgk.jpg',
-            price: 1.4,
-            type: 'drink',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 142,
-            name: 'Água do Luso',
-            image: 'KPNzRRCrbwnrxbgk.jpg',
-            price: 1.4,
-            type: 'drink',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 121,
-            name: 'Aletria',
-            image: 'QSJ8nyCgMiw40EkV.jpg',
-            price: 3.40,
-            type: 'dessert',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 152,
-            name: 'Alheira',
-            image: 'jBMVpJbZ8uJMRE8N.jpg',
-            price: 9.90,
-            type: 'hot dish',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 125,
-            name: 'Arroz de Marisco',
-            image: 'RmoYdKAGJzm10l9J.jpg',
-            price: 9.90,
-            type: 'hot dish',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 212,
-            name: 'Salada decNoodles',
-            image: 'ulSMYjBpImeqSSEE.jpg',
-            price: 9.90,
-            type: 'cold dish',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-        {
-            id: 126,
-            name: 'Salada Fria de Frango',
-            image: 'Vt0rlSQBE3jfJniu.jpg',
-            price: 4.00,
-            type: 'cold dish',
-            description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-        },
-    ]);
+    const products = ref([]);
+    const productsTrending = ref([]);
+
+    const productsLoading = ref(true);
+    const productsTrendingLoading = ref(true);
+
     const productTypes = ref([
         {type: 'hot dish', icon: 'bi-cup-hot'},
         {type: 'cold dish', icon: 'bi-cup'},
@@ -160,12 +34,20 @@ export const useMenuStore = defineStore('menu', () => {
 
     function clearProducts() {
         products.value = [];
+        productsLoading.value = false;
+    }
+
+    function clearProductsTrending() {
+        productsTrending.value = [];
+        productsTrendingLoading.value = false;
     }
 
     async function fetchProducts() {
         try {
+            productsLoading.value = true;
             const response = await axios.get('/products');
             products.value = response.data.data;
+            productsLoading.value = false;
             return products.value;
         } catch (error){
             clearProducts();
@@ -175,11 +57,13 @@ export const useMenuStore = defineStore('menu', () => {
 
     async function fetchProductsTrending() {
         try {
-            const response = await axios.get('/products');
-            products.value = response.data.data;
-            return products.value;
+            productsTrendingLoading.value = true;
+            const response = await axios.get('/products/trending');
+            productsTrending.value = response.data.data;
+            productsTrendingLoading.value = false;
+            return productsTrending.value;
         } catch (error){
-            clearProducts();
+            clearProductsTrending();
             throw error;
         }
     }
@@ -204,7 +88,7 @@ export const useMenuStore = defineStore('menu', () => {
     
     return {
         products, productTypes, productsTrending,
-        totalProducts,
+        totalProducts, productsLoading, productsTrendingLoading,
         fetchProducts, fetchProductsTrending,
         getProductsByFilter, getProductsByFilterTotal
     }

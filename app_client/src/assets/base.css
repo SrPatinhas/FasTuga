@@ -418,3 +418,34 @@ fieldset:disabled .btn {
 .row > .col{
   --bs-gutter-y: 1.5rem;
 }
+
+.footer {
+  flex-shrink: 0;
+}
+.bg-darker {
+  --bs-bg-opacity: 1;
+  background-color: #2b3445 !important;
+}
+.widget-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.widget-light .widget-list-link:hover {
+  color: #fff;
+}
+.widget-light .widget-list-link {
+  color: rgba(255,255,255,.65);
+  text-decoration: none;
+}
+.widget-list-link:hover {
+  color: var(--bs-link-hover-color);
+  text-decoration: none;
+}
+.widget-list-link {
+  display: block;
+  transition: color .25s ease-in-out;
+  color: #4b566b;
+  font-size: .875rem;
+  font-weight: normal;
+}
