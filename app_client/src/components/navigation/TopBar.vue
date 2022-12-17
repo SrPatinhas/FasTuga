@@ -52,7 +52,7 @@
 							<li><h6 class="dropdown-header">Account</h6></li>
 							<li>
 								<a class="dropdown-item d-flex align-items-center bi-gear" >
-									<router-link class="nav-link" :class="{ active: $route.name === 'SettingsAccount' }" :to="{ name: 'SettingsAccount' }">
+									<router-link class="nav-link" :class="{ active: $route.name === 'Account' }" :to="{ name: 'Account' }">
 							Settings
 						</router-link>
 								</a>

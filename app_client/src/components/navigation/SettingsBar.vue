@@ -11,8 +11,8 @@
                   </div>
                   <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 active" href=""><i class="ci-settings opacity-60 me-2"></i>
-                      <router-link :class="{ active: $route.name === 'SettingsAccount' }" :to="{ name: 'SettingsAccount' }">
-                        Settings
+                      <router-link :class="{ active: $route.name === 'Account' }" :to="{ name: 'Account' }">
+                        Personal Data
                   </router-link></a></li>
                   </ul>
                   <div class="bg-secondary p-4">
@@ -20,7 +20,7 @@
                   </div>
                   <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
-                  <router-link :class="{ active: $route.name === 'SettingsPurchases' }" :to="{ name: 'SettingsPurchases' }">
+                  <router-link :class="{ active: $route.name === 'Purchases' }" :to="{ name: 'Purchases' }">
                     Purchase history
                   </router-link>
                   </a></li>  
@@ -33,27 +33,27 @@
                   </div>
 				          <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
-                      <router-link :class="{ active: $route.name === 'SettingsDashboardManager' }" :to="{ name: 'SettingsDashboardManager' }">
+                      <router-link :class="{ active: $route.name === 'DashboardManager' }" :to="{ name: 'DashboardManager' }">
                         Dashboard Manager
                   </router-link>
                   <span class="fs-sm text-muted ms-auto"></span></a></li>
                   </ul>
                   <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
-                      <router-link :class="{ active: $route.name === 'SettingsUsersAccount' }" :to="{ name: 'SettingsUsersAccount' }">
+                      <router-link :class="{ active: $route.name === 'UsersAccount' }" :to="{ name: 'UsersAccount' }">
                         Users account
                   </router-link>
                   <span class="fs-sm text-muted ms-auto"></span></a></li>
                   </ul>
 				  <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
-                      <router-link :class="{ active: $route.name === 'SettingsMenu' }" :to="{ name: 'SettingsMenu' }">
-                        Menu
+                      <router-link :class="{ active: $route.name === 'Products' }" :to="{ name: 'Products' }">
+                        Products
                   </router-link><span class="fs-sm text-muted ms-auto"></span></a></li>
                   </ul>
 				  <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
-                      <router-link :class="{ active: $route.name === 'SettingsCancellingOrder' }" :to="{ name: 'SettingsCancellingOrder' }">
+                      <router-link :class="{ active: $route.name === 'Orders' }" :to="{ name: 'Orders' }">
                         Cancelling order
                   </router-link><span class="fs-sm text-muted ms-auto"></span></a></li>
                   </ul>

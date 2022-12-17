@@ -26,12 +26,12 @@ import RouteRedirector from "../components/global/RouteRedirector.vue";
 
 // Settings 
 import Settings from "../views/Settings.vue";
-import SettingsAccount from "../views/SettingsAccount.vue";
-import SettingsPurchases from "../views/SettingsPurchases.vue";
-import SettingsDashboardManager from "../views/SettingsDashboardManager.vue";
-import SettingsUsersAccount from "../views/SettingsUsersAccount.vue";
-import SettingsMenu from "../views/SettingsMenu.vue";
-import SettingsCancellingOrder from "../views/SettingsCancellingOrder.vue";
+import Account from "../components/settings/Account.vue";
+import Purchases from "../components/settings/Purchases.vue";
+import DashboardManager from "../components/settings/DashboardManager.vue";
+import UsersAccount from "../components/settings/UsersAccount.vue";
+import Products from "../components/settings/Products.vue";
+import Orders from "../components/settings/Orders.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,11 +58,6 @@ const router = createRouter({
 			name: 'Registration',
 			component: Registration
 		  },
-		{
-			path: '/password',
-			name: 'ChangePassword',
-			component: ChangePassword
-		},
 		{
 			path: '/users',
 			name: 'Users',
@@ -125,38 +120,44 @@ const router = createRouter({
 			path: '/settings',
 			name: 'Settings',
 			component: Settings,
-		}, 
-		{
-			path: '/settingsaccount',
-			name: 'SettingsAccount',
-			component: SettingsAccount,
+			children: [
+						{ 
+							path: 'account', 
+							name: 'Account', 
+							component: Account 
+						},
+						{
+							path: 'purchases',
+							name: 'Purchases',
+							component: Purchases,
+						},
+						{
+							path: 'dashboard-manager',
+							name: 'DashboardManager',
+							component: DashboardManager,
+						},
+						{
+							path: 'users-account',
+							name: 'UsersAccount',
+							component: UsersAccount,
+						},
+						{
+							path: 'products',
+							name: 'Products',
+							component: Products,
+						},
+						{
+							path: 'orders',
+							name: 'Orders',
+							component: Orders,
+						},
+						{
+							path: 'password',
+							name: 'ChangePassword',
+							component: ChangePassword
+						}
+					  ],
 		},
-		{
-			path: '/settingspurchases',
-			name: 'SettingsPurchases',
-			component: SettingsPurchases,
-		},
-		{
-			path: '/settingsdashboardmanager',
-			name: 'SettingsDashboardManager',
-			component: SettingsDashboardManager,
-		},
-		{
-			path: '/settingsusersaccount',
-			name: 'SettingsUsersAccount',
-			component: SettingsUsersAccount,
-		},
-		{
-			path: '/settingsmenu',
-			name: 'SettingsMenu',
-			component: SettingsMenu,
-		},
-		{
-			path: '/settingscancellingorder',
-			name: 'SettingsCancellingOrder',
-			component: SettingsCancellingOrder,
-		}
-		
 	]
 })
 
