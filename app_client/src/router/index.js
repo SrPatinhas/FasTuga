@@ -34,6 +34,19 @@ import Orders from "../components/settings/Orders.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
+	scrollBehavior(to, from, savedPosition) {
+		if (to.hash) {
+			return {
+				el: to.hash,
+				behavior: 'smooth'
+			}
+		}
+		if (savedPosition) {
+			return savedPosition
+		}
+		// always scroll to top
+		return { top: 0 }
+	},
 	routes: [
 		{
 			path: '/',
@@ -160,7 +173,7 @@ const router = createRouter({
 	]
 })
 
-let handlingFirstRoute = true
+let handlingFirstRoute = true;
 
 router.beforeEach((to, from, next) => {
 	if (handlingFirstRoute) {

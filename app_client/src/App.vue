@@ -1,9 +1,9 @@
 <template>
 	<TopBar />
-	<div class="page-content" :class="(pageName !== 'RestaurantBoard' && pageName !== 'PublicBoard') && 'container'">
+	<div class="page-content mb-5" :class="(pageName !== 'RestaurantBoard' && pageName !== 'PublicBoard') && 'container'">
 		<router-view />
 	</div>
-	<footer class="footer bg-darker">
+	<footer class="footer bg-darker mt-auto">
 		<div class="container pt-2">
 			<div class="d-md-flex justify-content-between pt-4 pb-1">
 				<div class="pb-4 fs-xs text-light opacity-50 text-center text-md-start">© All rights reserved. Made by <a class="text-light" href="#" target="_blank" rel="noopener">Group 47</a></div>
@@ -29,7 +29,12 @@
 	import {computed} from "vue";
 	import {RouterView, useRoute} from "vue-router"
 	import TopBar from "./components/navigation/TopBar.vue";
+	import {useMenuStore} from "@/stores/menu";
 
 	const route = useRoute();
 	const pageName = computed(() => route.name);
+
+	const menuStore = useMenuStore();
+	menuStore.fetchProducts();
+	menuStore.fetchProductsTrending();
 </script>

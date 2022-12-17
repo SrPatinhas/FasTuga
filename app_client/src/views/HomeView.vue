@@ -7,9 +7,7 @@
 
 	const menuStore = useMenuStore();
 	const userStore = useUserStore();
-	const router = useRouter()
-
-	menuStore.fetchProductsTrending();
+	const router = useRouter();
 
 	const guestUser = () => {
 		userStore.loginAsGuest();
@@ -18,7 +16,7 @@
 </script>
 
 <template>
-	<div class="home mb-5">
+	<div class="home">
 		<section class="pt-4">
 			<h2 class="h3 mb-4 pt-2 text-center">How it works?</h2>
 			<div class="row g-0 bg-light rounded-3">
@@ -86,12 +84,12 @@
 			<h2 class="text-center pt-4 pt-sm-3">Trending food in this restaurant</h2>
 			<p class="text-muted text-center">Choose what you want and we make it for you</p>
 			<div  v-if="menuStore.productsTrendingLoading">
-				<div class="row row-cols-2 row-cols-md-4">
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
 					<ProductItemPlaceholder v-for="index in 8" :key="index"/>
 				</div>
 			</div>
 			<div v-else>
-				<div class="row row-cols-2 row-cols-md-4">
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
 					<ProductItem v-for="(food, index) of menuStore.productsTrending" :key="'trending_' + index" v-bind="food"/>
 				</div>
 				<div class="d-flex flex-row-reverse mt-3">

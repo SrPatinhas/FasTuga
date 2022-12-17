@@ -18,10 +18,9 @@ import "bootstrap"
 import "./assets/main.css";
 import "./assets/dashboard.css";
 
-const app = createApp(App)
+const app = createApp(App);
 
-
-app.provide('socket', io("http://127.0.0.1:3000"))
+app.provide('socket', io("http://127.0.0.1:3000"));
 
 const serverBaseUrl = 'http://server_api.test'
 app.provide('axios', axios.create({
@@ -29,22 +28,22 @@ app.provide('axios', axios.create({
     headers: {
         'Content-type': 'application/json',
     },
-  }))
-app.provide('serverBaseUrl', serverBaseUrl)  
+  }));
+app.provide('serverBaseUrl', serverBaseUrl);
 
 app.use(Toaster, {
     // Global/Default options
     position: 'top',
     timeout: 3000,
     pauseOnHover: true
-})
+});
 
 app.provide('toast', app.config.globalProperties.$toast);
 
-app.use(createPinia())
-app.use(router)
+app.use(createPinia());
+app.use(router);
 
-app.component('FieldErrorMessage', FieldErrorMessage)
-app.component('ConfirmationDialog', ConfirmationDialog)
+app.component('FieldErrorMessage', FieldErrorMessage);
+app.component('ConfirmationDialog', ConfirmationDialog);
 
-app.mount('#app')
+app.mount('#app');

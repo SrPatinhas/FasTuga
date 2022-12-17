@@ -2,6 +2,7 @@
 	import ProductItem from "@/components/products/ProductItem.vue";
 	import {useMenuStore} from "@/stores/menu";
 	import {ref} from "vue";
+	import ProductItemPlaceholder from "@/components/products/ProductItemPlaceholder.vue";
 
 	const menuStore = useMenuStore();
 
@@ -9,6 +10,9 @@
 
 	function changeTab(type) {
 		foodTypeActive.value = type;
+		setTimeout(function (){
+			window.scrollTo(0, 0);
+		}, 100);
 	}
 </script>
 
@@ -34,25 +38,30 @@
 			</ul>
 			<div class="width-150"></div>
 		</div>
-		<div class="tab-content" id="myTabContent">
+		<div  v-if="menuStore.productsLoading">
+			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+				<ProductItemPlaceholder v-for="index in 8" :key="index"/>
+			</div>
+		</div>
+		<div v-else class="tab-content" id="myTabContent">
 			<div class="tab-pane fade show active" id="hot_dish-tab-pane" role="tabpanel" aria-labelledby="hot_dish-tab" tabindex="0">
-				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-					<ProductItem v-for="food of menuStore.getProductsByFilter('hot dish')" v-bind="food"/>
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 pt-3">
+					<ProductItem v-for="(food, index) of menuStore.getProductsByFilter('hot dish')" v-bind="food" :key="'hot_dish_' + index" />
 				</div>
 			</div>
 			<div class="tab-pane fade" id="cold_dish-tab-pane" role="tabpanel" aria-labelledby="cold_dish-tab" tabindex="0">
-				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-					<ProductItem v-for="food of menuStore.getProductsByFilter('cold dish')" v-bind="food"/>
-				</div>
-			</div>
-			<div class="tab-pane fade" id="drink-tab-pane" role="tabpanel" aria-labelledby="drink-tab" tabindex="0">
-				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-					<ProductItem v-for="food of menuStore.getProductsByFilter('drink')" v-bind="food"/>
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 pt-3">
+					<ProductItem v-for="(food, index) of menuStore.getProductsByFilter('cold dish')" v-bind="food" :key="'cold_dish_' + index" />
 				</div>
 			</div>
 			<div class="tab-pane fade" id="dessert-tab-pane" role="tabpanel" aria-labelledby="dessert-tab" tabindex="0">
-				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-4 pt-3">
-					<ProductItem v-for="food of menuStore.getProductsByFilter('dessert')" v-bind="food"/>
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 pt-3">
+					<ProductItem v-for="(food, index) of menuStore.getProductsByFilter('dessert')" v-bind="food" :key="'dessert_' + index" />
+				</div>
+			</div>
+			<div class="tab-pane fade" id="drink-tab-pane" role="tabpanel" aria-labelledby="drink-tab" tabindex="0">
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 pt-3">
+					<ProductItem v-for="(food, index) of menuStore.getProductsByFilter('drink')" v-bind="food" :key="'drink_' + index" />
 				</div>
 			</div>
 		</div>

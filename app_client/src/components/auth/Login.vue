@@ -1,40 +1,42 @@
 <script setup>
-import {ref, inject} from 'vue'
-import {useRouter} from 'vue-router'
-import {useUserStore} from "@/stores/user";
+	import {ref, inject} from 'vue'
+	import {useRouter} from 'vue-router'
+	import {useUserStore} from "@/stores/user";
 
-const router = useRouter()
-const axios = inject('axios')
-const toast = inject('toast')
-const userStore = useUserStore()
+	const router = useRouter()
+	const axios = inject('axios')
+	const toast = inject('toast')
+	const userStore = useUserStore()
 
-const credentials = ref({
-	username: '',
-	password: '',
-	loading: false,
-	showPassword: false
-})
+	const credentials = ref({
+		username: '',
+		password: '',
+		loading: false,
+		showPassword: false
+	})
 
-//const userStore = useUserStore()
-const emit = defineEmits(['login']);
+	//const userStore = useUserStore()
+	const emit = defineEmits(['login']);
 
-const login = async () => {
-	credentials.value.loading = true;
-	if (await userStore.login(credentials.value)) {
-		credentials.value.loading = false;
-		toast.success('User ' + userStore.user.name + ' has entered the application.')
-		emit('login');
-		//router.back()
-		console.log('login');
-		router.push({name: 'Menus'});
-	} else {
-		credentials.value.password = ''
-		toast.error('User credentials are invalid!')
+	const login = async () => {
+		credentials.value.loading = true;
+		if (await userStore.login(credentials.value)) {
+			credentials.value.loading = false;
+			toast.success('User ' + userStore.user.name + ' has entered the application.')
+			emit('login');
+			//router.back()
+			console.log('login');
+			router.push({name: 'Menus'});
+		} else {
+			credentials.value.password = ''
+			toast.error('User credentials are invalid!')
+		}
 	}
-}
-const loginGuest = () => {
 
-}
+	const guestUser = () => {
+		userStore.loginAsGuest();
+		router.push({name: 'Menus'});
+	}
 </script>
 
 <template>
@@ -79,7 +81,7 @@ const loginGuest = () => {
 					<img class="mb-4 d-block mx-auto" src="@/assets/logo_full.png" alt="fastuga">
 					<h2>Don't have an account?</h2>
 					<p>Don't worry, place your order as a guest.</p>
-					<button class="btn btn-primary w-100" id="signup-button">Order as Guest</button>
+					<button class="btn btn-primary w-100" id="signup-button" @click="guestUser">Order as Guest</button>
 				</div>
 			</div>
 		</div>

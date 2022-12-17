@@ -21,7 +21,7 @@
 	const orderStore = useOrdersStore();
 
 	const prod = defineProps({
-		id: String,
+		id: Number,
 		name: String,
 		photo_url: String,
 		price: Number,

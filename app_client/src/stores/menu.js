@@ -15,8 +15,8 @@ export const useMenuStore = defineStore('menu', () => {
     const productTypes = ref([
         {type: 'hot dish', icon: 'bi-cup-hot'},
         {type: 'cold dish', icon: 'bi-cup'},
-        {type: 'drink', icon: 'bi-cup-straw'},
-        {type: 'dessert', icon: 'bi-hypnotize'}// bi-brightness-alt-low
+        {type: 'dessert', icon: 'bi-hypnotize'},// bi-brightness-alt-low
+        {type: 'drink', icon: 'bi-cup-straw'}
     ]);
 
     // Local products count
@@ -25,6 +25,9 @@ export const useMenuStore = defineStore('menu', () => {
     });
 
     function getProductsByFilter(type) {
+        if(products.value.length === 0 ){
+            return [];
+        }
         return products.value.filter( prod => prod.type === type);
     }
     

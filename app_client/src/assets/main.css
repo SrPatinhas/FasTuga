@@ -55,6 +55,10 @@ nav.navbar  .nav-link{
   overflow: hidden;
   border: none;
   border-radius: 20px;
+  transition: transform .2s ease-in-out;
+}
+.card.card-item:hover {
+  transform: scale(1.01);
 }
 .card.card-item img {
   height: 200px;
@@ -159,4 +163,9 @@ nav.navbar  .nav-link{
 }
 .mb-grid-gutter {
   margin-bottom: 1.875rem !important;
+}
+
+.cart-item img {
+  object-fit: cover;
+  max-height: 90px;
 }

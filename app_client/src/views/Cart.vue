@@ -14,10 +14,14 @@
 		</div>
 		<!-- Sidebar-->
 		<div class="col-lg-4 col-md-5 pt-3 pt-sm-4">
-			<div class="card border-0 shadow-sm px-sm-4 py-4">
+			<div class="border-0 card px-sm-4 py-4 shadow-sm sticky-top top-10">
 				<div class="text-center mb-4 pb-3 border-bottom">
-					<h3 class="h5 mb-3 pb-1">Total ({{ orderStore.totalItems }})</h3>
-					<h4 class="fw-normal">{{ (orderStore.totalOrderCost).split(".")[0] }}.<small>{{ (orderStore.totalOrderCost).split(".")[1] }}</small></h4>
+					<h3 class="h5 mb-3 pb-1">
+						Total <small>({{ orderStore.totalItems }})</small>
+					</h3>
+					<h4 class="fw-normal">
+						€{{ (orderStore.totalOrderCost).split(".")[0] }}.<small>{{ (orderStore.totalOrderCost).split(".")[1] }}</small>
+					</h4>
 				</div>
 				<div class="mb-4">
 					<label class="form-label mb-3" for="order-comments"><span class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
