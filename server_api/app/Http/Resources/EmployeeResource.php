@@ -19,7 +19,7 @@ class EmployeeResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
-            'photo_url' => $this->photo_url
+            'photo_url' => env('LOCAL_FILE_PATH_AVATARS') . $this->photo_url,
         ];
     }
 }

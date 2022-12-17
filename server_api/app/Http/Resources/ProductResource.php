@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ProductResource extends JsonResource
 {
@@ -19,8 +20,8 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'description' => $this->description,
-            'photo_url' => $this->photo_url,
-            'price' => $this->price,
+            'photo_url' => env('LOCAL_FILE_PATH_PRODUCTS') . $this->photo_url,
+            'price' => (float) $this->price,
             'custom' => $this->custom,
         ];
     }
