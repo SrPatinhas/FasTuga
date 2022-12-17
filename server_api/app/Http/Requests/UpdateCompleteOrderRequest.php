@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
-class UpdateUserPasswordRequest extends FormRequest
+class UpdateCompleteOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,14 +19,12 @@ class UpdateUserPasswordRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function rules()
     {
         return [
-            'oldpassword' => 'current_password:api',
-            'password' => ['required', 'confirmed', Password::min(4)],
-            'password_confirmation' => ['required','same:password'],
+            'completed' => 'required|boolean',
         ];
     }
 }
