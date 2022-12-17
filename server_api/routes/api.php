@@ -14,9 +14,10 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::controller(OrderController::class)->prefix('orders')->group(function () {
-    Route::get('/guest/{order}',        'showGuest')->whereNumber('order');
     Route::post('/guest/payment',       'paymentGuest');
-    Route::get('/guest/{order}/status', 'getOrderStatusGuest')->whereNumber('order');
+    Route::get('/guest/{order}',        'showGuest')->whereNumber('order');
+    Route::get('/guest/{order}/status', 'getOrderStatusGuest')->whereNumber('order');// Requests for the kitchen
+    Route::get('/board',                'getBoardItems');
 });
 
 // Leave this 3 requests public so anyone can get them
@@ -28,26 +29,30 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
+
     //--USER
     Route::controller(UserController::class)->prefix('users')->group(function () {
         Route::get('/me',                  'userInfo');
-        Route::get('/',                    'index');
         Route::get('/{user}',              'show')->middleware('can:view,user')->whereNumber('user'); // <--Para quem esta logado
         Route::put('/{user}',              'update')->middleware('can:update,user')->whereNumber('user');
         Route::patch('/{user}/password',   'update_password')->middleware('can:updatePassword,user')->whereNumber('user');
-
         Route::post('/photo',              'uploadPhoto');
 
+        // Only Manager
         Route::post('/{user}/block',       'block')->whereNumber('user');
         Route::post('/{user}/unblock',     'unblock')->whereNumber('user');
     });
     //--END USER
+
     //--CUSTOMER
     Route::controller(CustomerController::class)->prefix('customers')->group(function () {
+        Route::get('/',                         'index');
+        Route::get('/{customer}',               'show')->whereNumber('customer');
         Route::get('/{customer}/order/{order}', 'order')->whereNumber('customer');
         Route::get('/{customer}/orders',        'orders')->whereNumber('customer');
     });
     //--END CUSTOMER
+
     //--EMPLOYEE
     Route::controller(EmployeeController::class)->prefix('employees')->group(function () {
         // Restaurant / Manager routes
@@ -58,6 +63,7 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/{employee}',    'delete')->whereNumber('employee');
     });
     //--END EMPLOYEE
+
     //--PRODUCTS
     Route::controller(ProductController::class)->prefix('products')->group(function () {
         // Only a manager can use this ones
@@ -70,16 +76,17 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/{product}/orders', 'getOrdersOfProduct')->whereNumber('product');
     });
     //--END PRODUCTS
+
     //--ORDERS
     Route::controller(OrderController::class)->prefix('orders')->group(function () {
-        Route::get('/',             'index');
-        Route::get('/{order}',      'show')->whereNumber('order');
-        Route::post('/payment',     'payment');
-        Route::put('/{order}',      'update')->whereNumber('order');
-        Route::delete('/{order}',   'destroy')->whereNumber('order');
+        Route::get('/',                 'index');
+        Route::get('/{order}',          'show')->whereNumber('order');
+        Route::post('/payment',         'payment');
+        Route::post('/{order}/refund',  'refund')->whereNumber('order');
+        Route::put('/{order}',          'update')->whereNumber('order');
+        Route::delete('/{order}',       'destroy')->whereNumber('order');
 
         // Requests for the kitchen
-        Route::get('/board',                        'getBoardItems');
         Route::get('/active',                       'getActiveOrders');
         Route::get('/{order}/status',               'getOrderStatus')->whereNumber('order');
         Route::post('/{order}/status',              'setOrderStatus')->whereNumber('order');
