@@ -6,6 +6,7 @@
               <!-- Actual menu-->
               <div class="h-100 border-end mb-2">
                 <div class="d-lg-block collapse" id="account-menu">
+                  <div class="nav-item" v-if="userStore.user?.type == 'C'">
                   <div class="bg-secondary p-4">
                     <h3 class="fs-sm mb-0 text-muted">Account</h3>
                   </div>
@@ -13,20 +14,20 @@
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3 active" href=""><i class="ci-settings opacity-60 me-2"></i>
                       <router-link :class="{ active: $route.name === 'Account' }" :to="{ name: 'Account' }">
                         Personal Data
-                  </router-link></a></li>
+                      </router-link></a></li>
                   </ul>
-                  <!--<div class="nav-item" v-show="userStore.user?.type == 'C'">-->
                   <div class="bg-secondary p-4">
                     <h3 class="fs-sm mb-0 text-muted">Orders</h3>
                   </div>
                   <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0"><a class="nav-link-style d-flex align-items-center px-4 py-3" href=""><i class="ci-dollar opacity-60 me-2"></i>
-                  <router-link :class="{ active: $route.name === 'Purchases' }" :to="{ name: 'Purchases' }">
-                    Purchase history
-                  </router-link>
+                      <router-link :class="{ active: $route.name === 'Purchases' }" :to="{ name: 'Purchases' }">
+                        Purchase history
+                      </router-link>
                   </a></li>  
                   </ul>
-				  <div class="nav-item" v-show="userStore.user?.type == 'EM'">
+                  </div>
+				  <div class="nav-item" v-else>
 					<div class="bg-secondary p-4">
                     <h3 class="fs-sm mb-0 text-muted">
                       Management

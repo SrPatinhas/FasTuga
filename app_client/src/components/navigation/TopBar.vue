@@ -52,7 +52,10 @@
 							<li><h6 class="dropdown-header">Account</h6></li>
 							<li>
 								<a class="dropdown-item d-flex align-items-center bi-gear" >
-									<router-link class="nav-link" :class="{ active: $route.name === 'Account' }" :to="{ name: 'Account' }">
+									<router-link class="nav-link" v-if="userStore.user?.type == 'C'" :class="{ active: $route.name === 'Account' }" :to="{ name: 'Account' }">
+							Settings
+						</router-link>
+						<router-link class="nav-link" v-if="userStore.user?.type == 'EM'" :class="{ active: $route.name === 'DashboardManager' }" :to="{ name: 'DashboardManager' }">
 							Settings
 						</router-link>
 								</a>

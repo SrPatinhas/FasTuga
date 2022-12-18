@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', () => {
 	const orderStore = useOrdersStore();
 
 	const user = ref();
+	const users = ref();
 	const customer = ref();
 
 	const userIsGuest = ref( false);
@@ -33,6 +34,17 @@ export const useUserStore = defineStore('user', () => {
 	const availablePoints = computed(() => {
 		return user.value?.points ?? 50;
 	});
+
+	async function loadUsers() {
+		try {
+			const response = await axios.get('users')
+			users.value = response.data.data
+		} catch (error) {
+			clearUser()
+			throw error
+		}
+	}
+
 
 	async function loadUser() {
 		try {
@@ -136,9 +148,29 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+	async function save () {
+		errors.value = null
+		axios.put('users/customers/' + userId.value, user.value)
+        .then((response) => {
+          user.value = response.data.data
+          originalValueStr = dataAsString()
+          toast.success('User #' + userId.value + ' was updated successfully.')
+        })
+        .catch((error) => {
+          if (error.response.status == 422) {
+              toast.error('User #' + userId.value  + ' was not updated due to validation errors!')
+              errors.value = error.response.data.errors
+            } else {
+              toast.error('User #' + userId.value  + ' was not updated due to unknown server error!')
+            }
+        })
+	 }
+ 
+
+
 	return {
-		user, customer, userId, userPhotoUrl, userIsGuest,
+		user, users, customer, userId, userPhotoUrl, userIsGuest,
 		availablePoints,
-		login, loginAsGuest, logout, restoreToken, changePassword, loadCustomer
+		login, loginAsGuest, logout, restoreToken, changePassword, loadUsers, loadCustomer, save
 	}
 })
