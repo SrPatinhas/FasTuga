@@ -7,7 +7,7 @@ export const useOrdersStore = defineStore('orders', () => {
 	const axios = inject('axios');
 	const toast = inject("toast");
 
-	const orders = ref([]);
+	const orders = ref({});
 
 
 	const order = ref({
@@ -174,13 +174,13 @@ export const useOrdersStore = defineStore('orders', () => {
 		return false;
 	}
 
-	async function fetchOrders() {
+	async function fetchOrders(page = 1) {
         try {
-            const response = await axios.get('/orders');
-            orders.value = response.data.data;
+            const response = await axios.get('/orders?page=' + page);
+            orders.value = response.data;
             return orders.value;
         } catch (error){
-			orders.value = [];
+			orders.value = {};
             throw error;
         }
     }
