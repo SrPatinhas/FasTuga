@@ -1,11 +1,15 @@
 <script setup>
- import SettingsBar from "../navigation/SettingsBar.vue"
+import { ref, watch, computed, inject } from "vue";
+import { useUserStore } from "../../stores/user";
+const userStore = useUserStore();
+userStore.loadCustomer();
+
 </script>
 
 <template>
             <!-- Content-->
             <section class="col-lg-8 pt-lg-4 pb-4 mb-3">
-              <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
+              <div class="pt-2 px-4 ps-lg-0 pe-xl-5" v-if="userStore.customer">
                 <h2 class="h3 py-2 text-center text-sm-start">Personal data</h2>
                 <!-- Tabs-->
                 <ul class="nav nav-tabs nav-justified" role="tablist">
@@ -33,22 +37,30 @@
                     </div>
                     <div class="row gx-4 gy-3">
                       <div class="col-sm-6">
-                        <label class="form-label" for="dashboard-fn">First Name</label>
-                        <input class="form-control" type="text" id="dashboard-fn" value="John">
-                      </div>
-                      <div class="col-sm-6">
-                        <label class="form-label" for="dashboard-ln">Last Name</label>
-                        <input class="form-control" type="text" id="dashboard-ln" value="Doe">
+                        <label class="form-label" for="dashboard-fn">Name</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="inputName"
+                            placeholder="User Name"
+                            required
+                            v-model="userStore.customer.user.name"
+                          />
                       </div>
                       <div class="col-sm-6">
                         <label class="form-label" for="dashboard-email">Email address</label>
-                        <input class="form-control" type="text" id="dashboard-email" value="contact@example.com" disabled="">
-                      </div>
-                      <div class="col-12">
-                        <hr class="mt-2 mb-4">
-                        <div class="d-sm-flex justify-content-between align-items-center">
-                          <button class="btn btn-primary mt-3 mt-sm-0" type="button">Save changes</button>
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="inputEmail"
+                            placeholder="Email"
+                            required
+                            v-model="userStore.customer.user.email"
+                          />
                         </div>
+                        <div class="mb-3 d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary px-5" @click="save">Save</button>
+                        <button type="button" class="btn btn-light px-5" @click="cancel">Cancel</button>
                       </div>
                     </div>
                   </div>
@@ -57,19 +69,49 @@
                     <div class="row gx-4 gy-3">
                       <div class="col-sm-6">
                         <label class="form-label" for="dashboard-fn">Phone Number</label>
-                        <input class="form-control" type="text" id="dashboard-fn" value="John">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="inputPhoneNumber"
+                            placeholder="Phone Number"
+                            required
+                            v-model="userStore.customer.phone"
+                          />
                       </div>
                       <div class="col-sm-6">
                         <label class="form-label" for="dashboard-ln">NIF</label>
-                        <input class="form-control" type="text" id="dashboard-ln" value="Doe">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="inputNIF"
+                            placeholder="NIF"
+                            required
+                            v-model="userStore.customer.nif"
+                          />
                       </div>
                       <div class="col-sm-6">
                         <label class="form-label" for="dashboard-email">Default payment type</label>
-                        <input class="form-control" type="text" id="dashboard-email" value="contact@example.com" disabled="">
+                        <input
+                            disabled=""
+                            type="text"
+                            class="form-control"
+                            id="inputdefaultpaymenttype"
+                            placeholder="Default payment type"
+                            required
+                            v-model="userStore.customer.default_payment_type"
+                          />
                       </div>
                       <div class="col-sm-6">
                         <label class="form-label" for="dashboard-email">Total points owned</label>
-                        <input class="form-control" type="text" id="dashboard-email" value="contact@example.com" disabled="">
+                        <input
+                            disabled=""
+                            type="text"
+                            class="form-control"
+                            id="inputpoints"
+                            placeholder="Total points owned"
+                            required
+                            v-model="userStore.customer.points"
+                          />
                       </div>
                       <div class="col-12">
                         <hr class="mt-2 mb-4">

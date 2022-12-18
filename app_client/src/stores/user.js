@@ -12,13 +12,8 @@ export const useUserStore = defineStore('user', () => {
 
 	const orderStore = useOrdersStore();
 
-	const user = ref( {
-		id: 12,
-		name: 'Jéssica',
-		image: 'KPNzRRCrbwnrxbgk.jpg',
-		email: 'je@je.com',
-		type: 'EM'
-	});
+	const user = ref();
+	const customer = ref();
 
 	const userIsGuest = ref( false);
 
@@ -43,6 +38,16 @@ export const useUserStore = defineStore('user', () => {
 		try {
 			const response = await axios.get('users/me')
 			user.value = response.data.data
+		} catch (error) {
+			clearUser()
+			throw error
+		}
+	}
+
+	async function loadCustomer() {
+		try {
+			const response = await axios.get('customers/me')
+			customer.value = response.data.data
 		} catch (error) {
 			clearUser()
 			throw error
@@ -132,8 +137,8 @@ export const useUserStore = defineStore('user', () => {
     }
 
 	return {
-		user, userId, userPhotoUrl, userIsGuest,
+		user, customer, userId, userPhotoUrl, userIsGuest,
 		availablePoints,
-		login, loginAsGuest, logout, restoreToken, changePassword
+		login, loginAsGuest, logout, restoreToken, changePassword, loadCustomer
 	}
 })

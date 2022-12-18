@@ -1,6 +1,6 @@
 <script setup>
-  import SettingsBar from "../navigation/SettingsBar.vue"
   import SettingsOrderTable from "../order/orderSettingsTable.vue"
+  import Pagination from "../navigation/Pagination.vue"
 </script>
 
 <template>
@@ -14,4 +14,5 @@
             </div>
               </div>
             </section>
+            <Pagination></Pagination>
 </template>

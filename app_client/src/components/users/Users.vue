@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, computed, onMounted, inject } from 'vue'
+  import { ref, computed,  onMounted, inject } from 'vue'
   import {useRouter} from 'vue-router'
   import UserTable from "./UserTable.vue"
   
