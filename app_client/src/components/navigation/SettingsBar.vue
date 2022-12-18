@@ -15,6 +15,7 @@
                         Personal Data
                   </router-link></a></li>
                   </ul>
+                  <div class="nav-item" v-show="userStore.user?.type == 'C'">
                   <div class="bg-secondary p-4">
                     <h3 class="fs-sm mb-0 text-muted">Orders</h3>
                   </div>
@@ -25,6 +26,7 @@
                   </router-link>
                   </a></li>  
                   </ul>
+                </div>
 				  <div class="nav-item" v-show="userStore.user?.type == 'EM'">
 					<div class="bg-secondary p-4">
                     <h3 class="fs-sm mb-0 text-muted">
