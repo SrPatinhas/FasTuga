@@ -17,8 +17,12 @@ class OrderController extends Controller
 
     public function index()
     {
-        // Filter by Auth user_id
-        return OrderResource::collection(Order::whereNotNull('customer_id')->get());
+        if(Auth::user()->getIsCustomer()){
+            $orders = Order::where('customer_id', Auth::user()->customer()->id);
+        } else {
+            $orders = Order::whereNotNull('customer_id');
+        }
+        return OrderResource::collection($orders->paginate(15));
     }
     // Check if order is from Auth user_id
     public function show(Order $order)

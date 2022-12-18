@@ -29,6 +29,8 @@ class OrderResource extends JsonResource
             'date'                      => $this->date,
             'delivered_by'              => $this->delivered_by,
             'custom'                    => $this->custom,
+            'created_at'                => $this->created_at,
+            'update_at'                 => $this->updated_at,
             'items'                     => OrderItemResource::collection($this->orderItems)
         ];
     }

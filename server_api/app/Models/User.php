@@ -80,7 +80,10 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'delivered_by');
     }
 
-
+    public function getIsCustomer()
+    {
+        return $this->type == 'C';
+    }
 
 
 
