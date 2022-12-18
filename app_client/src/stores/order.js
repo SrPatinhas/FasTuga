@@ -7,9 +7,9 @@ export const useOrdersStore = defineStore('orders', () => {
 	const axios = inject('axios');
 	const toast = inject("toast");
 
+	// Historic of purchases for the user
 	const orders = ref({});
-
-
+	// Current bag/cart for user
 	const order = ref({
 		id: 0,
 		user_id: undefined,
@@ -18,7 +18,7 @@ export const useOrdersStore = defineStore('orders', () => {
 		items: [],
 		checkout: {}
 	});
-
+	// Detail of Order for timeline
 	const orderDetail = ref({
 		id: 0,
 		user_id: undefined,
@@ -27,11 +27,13 @@ export const useOrdersStore = defineStore('orders', () => {
 		items: [],
 		checkout: {}
 	});
-
+	// Status of order
 	const status = ref([]);
 
 	/**
 	 * share information in the app
+	 *
+	 * Order in the Bag
 	 **/
 	const orderItems = computed(() => {
 		return order.value.items;
@@ -64,16 +66,18 @@ export const useOrdersStore = defineStore('orders', () => {
 		return order.value.checkout.discountPoints / 2;
 	});
 
-
+	/*
+	* Order detail, already paid
+	**/
 	const totalOrderDetailItems = computed(() => {
 		let totalItems = 0;
-		order.value.items.forEach( item => totalItems += item.count);
+		orderDetail.value.items.forEach( item => totalItems += item.count);
 		return totalItems;
 	});
 
 	const totalOrderDetailCost = computed(() => {
 		let totalCost = 0;
-		order.value.items.forEach( item => totalCost += item.price * item.count);
+		orderDetail.value.items.forEach( item => totalCost += item.price * item.count);
 		return totalCost.toFixed(2);
 	});
 	//- The registered customer will get
@@ -155,6 +159,12 @@ export const useOrdersStore = defineStore('orders', () => {
 		status.value = [];
 		sessionStorage.removeItem('order');
 	}
+	// This will be used when a user logs out
+	function clearOrderInfo(){
+		clearBag();
+		clearOrderDetail();
+		orders.value = {};
+	}
 
 	/**
 	 * complete order (after payment)
@@ -173,17 +183,6 @@ export const useOrdersStore = defineStore('orders', () => {
 		}
 		return false;
 	}
-
-	async function fetchOrders(page = 1) {
-        try {
-            const response = await axios.get('/orders?page=' + page);
-            orders.value = response.data;
-            return orders.value;
-        } catch (error){
-			orders.value = {};
-            throw error;
-        }
-    }
 
 	/**
 	 * Local storage order (Bag) to keep data opn page refresh
@@ -220,6 +219,21 @@ export const useOrdersStore = defineStore('orders', () => {
 		restoreBagLocalStorage();
 		restoreOrderDetailLocalStorage();
 	}
+
+	/*
+	 * This will get the orders for the current user
+	 */
+	async function fetchOrders(page = 1) {
+		try {
+			const response = await axios.get('/orders?page=' + page);
+			orders.value = response.data;
+			return orders.value;
+		} catch (error){
+			orders.value = {};
+			throw error;
+		}
+	}
+
 	/**
 	 * update order status
 	 **/
@@ -233,6 +247,6 @@ export const useOrdersStore = defineStore('orders', () => {
 		orderItems, totalItems, totalOrderCost, orderStatus, orderPoints, orderPointsDiscount,
 		totalOrderDetailItems, totalOrderDetailCost,
 		addItemToOrder, updateQuantityItemOnOrder, deleteItemOnOrder, cancelOrder, orderNotes,
-		completeOrder, restoreLocalStorage, fetchOrders
+		completeOrder, restoreLocalStorage, fetchOrders, clearOrderInfo
 	}
 })

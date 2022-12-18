@@ -80,7 +80,8 @@ export const useUserStore = defineStore('user', () => {
 		try {
 			await axios.post('logout')
 			socket.emit('loggedOut', user.value)
-			clearUser()
+			clearUser();
+			orderStore.clearOrderInfo();
 			//projectsStore.clearProjects()
 			return true
 		} catch (error) {
