@@ -319,7 +319,7 @@ fieldset:disabled .btn {
 .password-toggle-btn {
   position: absolute;
   top: 50%;
-  right: 0.625rem;
+  right: 1.625rem;
   margin-bottom: 0;
   padding: 0.5rem;
   transform: translateY(-50%);
@@ -502,4 +502,17 @@ fieldset:disabled .btn {
 .border-r-5 {
   border-right-width: 5px;
   --bs-border-width: 5px;
+}
+
+.avatar-upload {
+  padding: 0.25rem;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.avatar-upload img{
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
 }

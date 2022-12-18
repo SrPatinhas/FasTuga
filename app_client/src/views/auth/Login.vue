@@ -40,7 +40,7 @@
 </script>
 
 <template>
-	<section class="user">
+	<section class="login">
 		<div class="user_options-container">
 			<div>
 				<div class="user_options-forms" id="user_options-forms">
@@ -88,11 +88,12 @@
 	</section>
 </template>
 
+
 <style scoped>
 /**
  * * Page background
  * */
-.user {
+.login {
 	display: flex;
 	justify-content: center;
 	align-items: center;

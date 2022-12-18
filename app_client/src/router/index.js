@@ -1,32 +1,27 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import {useUserStore} from "@/stores/user";
 
-import HomeView from "../views/HomeView.vue";
-
 // public
-import Publicboard from "../views/Board.vue";
-// import Publicboard from "../components/publicboard/Publicboard.vue";
+import HomeView from "../views/HomeView.vue";
 import Menus from "../views/Menu.vue";
 import Cart from "../views/Cart.vue";
 import Checkout from "../views/Checkout.vue";
 import OrderDetail from "../views/OrderDetail.vue";
-
-// protected
 import PublicBoard from "../views/PublicBoard.vue";
-import Employee from "../views/Employee.vue";
+// Auth
+import Login from "../views/auth/Login.vue";
+import Registration from "../views/auth/Registration.vue";
+import ChangePassword from "../views/auth/ChangePassword.vue";
+// protected
 import RestaurantBoard from "../views/RestaurantBoard.vue";
-
-import Login from "../components/auth/Login.vue";
-import Registration from "../components/auth/Registration.vue";
-import ChangePassword from "../components/auth/ChangePassword.vue";
 import Users from "../components/users/Users.vue";
 import User from "../components/users/User.vue";
 import RouteRedirector from "../components/global/RouteRedirector.vue";
-
 // Settings 
 import Settings from "../views/Settings.vue";
 import Account from "../components/settings/Account.vue";
 import Purchases from "../components/settings/Purchases.vue";
+// Manager
 import DashboardManager from "../components/settings/DashboardManager.vue";
 import UsersAccount from "../components/settings/UsersAccount.vue";
 import Products from "../components/settings/Products.vue";
