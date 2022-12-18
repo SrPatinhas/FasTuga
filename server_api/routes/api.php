@@ -48,6 +48,7 @@ Route::middleware('auth:api')->group(function () {
     //--CUSTOMER
     Route::controller(CustomerController::class)->prefix('customers')->group(function () {
         Route::get('/',                         'index');
+        Route::get('/me',                       'customerInfo');
         Route::get('/{customer}',               'show')->whereNumber('customer');
         Route::get('/{customer}/order/{order}', 'order')->whereNumber('customer');
         Route::get('/{customer}/orders',        'orders')->whereNumber('customer');

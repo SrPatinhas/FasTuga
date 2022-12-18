@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterUserRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\OrderResource;
@@ -12,6 +11,7 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,11 +21,11 @@ class CustomerController extends Controller
     public function index(){
         return CustomerResource::collection(Customer::all());
     }
-    // TODO check from here down
-    public function me($id){
-        $customer = Customer::findOrFail($id);
 
-        return response()->json($customer);
+    public function customerInfo(){
+        $customerId = Auth::user()->customer->id;
+        $customer = Customer::findOrFail($customerId);
+        return new CustomerResource($customer);
     }
 
     public function update(UpdateCustomerRequest $request, $id)
