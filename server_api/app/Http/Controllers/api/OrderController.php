@@ -18,7 +18,7 @@ class OrderController extends Controller
     public function index()
     {
         if(Auth::user()->getIsCustomer()){
-            $orders = Order::where('customer_id', Auth::user()->customer()->id);
+            $orders = Order::where('customer_id', Auth::user()->customer->id);
         } else {
             $orders = Order::whereNotNull('customer_id');
         }
