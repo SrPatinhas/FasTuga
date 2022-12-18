@@ -7,6 +7,9 @@ export const useOrdersStore = defineStore('orders', () => {
 	const axios = inject('axios');
 	const toast = inject("toast");
 
+	const orders = ref([]);
+
+
 	const order = ref({
 		id: 0,
 		user_id: undefined,
@@ -171,6 +174,17 @@ export const useOrdersStore = defineStore('orders', () => {
 		return false;
 	}
 
+	async function fetchOrders() {
+        try {
+            const response = await axios.get('/orders');
+            orders.value = response.data.data;
+            return orders.value;
+        } catch (error){
+			orders.value = [];
+            throw error;
+        }
+    }
+
 	/**
 	 * Local storage order (Bag) to keep data opn page refresh
 	 **/
@@ -215,10 +229,10 @@ export const useOrdersStore = defineStore('orders', () => {
 	});
 
 	return {
-		order, status,
+		order, status, orders,
 		orderItems, totalItems, totalOrderCost, orderStatus, orderPoints, orderPointsDiscount,
 		totalOrderDetailItems, totalOrderDetailCost,
 		addItemToOrder, updateQuantityItemOnOrder, deleteItemOnOrder, cancelOrder, orderNotes,
-		completeOrder, restoreLocalStorage
+		completeOrder, restoreLocalStorage, fetchOrders
 	}
 })
