@@ -6,32 +6,9 @@ export const useProductsStore = defineStore('products', () => {
 	const axios = inject('axios');
 	const toast = inject("toast");
 
-	const products = ref([
-		{
-			id: 12,
-			name: '7-Up',
-			image: 'KPNzRRCrbwnrxbgk.jpg',
-			price: 1.4,
-			type: 'drink',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-		{
-			id: 123,
-			name: 'Água das Pedras',
-			image: 'KPNzRRCrbwnrxbgk.jpg',
-			price: 1.4,
-			type: 'drink',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-		{
-			id: 121,
-			name: 'Aletria',
-			image: 'QSJ8nyCgMiw40EkV.jpg',
-			price: 3.40,
-			type: 'dessert',
-			description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-		},
-	]);
+	const deleteProduct = ref();
+	const products = ref({});
+	const product = ref({});
 
 	/**
 	 * share information in the app
@@ -47,7 +24,7 @@ export const useProductsStore = defineStore('products', () => {
 		return products.value?.id ?? -1
 	});
 	
-    async function loadProducts() {
+  /*  async function loadProducts() {
         try {
             const response = await axios.get('products')
             products.value = response.data.data
@@ -56,7 +33,18 @@ export const useProductsStore = defineStore('products', () => {
             clearProducts()
             throw error
         }
-    }
+    }*/
+
+	async function fetchProducts(page = 1) {
+		try {
+			const response = await axios.get('/products?page=' + page);
+			products.value = response.data;
+			return products.value;
+		} catch (error){
+			products.value = {};
+			throw error;
+		}
+	}
 
 	function clearProducts() {
         projects.value = []
@@ -99,6 +87,7 @@ export const useProductsStore = defineStore('products', () => {
     
 
 	return {
-		products, productsItems, loadProducts, clearProjects, deleteProduct
+		products, product, productsItems, deleteProduct,
+		clearProducts, fetchProducts, deleteProductOnArray
 	}
 })
