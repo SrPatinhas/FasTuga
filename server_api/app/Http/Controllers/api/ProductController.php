@@ -66,7 +66,7 @@ class ProductController extends Controller
         return OrderResource::collection($orders);
     }
 
-    /*
+    
     public function trending(){
         $mostUsedProduct = Product::select('products.*', DB::raw('count(order_items.product_id) as times_ordered'))
             ->join('order_items', 'products.id', '=', 'order_items.product_id')
@@ -80,6 +80,6 @@ class ProductController extends Controller
 
         return ProductResource::collection($mostUsedProduct);
     }
-    */
+    
     
 }
