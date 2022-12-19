@@ -28,6 +28,27 @@ class CustomerController extends Controller
         return new CustomerResource($customer);
     }
 
+    public function show(Customer $customer)
+    {
+        return new CustomerResource($customer);
+    }
+
+    //Estou na duvida
+    public function orderDetails(Customer $customer)
+    {
+        return new CustomerResource($customer);
+    }
+
+
+    public function customerOrders($id){
+        $customer = Customer::findOrFail($id);
+
+        $orders = OrderResource::collection(Order::where('customer_id', '=', $customer->id)->get())->sortByDesc('id')->values()->all();
+
+        return response()->json(['orders' => $orders], 200);
+    }
+
+
     public function update(UpdateCustomerRequest $request, $id)
     {
         $user = new User;
@@ -66,13 +87,7 @@ class CustomerController extends Controller
         return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()], 201);
     }
 
-    public function getCustomerOrders($id){
-        $customer = Customer::findOrFail($id);
-
-        $orders = OrderResource::collection(Order::where('customer_id', '=', $customer->id)->get())->sortByDesc('id')->values()->all();
-
-        return response()->json(['orders' => $orders], 200);
-    }
+    
 
 
     public function getCurrentOrder(User $user){

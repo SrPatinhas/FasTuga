@@ -65,8 +65,8 @@ class OrderGuestController extends Controller
 
     public function getOrderStatusGuest(Order $order){
 
-        //É os status da order? por isso passamos o resource todo certo ?
-        return new OrderResource($order);   
+        //Passar os status da order
+        return new OrderStatusResource($order);   
     }
 
     public function getBoardItems (Request $request){

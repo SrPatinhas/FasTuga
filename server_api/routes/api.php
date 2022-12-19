@@ -9,6 +9,8 @@ use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\OrderController;
 use App\Http\Controllers\api\OrderGuestController;
 
+
+
 Route::controller(AuthController::class)->group(function () {
     Route::post('login',        'login');
     Route::post('register',     'register');
@@ -50,8 +52,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/',                         'index');
         Route::get('/me',                       'customerInfo');
         Route::get('/{customer}',               'show')->whereNumber('customer');
-        Route::get('/{customer}/order/{order}', 'order')->whereNumber('customer');
-        Route::get('/{customer}/orders',        'orders')->whereNumber('customer');
+        Route::get('/{customer}/order/{order}', 'orderDetails')->whereNumber('customer');
+        Route::get('/{customer}/orders',        'customerOrders')->whereNumber('customer');
     });
     //--END CUSTOMER
 

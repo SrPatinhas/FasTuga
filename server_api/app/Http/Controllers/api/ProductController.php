@@ -51,6 +51,20 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
+    //Por fazer
+    public function getTopItems(Product $product)
+    {
+        
+    }
+
+    public function getOrdersOfProduct(Product $product)
+    {
+        $orders = Order::leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->where('order_items.product_id', '=', $product->id)
+            ->get();
+
+        return OrderResource::collection($orders);
+    }
 
     public function trending(){
         $mostUsedProduct = Product::select('products.*', DB::raw('count(order_items.product_id) as times_ordered'))
@@ -66,12 +80,5 @@ class ProductController extends Controller
         return ProductResource::collection($mostUsedProduct);
     }
 
-    public function getOrdersOfProduct(Product $product)
-    {
-        $orders = Order::leftJoin('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->where('order_items.product_id', '=', $product->id)
-            ->get();
-
-        return OrderResource::collection($orders);
-    }
+    
 }
