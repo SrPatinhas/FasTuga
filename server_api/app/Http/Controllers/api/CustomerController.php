@@ -33,12 +33,11 @@ class CustomerController extends Controller
         return new CustomerResource($customer);
     }
 
-    //Estou na duvida
-    public function orderDetails(Customer $customer)
+    //Não sei se é assim !rever
+    public function orderDetails(Order $order)
     {
-        return new CustomerResource($customer);
+        return new OrderResource($order->user);
     }
-
 
     public function customerOrders($id){
         $customer = Customer::findOrFail($id);

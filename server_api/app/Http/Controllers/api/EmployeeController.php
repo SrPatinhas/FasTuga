@@ -35,8 +35,9 @@ class EmployeeController extends Controller
         return new UserResource($user);
     }
 
-    public function show(User $user)
+    public function show($user)
     {
+        //return EmployeeResource::collection($employee->users);
         return new EmployeeResource($user);
     }  
 

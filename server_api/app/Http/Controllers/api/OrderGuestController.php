@@ -60,13 +60,13 @@ class OrderGuestController extends Controller
 
     public function getOrderStatusGuest(Order $order){
 
-        //Passar os status da order
+        //Passar os statusOrder
         return new OrderStatusResource($order);   
     }
 
-    public function getBoardItems (Request $request){
+    public function getBoardItems (Order $order){
 
-        return new OrderResource($request->order());
+        return new OrderStatusResource($order);
     }
 
 //ate aqui
