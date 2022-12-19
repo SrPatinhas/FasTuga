@@ -92,7 +92,6 @@ class OrderController extends Controller
     }
 
 
-
     public function getOrdersOfProduct(Request $request, Product $product)
     {
         //OrderResource::$format = 'detailed';
