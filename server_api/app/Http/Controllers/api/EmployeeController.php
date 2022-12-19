@@ -22,11 +22,6 @@ class EmployeeController extends Controller
         return UserResource::collection(User::all());
     }
 
-    public function show(User $user)
-    {
-        return new UserResource($user);
-    }
-
     public function create(CreateEmployeeRequest $request){
         $user = User::create([
             'name' => $request->name,
@@ -40,9 +35,21 @@ class EmployeeController extends Controller
         return new UserResource($user);
     }
 
+    public function show(User $user)
+    {
+        return new EmployeeResource($user);
+    }  
+
     public function update(UpdateUserRequest $request, User $user)
     {
         $user->update($request->validated());
+        return new UserResource($user);
+    }
+
+    public function destroy(User $user)
+    {
+        User::where("employee_id", $user->id)->delete();
+        $user->delete();
         return new UserResource($user);
     }
 

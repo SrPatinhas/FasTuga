@@ -20,11 +20,6 @@ class OrderGuestController extends Controller
         // Filter by Auth user_id
         return OrderResource::collection(Order::whereNotNull('customer_id')->get());
     }
-    // Check if order is from Auth user_id
-    public function show(Order $order)
-    {
-        return new OrderResource($order);
-    }
 
     public function store(StoreUpdateOrderRequest $request)
     {
@@ -65,8 +60,8 @@ class OrderGuestController extends Controller
 
     public function getOrderStatusGuest(Order $order){
 
-        //É os status da order? por isso passamos o resource todo certo ?
-        return new OrderResource($order);   
+        //Passar os status da order
+        return new OrderStatusResource($order);   
     }
 
     public function getBoardItems (Request $request){

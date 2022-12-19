@@ -30,10 +30,14 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function store(StoreUpdateOrderRequest $request)
+    public function payment(Order $order)
     {
-        $newOrder = Order::create($request->validated());
-        return new OrderResource($newOrder);
+        return new OrderResource($order);
+    }
+
+    public function refund(Order $order)
+    {
+        return new OrderResource($order);
     }
 
     public function update(StoreUpdateOrderRequest $request, Order $order)
@@ -50,13 +54,42 @@ class OrderController extends Controller
     }
 
 
+    // Requests for the kitchen
+    public function getActiveOrders(){
+        return OrderResource::collection(Order::where([['status', '!=', 'D'], ['status', '!=', 'C']])->get());
+    }
+
+    public function getOrderStatus(Order $order){
+
+        //Passar os status da order
+        return new OrderStatusResource($order);   
+    }
+
+    public function setOrderStatus(Order $order){
+
+        //Passar os status da order
+        return new OrderStatusResource($order);   
+    }
+
+
+
+    public function store(StoreUpdateOrderRequest $request)
+    {
+        $newOrder = Order::create($request->validated());
+        return new OrderResource($newOrder);
+    }
+
+    
+
+    
+
+
     public function update_completed(UpdateCompleteOrderRequest $request, Order $order)
     {
         $order->completed = $request->validated()['completed'];
         $order->save();
         return new OrderResource($order);
     }
-
 
 
     public function getOrdersOfProduct(Request $request, Product $product)
@@ -151,9 +184,6 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order status updated. Order went from '. $oldStatus . ' to ' . $order->status, 'order' => new OrderResource($order)], 200);
     }
 
-    public function getActiveOrders(){
-        return OrderResource::collection(Order::where([['status', '!=', 'D'], ['status', '!=', 'C']])->get());
-    }
 
     public function create(CreateOrderRequest $request){
 
