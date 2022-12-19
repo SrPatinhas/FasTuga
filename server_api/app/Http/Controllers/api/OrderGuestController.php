@@ -50,7 +50,7 @@ class OrderGuestController extends Controller
 
     //ORDERGUESTCONTROLLER aquii
     public function paymentGuest(){
-
+        
     }
 
     public function showGuest (Order $order){

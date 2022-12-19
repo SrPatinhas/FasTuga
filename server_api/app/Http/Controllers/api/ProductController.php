@@ -81,5 +81,29 @@ class ProductController extends Controller
         return ProductResource::collection($mostUsedProduct);
     }
     
-    
+//Manager stats
+
+private function topItemsByCategory($category, $page){
+    $mostUsedProduct = Product::select('products.*', DB::raw('count(order_items.product_id) as times_ordered'))
+        ->join('order_items', 'products.id', '=', 'order_items.product_id')
+        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+        ->whereIn('products.type', [$category])
+        ->where('orders.created_at', '>=', Carbon::now()->subMonths(3))//Hours(24))
+        ->groupBy('products.id')
+        ->orderBy('times_ordered', 'desc')
+        ->limit($page)
+        ->get();
+
+    return ProductResource::collection($mostUsedProduct);
+}
+
+    public function getTopHotItems(){
+        return $this->topItemsByCategory('hot dish', 4);
+    }
+    public function getTopColdItems(){
+        return $this->topItemsByCategory('cold dish', 4);
+    }
+    public function getTopDessertItems(){
+        return $this->topItemsByCategory('dessert', 4);
+    }  
 }
