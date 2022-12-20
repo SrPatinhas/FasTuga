@@ -284,7 +284,7 @@ export const useUserStore = defineStore('user', () => {
 
 	return {
 		user, users, customer, customers, employees, userId, userPhotoUrl, userIsGuest,
-		availablePoints, productTypes, isGuest,
+		availablePoints, userTypes, isGuest,
 		login, register,loginAsGuest, logout, restoreToken, changePassword,
 		loadUsers, loadCustomer, save,
 		isCustomer, isChef, isDelivery, isEmployee, isManager, isAuthenticated,
