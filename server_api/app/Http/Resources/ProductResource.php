@@ -20,7 +20,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'description' => $this->description,
-            'photo_url' => env('LOCAL_FILE_PATH_PRODUCTS') . $this->photo_url,
+            'photo_url' => ($this->photo_url != '' ? env('LOCAL_FILE_PATH_PRODUCTS', 'http://server_api.test/storage/products/') . $this->photo_url : ''),
             'price' => (float) $this->price,
             'custom' => $this->custom,
         ];
