@@ -206,7 +206,7 @@ router.beforeEach((to, from, next) => {
 			return
 		}
 	}
-
+	/*
 	if (handlingFirstRoute) {
 		handlingFirstRoute = false
 		next({name: 'Redirect', params: {redirectTo: to.fullPath}})
@@ -215,6 +215,7 @@ router.beforeEach((to, from, next) => {
 		next()
 		return
 	}
+	*/
 	if ((to.name == 'Login') || (to.name == 'home')) {
 		next()
 		return

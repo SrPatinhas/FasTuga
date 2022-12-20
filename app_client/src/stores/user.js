@@ -203,6 +203,7 @@ export const useUserStore = defineStore('user', () => {
 	}
 
 	async function restoreToken() {
+		console.log('restoreToken');
 		let storedToken = sessionStorage.getItem('token')
 		if (storedToken) {
 			axios.defaults.headers.common.Authorization = "Bearer " + storedToken
