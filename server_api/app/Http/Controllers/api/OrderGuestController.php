@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrderStatusResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -64,6 +65,7 @@ class OrderGuestController extends Controller
         return new OrderStatusResource($order);   
     }
 
+    //por fazer
     public function getBoardItems (Order $order){
 
         return new OrderStatusResource($order);

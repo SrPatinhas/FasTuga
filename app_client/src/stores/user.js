@@ -48,6 +48,9 @@ export const useUserStore = defineStore('user', () => {
 	/*
 	 * Roles
 	 */
+	const isGuest = computed(() => {
+		return userIsGuest;
+	});
 	const isCustomer = computed(() => {
 		return user.value?.type == 'C' ?? false;
 	});
@@ -218,6 +221,7 @@ export const useUserStore = defineStore('user', () => {
 	}
 
 	async function restoreToken() {
+		console.log('restoreToken');
 		let storedToken = sessionStorage.getItem('token')
 		if (storedToken) {
 			axios.defaults.headers.common.Authorization = "Bearer " + storedToken
@@ -280,7 +284,7 @@ export const useUserStore = defineStore('user', () => {
 
 	return {
 		user, users, customer, customers, employees, userId, userPhotoUrl, userIsGuest,
-		totalUsers, availablePoints, userTypes,
+		availablePoints, productTypes, isGuest,
 		login, register,loginAsGuest, logout, restoreToken, changePassword,
 		loadUsers, loadCustomer, save,
 		isCustomer, isChef, isDelivery, isEmployee, isManager, isAuthenticated,

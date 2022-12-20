@@ -17,23 +17,25 @@
 					<li class="nav-item">
 						<router-link class="nav-link" :class="{ active: $route.name === 'PublicBoard' }" :to="{ name: 'PublicBoard' }">Public Board</router-link>
 					</li>
-					<li class="nav-item" v-show="userStore.user">
+					<li class="nav-item" v-if="userStore.isAuthenticated && !userStore.isCustomer">
 						<router-link class="nav-link" :to="{ name: 'RestaurantBoard' }">Restaurant Board</router-link>
 					</li>
 				</ul>
 
 				<ul class="navbar-nav">
-					<li class="nav-item" v-show="!userStore.user">
-						<router-link class="nav-link" :class="{ active: $route.name === 'Registration' }" :to="{ name: 'Registration' }">
-							Register
-						</router-link>
-					</li>
-					<li class="nav-item" v-show="!userStore.user">
-						<router-link class="nav-link" :class="{ active: $route.name === 'Login' }" :to="{ name: 'Login' }">
-							Login
-						</router-link>
-					</li>
-					<li class="nav-item">
+					<template v-if="!userStore.isAuthenticated">
+						<li class="nav-item">
+							<router-link class="nav-link" :class="{ active: $route.name === 'Registration' }" :to="{ name: 'Registration' }">
+								Register
+							</router-link>
+						</li>
+						<li class="nav-item">
+							<router-link class="nav-link" :class="{ active: $route.name === 'Login' }" :to="{ name: 'Login' }">
+								Login
+							</router-link>
+						</li>
+					</template>
+					<li class="nav-item" v-if="!userStore.isCustomer || userStore.isGuest">
 						<router-link class="nav-link position-relative gap-1" :class="{ active: $route.name === 'Bag' }" :to="{ name: 'Bag' }">
 							<i class="fs-5 bi bi bi-bag"></i>
 							<span class="badge">
@@ -43,7 +45,7 @@
 							{{ orderStore.totalOrderCost }}
 						</router-link>
 					</li>
-					<li class="dropdown" v-show="userStore.user">
+					<li class="dropdown" v-if="userStore.isAuthenticated">
 						<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							<img :src="userStore.userPhotoUrl" class="rounded-circle z-depth-0 avatar-img" width="32" height="32" alt="avatar image"/>
 							<span class="avatar-text">{{ userStore.user?.name ?? "Anonymous" }}</span>
