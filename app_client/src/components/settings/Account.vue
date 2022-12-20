@@ -1,9 +1,7 @@
 <script setup>
-import { ref, watch, computed, inject } from "vue";
-import { useUserStore } from "../../stores/user";
-const userStore = useUserStore();
-userStore.loadCustomer();
-
+	import { useUserStore } from "@/stores/user";
+	const userStore = useUserStore();
+	userStore.loadCustomer();
 </script>
 
 <template>

@@ -1,15 +1,15 @@
 <template>
-	<div>
+	<div v-if="pagination?.current_page">
 		<nav aria-label="Page navigation" class="mt-3">
 			<ul class="pagination justify-content-center">
-				<li class="page-item" :class="pagination.from == pagination.current_page && 'disabled'">
-					<a class="page-link" @click.prevent="changePage(pagination.current_page - 1)">Previous</a>
+				<li class="page-item" :class="pagination?.from == pagination?.current_page && 'disabled'">
+					<a class="page-link" @click.prevent="changePage(pagination?.current_page - 1)">Previous</a>
 				</li>
-				<li class="page-item" v-for="page in pages" :key="page" :class="{ 'active': page === pagination.current_page }">
+				<li class="page-item" v-for="page in pages" :key="page" :class="{ 'active': page === pagination?.current_page }">
 					<a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
 				</li>
-				<li class="page-item" :class="pagination.last_page == pagination.current_page && 'disabled'">
-					<a class="page-link" href="#" @click.prevent="changePage(pagination.current_page + 1)">Next</a>
+				<li class="page-item" :class="pagination?.last_page == pagination?.current_page && 'disabled'">
+					<a class="page-link" href="#" @click.prevent="changePage(pagination?.current_page + 1)">Next</a>
 				</li>
 			</ul>
 		</nav>

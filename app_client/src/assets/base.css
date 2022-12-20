@@ -289,8 +289,15 @@ fieldset:disabled .btn {
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+.text-muted {
+  --bs-text-opacity: 1;
+  color: #7d879c !important;
+}
 .fs-xs {
   font-size: 0.75rem !important;
+}
+.fs-sm {
+  font-size: 0.875rem !important;
 }
 .mr-2{
   margin-right: .5rem!important;
@@ -314,6 +321,14 @@ fieldset:disabled .btn {
 
 .navbar-nav {
   align-items: center;
+}
+.nav-link-style {
+  color: #4b566b;
+  text-decoration: none;
+}
+.active>.nav-link-style,
+.nav-link-style.active {
+  color: var(--bs-primary);
 }
 
 .password-toggle-btn {
