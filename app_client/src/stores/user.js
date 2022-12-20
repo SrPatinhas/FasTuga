@@ -16,7 +16,8 @@ export const useUserStore = defineStore('user', () => {
 	const users = ref();
 	const customer = ref();
 	const customers = ref([]);
-	const employees = ref(true);
+	const employee = ref([]);
+	const employees = ref([]);
 
 	const userTypes = ref([
         {type: 'C', icon: 'bi bi-people'},
@@ -105,9 +106,9 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
-	async function fetchCustomers() {
+	async function fetchCustomers(page = 1) {
 		try {
-			const response = await axios.get('/customers');
+			const response = await axios.get('/customers?page=' + page);
 			customers.value = response.data;
 			return customers.value;
 		} catch (error){

@@ -88,7 +88,7 @@
 									</router-link>
 								</li>
 								<li>
-									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'UsersAccount' }" :to="{name: 'UsersAccount'}">
+									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'ClientsAccount' }" :to="{name: 'ClientsAccount'}">
 										<i class="bi-people opacity-50 me-2"></i>Users
 									</router-link>
 								</li>
