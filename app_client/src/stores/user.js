@@ -46,6 +46,9 @@ export const useUserStore = defineStore('user', () => {
 	/*
 	 * Roles
 	 */
+	const isGuest = computed(() => {
+		return userIsGuest;
+	});
 	const isCustomer = computed(() => {
 		return user.value?.type == 'C' ?? false;
 	});
@@ -262,7 +265,7 @@ export const useUserStore = defineStore('user', () => {
 
 	return {
 		user, users, customer, customers, employees, userId, userPhotoUrl, userIsGuest,
-		availablePoints, productTypes,
+		availablePoints, productTypes, isGuest,
 		login, register,loginAsGuest, logout, restoreToken, changePassword,
 		loadUsers, loadCustomer, save,
 		isCustomer, isChef, isDelivery, isEmployee, isManager, isAuthenticated,

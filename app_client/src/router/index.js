@@ -191,6 +191,9 @@ let handlingFirstRoute = true;
 
 router.beforeEach((to, from, next) => {
 	const userStore = useUserStore();
+	if(!userStore.isAuthenticated){
+		userStore.restoreToken();
+	}
 	if ( to.meta.requiresAuth && !userStore.isAuthenticated ) {
 		// this route requires auth, check if logged in
 		// if not, redirect to login page.
