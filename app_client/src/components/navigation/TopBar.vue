@@ -51,59 +51,49 @@
 						<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" style="width: 200px;">
 							<li><h6 class="dropdown-header">Account</h6></li>
 							<li>
-								<a class="dropdown-item d-flex align-items-center bi-gear" >
-									<router-link class="nav-link" v-if="userStore.user?.type == 'C'" :class="{ active: $route.name === 'Account' }" :to="{ name: 'Account' }">
-							Settings
-						</router-link>
-						<router-link class="nav-link" v-if="userStore.user?.type == 'EM'" :class="{ active: $route.name === 'DashboardManager' }" :to="{ name: 'DashboardManager' }">
-							Settings
-						</router-link>
-								</a>
-							</li>
-							<li>
-								<a class="dropdown-item d-flex align-items-center" href="dashboard-purchases.html">
-									<i class="bi-basket opacity-50 me-2"></i>Purchases
-								</a>
-							</li>
-							<li>
-								<div class="dropdown-item d-flex align-items-center">
-									<i class="bi-coin opacity-50 me-2"></i>Points<span class="ms-auto opacity-50">4</span>
-								</div>
-							</li>
-
-							<li>
-								<router-link class="dropdown-item" :class="{ active: $route.name === 'ChangePassword' }" :to="{ name: 'ChangePassword' }">
-									<i class="bi-key-fill"></i>
-									Change password
+								<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'Account' }" :to="{ name: (userStore.isManager ? 'DashboardManager' : 'Account') }">
+									<i class="bi-gear opacity-50 me-2"></i>Settings
 								</router-link>
 							</li>
-
+							<template v-if="userStore.isCustomer">
+								<li>
+									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'Purchases' }" :to="{name: 'Purchases'}">
+										<i class="bi-basket opacity-50 me-2"></i>Purchases
+									</router-link>
+								</li>
+								<li>
+									<div class="dropdown-item d-flex align-items-center disabled">
+										<i class="bi-coin opacity-50 me-2"></i>Points<span class="ms-auto opacity-50">{{ userStore.availablePoints}}</span>
+									</div>
+								</li>
+							</template>
+							<template v-if="userStore.isManager">
+								<li><hr class="dropdown-divider"></li>
+								<li><h6 class="dropdown-header">Restaurant Board</h6></li>
+								<li>
+									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'DashboardManager' }" :to="{name: 'DashboardManager'}">
+										<i class="bi-currency-dollar opacity-50 me-2"></i>Reveneu<span class="ms-auto opacity-50">$1,375.00</span>
+									</router-link>
+								</li>
+								<li>
+									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'Orders' }" :to="{name: 'Orders'}">
+										<i class="bi-receipt-cutoff opacity-50 me-2"></i>Orders<span class="ms-auto opacity-50">5</span>
+									</router-link>
+								</li>
+								<li>
+									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'Products' }" :to="{name: 'Products'}">
+										<i class="bi-cloud-upload opacity-50 me-2"></i>Add New Product
+									</router-link>
+								</li>
+								<li>
+									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'UsersAccount' }" :to="{name: 'UsersAccount'}">
+										<i class="bi-people opacity-50 me-2"></i>Users
+									</router-link>
+								</li>
+							</template>
 							<li><hr class="dropdown-divider"></li>
-							<li><h6 class="dropdown-header">Restaurant Board</h6></li>
 							<li>
-								<a class="dropdown-item d-flex align-items-center" href="dashboard-sales.html">
-									<i class="bi-currency-dollar opacity-50 me-2"></i>Reveneu<span class="ms-auto opacity-50">$1,375.00</span>
-								</a>
-							</li>
-							<li>
-								<a class="dropdown-item d-flex align-items-center" href="dashboard-products.html">
-									<i class="bi-receipt-cutoff opacity-50 me-2"></i>Orders<span class="ms-auto opacity-50">5</span>
-								</a>
-							</li>
-							<li>
-								<a class="dropdown-item d-flex align-items-center" href="dashboard-add-new-product.html">
-									<i class="bi-cloud-upload opacity-50 me-2"></i>Add New Product
-								</a>
-							</li>
-							<li>
-								<a class="dropdown-item d-flex align-items-center" href="dashboard-payouts.html">
-									<i class="bi-currency-exchange opacity-50 me-2"></i>Payouts
-								</a>
-							</li>
-
-							<li><hr class="dropdown-divider"></li>
-							<li>
-								<a class="dropdown-item d-flex align-items-center" @click.prevent="logout">
+								<a class="dropdown-item d-flex align-items-center" href="#" @click.prevent="logout">
 									<i class="bi-box-arrow-right opacity-50 me-2"></i>Sign Out
 								</a>
 							</li>

@@ -27,6 +27,8 @@ import UsersAccount from "../components/settings/UsersAccount.vue";
 import Products from "../components/settings/Products.vue";
 import Orders from "../components/settings/Orders.vue";
 
+//const userStore = useUserStore();
+
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	scrollBehavior(to, from, savedPosition) {
@@ -40,7 +42,7 @@ const router = createRouter({
 			return savedPosition
 		}
 		// always scroll to top
-		return { top: 0 }
+		return {top: 0}
 	},
 	routes: [
 		{
@@ -64,7 +66,7 @@ const router = createRouter({
 			path: '/registration',
 			name: 'Registration',
 			component: Registration
-		  },
+		},
 		{
 			path: '/users',
 			name: 'Users',
@@ -116,54 +118,71 @@ const router = createRouter({
 			component: OrderDetail,
 			props: route => ({id: parseInt(route.params.id)})
 		},
-
-		{
-			path: '/reports',
-			name: 'Reports',
-			component: () => import('../views/Board.vue')
-		},
 		// Settings
 		{
 			path: '/settings',
 			name: 'Settings',
 			component: Settings,
 			children: [
-						{ 
-							path: 'account', 
-							name: 'Account', 
-							component: Account 
-						},
-						{
-							path: 'purchases',
-							name: 'Purchases',
-							component: Purchases,
-						},
-						{
-							path: 'dashboard-manager',
-							name: 'DashboardManager',
-							component: DashboardManager,
-						},
-						{
-							path: 'users-account',
-							name: 'UsersAccount',
-							component: UsersAccount,
-						},
-						{
-							path: 'products',
-							name: 'Products',
-							component: Products,
-						},
-						{
-							path: 'orders',
-							name: 'Orders',
-							component: Orders,
-						},
-						{
-							path: 'password',
-							name: 'ChangePassword',
-							component: ChangePassword
-						}
-					  ],
+				{
+					path: 'account',
+					name: 'Account',
+					component: Account
+				},
+				{
+					path: 'password',
+					name: 'ChangePassword',
+					component: ChangePassword
+				},
+				{
+					path: 'purchases',
+					name: 'Purchases',
+					component: Purchases,
+					meta: {
+						requiresAuth: true,
+						role: 'c'
+					}
+				},
+				{
+					path: 'dashboard-manager',
+					name: 'DashboardManager',
+					component: DashboardManager,
+					meta: {
+						requiresAuth: true,
+						role: 'm'
+					}
+				},
+				{
+					path: 'users-account',
+					name: 'UsersAccount',
+					component: UsersAccount,
+					meta: {
+						requiresAuth: true,
+						role: 'm'
+					}
+				},
+				{
+					path: 'products',
+					name: 'Products',
+					component: Products,
+					meta: {
+						requiresAuth: true,
+						role: 'm'
+					}
+				},
+				{
+					path: 'orders',
+					name: 'Orders',
+					component: Orders,
+					meta: {
+						requiresAuth: true,
+						role: 'm'
+					}
+				}
+			],
+			meta: {
+				requiresAuth: true
+			}
 		},
 	]
 })
@@ -171,6 +190,20 @@ const router = createRouter({
 let handlingFirstRoute = true;
 
 router.beforeEach((to, from, next) => {
+	const userStore = useUserStore();
+	if ( to.meta.requiresAuth && !userStore.isAuthenticated ) {
+		// this route requires auth, check if logged in
+		// if not, redirect to login page.
+		next({ name: 'Login' });
+		return
+	} else {
+		// if they don't have enought permissions
+		if ( ( to.meta.meta == 'c' && !userStore.isCustomer ) || ( to.meta.meta == 'm' && !userStore.isManager) ) {
+			next({ name: 'Menus' });
+			return
+		}
+	}
+
 	if (handlingFirstRoute) {
 		handlingFirstRoute = false
 		next({name: 'Redirect', params: {redirectTo: to.fullPath}})
@@ -179,7 +212,6 @@ router.beforeEach((to, from, next) => {
 		next()
 		return
 	}
-	const userStore = useUserStore()
 	if ((to.name == 'Login') || (to.name == 'home')) {
 		next()
 		return
@@ -188,12 +220,6 @@ router.beforeEach((to, from, next) => {
 		next({name: 'Login'})
 		return
 	}*/
-	if (to.name == 'Reports') {
-		if (userStore.user.type != 'A') {
-			next({name: 'home'})
-			return
-		}
-	}
 	if (to.name == 'User') {
 		if ((userStore.user.type == 'A') || (userStore.user.id == to.params.id)) {
 			next()

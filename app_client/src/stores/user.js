@@ -36,11 +36,38 @@ export const useUserStore = defineStore('user', () => {
 	const userId = computed(() => {
 		return user.value?.id ?? -1
 	});
-
-
 	const availablePoints = computed(() => {
 		return user.value?.points ?? 50;
 	});
+
+	const isAuthenticated = computed(() => {
+		return !!user.value?.id ?? false;
+	});
+	/*
+	 * Roles
+	 */
+	const isCustomer = computed(() => {
+		return user.value?.type == 'C' ?? false;
+	});
+	const isChef = computed(() => {
+		return user.value?.type == 'EC' ?? false;
+	});
+	const isDelivery = computed(() => {
+		return user.value?.type == 'ED' ?? false;
+	});
+	const isEmployee = computed(() => {
+		return isCustomer || isDelivery;
+	});
+	const isManager = computed(() => {
+		return user.value?.type == 'EM' ?? false;
+	});
+
+
+
+
+
+
+
 
 	async function loadUsers() {
 		try {
@@ -141,7 +168,7 @@ export const useUserStore = defineStore('user', () => {
 				}
 			});
 			axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
-			sessionStorage.setItem('token', response.data.access_token)
+			sessionStorage.setItem('token', response.data.access_token);
 			await loadUser();
 			socket.emit('loggedIn', user.value);
 			//await projectsStore.loadProjects()
@@ -238,6 +265,7 @@ export const useUserStore = defineStore('user', () => {
 		availablePoints, productTypes,
 		login, register,loginAsGuest, logout, restoreToken, changePassword,
 		loadUsers, loadCustomer, save,
+		isCustomer, isChef, isDelivery, isEmployee, isManager, isAuthenticated,
 		fetchCustomers, fetchEmployees,
 	}
 })
