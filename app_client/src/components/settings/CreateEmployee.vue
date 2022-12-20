@@ -22,11 +22,9 @@ import {ref, inject, computed, reactive} from 'vue'
 		loading: false
 	})
 
-	//const userStore = useUserStore()
 	const emit = defineEmits(['register']);
 
 	const btnDisabled = ref(true);
-
 
 	const register = async () => {
 		if(isFormValid.value) {
@@ -38,7 +36,7 @@ import {ref, inject, computed, reactive} from 'vue'
 				router.push({name: 'EmployeesAccount'});
 			} else {
 				toast.error('Unable to create employee');
-			}
+			} 
 		}
 	}
 
@@ -50,28 +48,21 @@ import {ref, inject, computed, reactive} from 'vue'
 			}
 			for (const [key, value] of Object.entries(credentials)) {
 				if(key !== "loading" && key !== "showPassword" && key !== "showPasswordConfirmation" && key !== "photo"){
-					if(key === "pay_type" || key === "pay_reference") {
+					if(key === "type") {
 						formData.append(key, value.toLowerCase());
 					} else {
 						formData.append(key, value);
 					}
 				}
 			}
-			const response = await axios.post('register', formData, {
+			const response = await axios.post('employee', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			});
-			axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
-			sessionStorage.setItem('token', response.data.access_token);
-			await loadUser();
-			socket.emit('loggedIn', user.value);
-			//await projectsStore.loadProjects()
-			userIsGuest.value = false;
 			return true
 		} catch (error) {
 			clearUser()
-			//projectsStore.clearProjects()
 			return false
 		}
 	}
@@ -88,18 +79,8 @@ import {ref, inject, computed, reactive} from 'vue'
 		isValid = isValid && credentials.password_confirmation === credentials.password;
 		return isValid;
 	});
-
 	const validateEmail = computed(() => {
 		return validations.isValidEmail(credentials.email);
-	});
-	const validatePhone = computed(() => {
-		return validations.isValidPhoneNumber(credentials.phone);
-	});
-	const validateNif = computed(() => {
-		return validations.isValidNIF(credentials.nif);
-	});
-	const validatePayment = computed(() => {
-		return checkPaymentDetaulf();
 	});
 	const validPasswords = computed(() => {
 		return validatePasswords();
@@ -114,25 +95,12 @@ import {ref, inject, computed, reactive} from 'vue'
 		isValid = isValid && credentials.password_confirmation === credentials.password;
 		return isValid;
 	}
-	function checkPaymentDetaulf() {
-		let isPaymentValid = false;
-		const paymentType = credentials.pay_type.toLowerCase();
-		const paymentValue = credentials.pay_reference;
-		if (paymentType === "visa") { // for a Visa payment is the Visa Card ID with 16 digits;
-			isPaymentValid = validations.validateVisaCard(paymentValue);
-		} else if (paymentType === "mbway") { // the reference for the MbWay is the mobile phone number with 9 digits
-			isPaymentValid = validations.isValidPhoneNumber(paymentValue);
-		} else if (paymentType === "paypal") { // the reference for the PayPal is a valid email
-			isPaymentValid = validations.isValidEmail(paymentValue);
-		}
-		return isPaymentValid;
-	}
 	const changeUploadImage = (image) => {
 		credentials.photo = image;
 	}
 
 	const isFormValid = computed(() => {
-		return validateEmail.value && validatePhone.value && validateNif.value && validatePayment.value && validPasswords.value;
+		return validateEmail.value && validPasswords.value;
 	});
 </script>
 
@@ -193,7 +161,7 @@ import {ref, inject, computed, reactive} from 'vue'
 							</div>
 							<div class="col-12 col-md-6">
 								<label for="inputState" class="form-label">Employee Type<span class="text-danger">*</span></label>
-								<select id="inputState" class="form-select form-control" required v-model="credentials.pay_type">
+								<select id="inputState" class="form-select form-control" required v-model="credentials.type">
 									<option selected value="" disabled>Delivery</option>
 									<option value="Chef">Chef</option>
 									<option value="Manager">Manager</option>
@@ -203,7 +171,7 @@ import {ref, inject, computed, reactive} from 'vue'
 
 							<div class="forms_buttons">
 								<button type="submit" class="btn btn-primary" @click="register" :disabled="!isFormValid">
-									<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+									<span role="status" aria-hidden="true"></span>
 									Add
 								</button>
 							</div>
