@@ -19,7 +19,7 @@ class CustomerController extends Controller
 {
 
     public function index(){
-        return CustomerResource::collection(Customer::all());
+        return CustomerResource::collection(Customer::paginate(15));
     }
 
     public function customerInfo(){
@@ -33,18 +33,17 @@ class CustomerController extends Controller
         return new CustomerResource($customer);
     }
 
-    //Não sei se é assim !rever
-    public function orderDetails(Order $order)
+    public function orderDetails(Customer $customer,Order $order)
     {
-        return new OrderResource($order->user);
+        if($order->customer_id = $customer->id) {
+            return new OrderResource($order);
+        }
+        return response()->json(['The requested order does not belongs to the requested customer', 400]);
     }
 
-    public function customerOrders($id){
-        $customer = Customer::findOrFail($id);
-
-        $orders = OrderResource::collection(Order::where('customer_id', '=', $customer->id)->get())->sortByDesc('id')->values()->all();
-
-        return response()->json(['orders' => $orders], 200);
+    public function customerOrders(Customer $customer){
+        $orders = Order::where('customer_id', '=', $customer->id)->sortByDesc('id')->get();
+        return OrderResource::collection($orders);
     }
 
 
@@ -86,7 +85,7 @@ class CustomerController extends Controller
         return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()], 201);
     }
 
-    
+
 
 
     public function getCurrentOrder(User $user){

@@ -19,7 +19,8 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        return UserResource::collection(User::all());
+        $usersList = User::where('type', '<>', 'C')->paginate(15);
+        return UserResource::collection($usersList);
     }
 
     public function create(CreateEmployeeRequest $request){
@@ -39,7 +40,7 @@ class EmployeeController extends Controller
     {
         //return EmployeeResource::collection($employee->users);
         return new EmployeeResource($user);
-    }  
+    }
 
     public function update(UpdateUserRequest $request, User $user)
     {
