@@ -18,7 +18,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(OrderGuestController::class)->prefix('orders')->group(function () {
     Route::post('/guest/payment',       'paymentGuest');/*POR FAZER*/
     Route::get('/guest/{order}',        'showGuest')->whereNumber('order'); /*Feito*/
-    Route::get('/guest/{order}/status', 'getOrderStatusGuest')->whereNumber('order');/*Não esta a passar, nao sei porque*/  // Requests for the kitchen
+    Route::get('/guest/{order}/status', 'getOrderStatusGuest')->whereNumber('order');/*Feito*/  // Requests for the kitchen
     Route::get('/board',                'getBoardItems');/*POR FAZER*/
 });
 
@@ -74,26 +74,26 @@ Route::middleware('auth:api')->group(function () {
         // Only a manager can use this ones
         Route::post('/',                    'store');/*Feito*/
         Route::put('/{product}',            'update')->whereNumber('product');/*Erro por causa da func getTopItems*/
-        Route::post('/{product}/photos',   'updatePhoto')->whereNumber('product');
-        Route::delete('/{product}',         'destroy')->whereNumber('product');
+        Route::post('/{product}/photos',   'updatePhoto')->whereNumber('product');/*Erro */
+        Route::delete('/{product}',         'destroy')->whereNumber('product');/*Erro database */
         // TODO -> talvez para estatisticas?
-        Route::get('/top-items',        'getTopItems');
+        Route::get('/top-items',        'getTopItems');/*Erro */
         Route::get('/{product}/orders', 'getOrdersOfProduct')->whereNumber('product');
     });
     //--END PRODUCTS
 
     //--ORDERS
     Route::controller(OrderController::class)->prefix('orders')->group(function () {
-        Route::get('/',                 'index');
-        Route::get('/{order}',          'show')->whereNumber('order');
-        Route::post('/payment',         'payment');
-        Route::post('/{order}/refund',  'refund')->whereNumber('order');
-        Route::put('/{order}',          'update')->whereNumber('order');
-        Route::delete('/{order}',       'destroy')->whereNumber('order');
+        Route::get('/',                 'index');   /*Feito*/
+        Route::get('/{order}',          'show')->whereNumber('order'); /*Feito*/
+        Route::post('/payment',         'payment');  /*Por fazer*/
+        Route::post('/{order}/refund',  'refund')->whereNumber('order');/*Por fazer*/
+        Route::put('/{order}',          'update')->whereNumber('order');/*Erro */
+        Route::delete('/{order}',       'destroy')->whereNumber('order');/*Erro database */
 
         // Requests for the kitchen
-        Route::get('/active',                       'getActiveOrders');
-        Route::get('/{order}/status',               'getOrderStatus')->whereNumber('order');
+        Route::get('/active',                       'getActiveOrders');/*Vazio */
+        Route::get('/{order}/status',               'getOrderStatus')->whereNumber('order');/*Erro */
         Route::post('/{order}/status',              'setOrderStatus')->whereNumber('order');
     });
     //--END ORDERS
