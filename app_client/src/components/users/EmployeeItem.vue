@@ -2,6 +2,7 @@
 	import {useUserStore} from "@/stores/user.js";
 	import avatarNoneUrl from '@/assets/avatar-none.png';
 	import Pagination from "@/components/navigation/Pagination.vue";
+	import {useRouter, RouterLink} from "vue-router"
 
 	const userStore = useUserStore();
 	userStore.fetchEmployees();
@@ -12,6 +13,10 @@
 </script>
 
 <template>
+	
+		<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'CreateEmployee' }" :to="{ name: 'CreateEmployee' }">
+			<button type="button" class="btn btn-primary">Add Employee</button>
+		</router-link>
 	<div class="d-block d-sm-flex align-items-center py-4 border-bottom" v-for="(employee, index) of userStore.employees.data" :key="index">
 		<div class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" style="width: 12.5rem;">
 				<img v-if="employee.photo_url==''" :src="avatarNoneUrl" class="card-img-top" :alt="name">

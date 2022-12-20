@@ -25,6 +25,7 @@ import Purchases from "../components/settings/Purchases.vue";
 import DashboardManager from "../components/settings/DashboardManager.vue";
 import ClientsAccount from "../components/settings/CustomersList.vue";
 import EmployeesAccount from "../components/settings/EmployeesList.vue";
+import CreateEmployee from "../components/settings/CreateEmployee.vue";
 import Products from "../components/settings/Products.vue";
 import Orders from "../components/settings/Orders.vue";
 
@@ -166,6 +167,15 @@ const router = createRouter({
 					path: 'employees-account',
 					name: 'EmployeesAccount',
 					component: EmployeesAccount,
+					meta: {
+						requiresAuth: true,
+						role: 'm'
+					}
+				},
+				{
+					path: 'create-employee',
+					name: 'CreateEmployee',
+					component: CreateEmployee,
 					meta: {
 						requiresAuth: true,
 						role: 'm'

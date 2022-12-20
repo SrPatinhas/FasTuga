@@ -203,6 +203,8 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
+	
+
 
 	function loginAsGuest() {
 		userIsGuest.value = true;

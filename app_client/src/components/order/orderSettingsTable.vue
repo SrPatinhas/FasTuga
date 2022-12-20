@@ -11,7 +11,7 @@
 </script>
 
 <template>
-	<div v-if="orderStore.orders?.data || orderStore.orders?.data?.length === 0">
+	<div v-if="orderStore.orders?.data?.length === 0">
 		<div class="p-5 bg-faded-warning rounded-3">
 			<div class="">
 				<h1 class="fw-bold">No orders until now <i class="bi bi-emoji-frown fs-2 text-danger"></i></h1>
