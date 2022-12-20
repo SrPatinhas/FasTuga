@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -44,32 +45,25 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    // TODO check this 2 requests for image upload
-    public function uploadPhoto(Request $request){
-        $request->validate(['photo_file' => 'image|mimes:jpeg,png,jpg']);
-
-        $path = Storage::putFile('public/fotos', $request->file('photo_file'));
-
-        return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()], 201);
-    }
-
-    public function updatePhoto(Request $request, $id){
-        $request->validate(['photo_file' => 'image|mimes:jpeg,png,jpg']);
-
-        $user = User::findOrFail($id);
-
+    public function updatePhoto(Request $request){
+        $request->validate(['photo' => 'image|mimes:jpeg,png,jpg']);
+        $user = Auth::user();
         // Delete previous photo
         Storage::disk('public')->delete('fotos/'.$user->photo_url);
-
-        $path = Storage::putFile('public/fotos', $request->file('photo_file'));
-
-        return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()], 201);
+        // Save new file
+        Storage::putFile('public/fotos', $request->file('photo'));
+        // Update path on DB
+        User::where('id', $user->id)->update(['photo_url', $request->file('photo')->hashName()]);
+        // return new image path
+        return response()->json([
+            'location' => '/storage/fotos/'.$request->file('photo')->hashName(),
+            'filename' => $request->file('photo')->hashName()
+        ], 201);
     }
 
     /**
      * Manager actions
      */
-
     public function block(User $user)
     {
         $user->blocked = 1;

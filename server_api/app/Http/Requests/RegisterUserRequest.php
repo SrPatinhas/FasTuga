@@ -30,8 +30,8 @@ class RegisterUserRequest extends FormRequest
             'password_confirmation' => ['required','same:password'],
 
             'phone' => ['required', 'between:9,13'],
-            'nif' => ['nullable','size:9'],
-            'photo_file' => ['nullable','file','image'],
+            'nif' => ['nullable','between:8,9'],
+            'photo' => ['nullable','file','image'],
 
             'pay_type' => ['required', 'in:visa,mbway,paypal'],
             'pay_reference' => ['required'],
@@ -59,7 +59,7 @@ class RegisterUserRequest extends FormRequest
             'nif.size' => "A NIF consists of 9 numbers",
 
             'pay_type.required' => "You have to provide your default payment type",
-            'pay_type.in' => "The payment type needs to be 'VISA', 'MBWay' or 'Paypal'",
+            'pay_type.in' => "The payment type needs to be 'visa', 'mbway' or 'paypal'",
 
             'pay_reference.required' => "You have to provide your default payment reference"
         ];

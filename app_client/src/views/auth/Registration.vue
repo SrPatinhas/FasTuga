@@ -1,26 +1,25 @@
 <script setup>
-	import {ref, inject, computed} from 'vue'
+import {ref, inject, computed, reactive} from 'vue'
 	import {useRouter} from 'vue-router'
 	import {useUserStore} from "@/stores/user";
 	import PhotoUploader from "@/components/global/photoUploader.vue";
+	import validations from "@/utils/validations";
 
 	const router = useRouter()
 	const axios = inject('axios')
 	const toast = inject('toast')
 	const userStore = useUserStore();
 
-	const credentials = ref({
+	const credentials = reactive({
 		name: '',
 		email: '',
 		password: '',
-		passwordConfirmation: '',
+		password_confirmation: '',
 		photo: null,
 		nif: '',
 		phone: '',
-		payment: {
-			type: '',
-			reference: ''
-		},
+		pay_type: '',
+		pay_reference: '',
 		showPassword: false,
 		showPasswordConfirmation: false,
 		loading: false
@@ -29,41 +28,83 @@
 	//const userStore = useUserStore()
 	const emit = defineEmits(['register']);
 
+	const btnDisabled = ref(true);
+
+
 	const register = async () => {
-		credentials.value.loading = true;
-		if (await userStore.register(credentials.value)) {
-			credentials.value.loading = false;
-			toast.success('User ' + userStore.user.name + ' has entered the application.')
-			emit('register');
-			//router.back()
-			console.log('register');
-			router.push({name: 'Menus'});
-		} else {
-			credentials.value.password = ''
-			toast.error('User credentials are invalid!')
+		if(isFormValid.value) {
+			credentials.loading = true;
+			if (await userStore.register(credentials)) {
+				credentials.loading = false;
+				toast.success('User ' + userStore.user.name + ' has entered the application.')
+				emit('register');
+				//router.back()
+				console.log('register');
+				router.push({name: 'Menus'});
+			} else {
+				credentials.loading = false;
+			}
 		}
 	}
 
-	const guestUser = () => {
-		userStore.loginAsGuest();
-		router.push({name: 'Menus'});
-	}
 	const validatePassword = computed(() => {
 		let isValid = false;
-		isValid = credentials.value.password !== '';
-		isValid = isValid && credentials.value.password.length >= 4;
+		isValid = credentials.password !== '';
+		isValid = isValid && credentials.password.length >= 4;
 		return isValid;
 	});
 	const validatePasswordConfirmation = computed(() => {
 	  	let isValid = false;
-		isValid = credentials.value.passwordConfirmation !== '';
-		isValid = isValid && credentials.value.passwordConfirmation !== credentials.value.password;
+		isValid = credentials.password_confirmation !== '';
+		isValid = isValid && credentials.password_confirmation === credentials.password;
 		return isValid;
 	});
 
-	const changeUploadImage = (image) => {
-		credentials.value.photo = image;
+	const validateEmail = computed(() => {
+		return validations.isValidEmail(credentials.email);
+	});
+	const validatePhone = computed(() => {
+		return validations.isValidPhoneNumber(credentials.phone);
+	});
+	const validateNif = computed(() => {
+		return validations.isValidNIF(credentials.nif);
+	});
+	const validatePayment = computed(() => {
+		return checkPaymentDetaulf();
+	});
+	const validPasswords = computed(() => {
+		return validatePasswords();
+	});
+
+
+	function validatePasswords() {
+		let isValid = false;
+		isValid = credentials.password !== '';
+		isValid = isValid && credentials.password.length >= 4;
+		isValid = isValid && credentials.password_confirmation !== '';
+		isValid = isValid && credentials.password_confirmation === credentials.password;
+		return isValid;
 	}
+	function checkPaymentDetaulf() {
+		let isPaymentValid = false;
+		const paymentType = credentials.pay_type.toLowerCase();
+		const paymentValue = credentials.pay_reference;
+		if (paymentType === "visa") { // for a Visa payment is the Visa Card ID with 16 digits;
+			isPaymentValid = validations.validateVisaCard(paymentValue);
+		} else if (paymentType === "mbway") { // the reference for the MbWay is the mobile phone number with 9 digits
+			isPaymentValid = validations.isValidPhoneNumber(paymentValue);
+		} else if (paymentType === "paypal") { // the reference for the PayPal is a valid email
+			isPaymentValid = validations.isValidEmail(paymentValue);
+		}
+		return isPaymentValid;
+	}
+	const changeUploadImage = (image) => {
+		credentials.photo = image;
+	}
+
+	const isFormValid = computed(() => {
+		return validateEmail.value && validatePhone.value && validateNif.value && validatePayment.value && validPasswords.value;
+	});
 </script>
 
 <template>
@@ -73,27 +114,30 @@
 					<div class="user_forms-login">
 						<h2 class="forms_title">Register</h2>
 
-						<form class="row g-3" @submit.prevent="register">
+						<form class="row g-3" @submit.prevent="">
 							<div class="col-12 col-md-6">
-								<label for="inputName" class="form-label">Name</label>
+								<label for="inputName" class="form-label">Name<span class="text-danger">*</span></label>
 								<input class="form-control" id="inputName" type="text" placeholder="Name" required v-model="credentials.name">
 							</div>
 							<div class="col-12 col-md-6">
-								<label for="inputEmail4" class="form-label">Email</label>
+								<label for="inputEmail4" class="form-label">Email<span class="text-danger">*</span></label>
 								<div class="input-group mb-3">
 									<i class="bi-at position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
-									<input class="form-control rounded-start" type="email" placeholder="Email" required v-model="credentials.email">
+									<input class="form-control" :class="validateEmail ? 'is-valid' : (credentials.email ? 'is-invalid' : '')" type="email" placeholder="Email" required v-model="credentials.email">
+								</div>
+								<div class="invalid-feedback" :class="!validateEmail && credentials.email && 'd-block'">
+									Your email is invalid
 								</div>
 							</div>
 
 							<div class="col-12 col-md-6">
-								<label for="inputPassword" class="form-label">Password</label>
+								<label for="inputPassword" class="form-label">Password<span class="text-danger">*</span></label>
 								<div class="input-group mb-3">
 									<i class="bi-shield-lock position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
 									<div class="password-toggle w-100">
 										<input class="form-control" :class="validatePassword ? 'is-valid' : (credentials.password ? 'is-invalid' : '')" id="inputPassword" :type="(credentials.showPassword ? 'text' : 'password')" placeholder="Password" v-model="credentials.password">
 										<label class="password-toggle-btn" aria-label="Show/hide password">
-											<input class="password-toggle-check" type="checkbox" v-model="credentials.showPassword"><span class="password-toggle-indicator"></span>
+											<input class="password-toggle-check" tabindex="-1" type="checkbox" v-model="credentials.showPassword"><span class="password-toggle-indicator"></span>
 										</label>
 									</div>
 								</div>
@@ -102,18 +146,18 @@
 								</div>
 							</div>
 							<div class="col-12 col-md-6">
-								<label for="inputPasswordConfirm" class="form-label">Password Confirmation</label>
+								<label for="inputPasswordConfirm" class="form-label">Password Confirmation<span class="text-danger">*</span></label>
 								<div class="input-group mb-3 has-validation">
 									<i class="bi-shield-lock position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
 									<div class="password-toggle w-100">
-										<input class="form-control" :class="validatePasswordConfirmation ? 'is-valid' : (credentials.passwordConfirmation ? 'is-invalid' : '')" id="inputPasswordConfirm" :type="(credentials.showPasswordConfirmation ? 'text' : 'password')" placeholder="Password Confirmation" v-model="credentials.passwordConfirmation">
+										<input class="form-control" :class="validatePasswordConfirmation ? 'is-valid' : (credentials.password_confirmation ? 'is-invalid' : '')" id="inputPasswordConfirm" :type="(credentials.showPasswordConfirmation ? 'text' : 'password')" placeholder="Password Confirmation" v-model="credentials.password_confirmation">
 										<label class="password-toggle-btn" aria-label="Show/hide password">
-											<input class="password-toggle-check" type="checkbox" v-model="credentials.showPasswordConfirmation"><span class="password-toggle-indicator"></span>
+											<input class="password-toggle-check" tabindex="-1" type="checkbox" v-model="credentials.showPasswordConfirmation"><span class="password-toggle-indicator"></span>
 										</label>
 									</div>
 								</div>
-								<div class="invalid-feedback" :class="!validatePasswordConfirmation && credentials.passwordConfirmation && 'd-block'">
-									Your passwords need to be equal
+								<div class="invalid-feedback" :class="!validatePasswordConfirmation && credentials.password_confirmation && 'd-block'">
+									Your passwords need to be the same
 								</div>
 							</div>
 
@@ -122,30 +166,45 @@
 							</div>
 
 							<div class="col-12 col-md-6">
-								<label for="inputAddress2" class="form-label">Phone</label>
-								<input type="text" class="form-control" id="inputAddress2" placeholder="911 111 111" required v-model="credentials.phone">
+								<label for="inputPhone" class="form-label">Phone<span class="text-danger">*</span></label>
+								<input type="text" class="form-control" id="inputPhone" placeholder="911 111 111"
+									   :class="validatePhone ? 'is-valid' : (credentials.phone ? 'is-invalid' : '')"
+									   required v-model="credentials.phone">
+								<div class="invalid-feedback" :class="!validatePhone && credentials.phone && 'd-block'">
+									Your phone is invalid
+								</div>
 							</div>
 							<div class="col-12 col-md-6">
-								<label for="inputAddress2" class="form-label">NIF</label>
-								<input type="text" class="form-control" id="inputAddress2" placeholder="123 123 123" required v-model="credentials.nif">
+								<label for="inputNif" class="form-label">NIF<span class="text-danger">*</span></label>
+								<input type="text" class="form-control" id="inputNif" placeholder="123 123 123"
+									   :class="validateNif ? 'is-valid' : (credentials.nif ? 'is-invalid' : '')"
+									   required v-model="credentials.nif">
+								<div class="invalid-feedback" :class="!validateNif && credentials.nif && 'd-block'">
+									Your NIF is invalid
+								</div>
 							</div>
 
 							<div class="col-12 col-md-6">
-								<label for="inputState" class="form-label">Payment Type</label>
-								<select id="inputState" class="form-select" required v-model="credentials.payment.type">
+								<label for="inputState" class="form-label">Payment Type<span class="text-danger">*</span></label>
+								<select id="inputState" class="form-select form-control" required v-model="credentials.pay_type">
 									<option selected value="" disabled>Default Payment type</option>
-									<option value="VISA">VISA</option>
-									<option value="MBway">MBway</option>
-									<option value="Paypal">Paypal</option>
+									<option value="visa">VISA</option>
+									<option value="mbway">MBway</option>
+									<option value="paypal">Paypal</option>
 								</select>
 							</div>
 							<div class="col-12 col-md-6">
-								<label for="inputCity" class="form-label">Default Payment Reference</label>
-								<input type="text" class="form-control" id="inputCity" placeholder="Email, phone number or credit card" required v-model="credentials.payment.reference">
+								<label for="inputCity" class="form-label">Payment Reference<span class="text-danger">*</span></label>
+								<input type="text" class="form-control" id="inputCity" placeholder="Email, phone number or credit card"
+									   :class="validatePayment ? 'is-valid' : (credentials.pay_reference ? 'is-invalid' : '')"
+									   required v-model="credentials.pay_reference">
+								<div class="invalid-feedback" :class="!validatePayment && credentials.pay_reference && 'd-block'">
+									Your default payment is invalid
+								</div>
 							</div>
 
 							<div class="forms_buttons">
-								<button type="submit" class="btn btn-primary" @click="register" :disabled="credentials.loading">
+								<button type="submit" class="btn btn-primary" @click="register" :disabled="!isFormValid || credentials.loading">
 									<span v-if="credentials.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
 									Register
 								</button>
@@ -182,7 +241,6 @@
 }
 .user_options-container {
 	position: relative;
-	width: 80%;
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;

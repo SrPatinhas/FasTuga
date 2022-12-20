@@ -62,13 +62,13 @@ class OrderController extends Controller
     public function getOrderStatus(Order $order){
 
         //Passar os status da order
-        return new OrderStatusResource($order);   
+        return new OrderStatusResource($order);
     }
 
     public function setOrderStatus(Order $order){
 
         //Passar os status da order
-        return new OrderStatusResource($order);   
+        return new OrderStatusResource($order);
     }
 
 
@@ -79,9 +79,9 @@ class OrderController extends Controller
         return new OrderResource($newOrder);
     }
 
-    
 
-    
+
+
 
 
     public function update_completed(UpdateCompleteOrderRequest $request, Order $order)
@@ -123,7 +123,7 @@ class OrderController extends Controller
         return OrderResource::collection(Order::where('id', '=', $id)->get());
     }
 
-    public function setOrderStatus($id, $status){
+    public function setOrderStatus_old($id, $status){
         $order = Order::findOrFail($id);
         $oldStatus = $order->status;
         $status = strtoupper($status);

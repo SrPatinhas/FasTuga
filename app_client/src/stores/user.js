@@ -89,6 +89,42 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
+
+	async function register(credentials) {
+		try {
+			const formData = new FormData();
+			if(credentials.photo != null) {
+				formData.append('photo', credentials.photo);
+			}
+			for (const [key, value] of Object.entries(credentials)) {
+				if(key !== "loading" && key !== "showPassword" && key !== "showPasswordConfirmation" && key !== "photo"){
+					if(key === "pay_type" || key === "pay_reference") {
+						formData.append(key, value.toLowerCase());
+					} else {
+						formData.append(key, value);
+					}
+				}
+			}
+			const response = await axios.post('register', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+			axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
+			sessionStorage.setItem('token', response.data.access_token)
+			await loadUser();
+			socket.emit('loggedIn', user.value);
+			//await projectsStore.loadProjects()
+			userIsGuest.value = false;
+			return true
+		} catch (error) {
+			clearUser()
+			//projectsStore.clearProjects()
+			return false
+		}
+	}
+
+
 	function loginAsGuest() {
 		userIsGuest.value = true;
 	}
@@ -153,7 +189,6 @@ export const useUserStore = defineStore('user', () => {
 		axios.put('users/customers/' + userId.value, user.value)
         .then((response) => {
           user.value = response.data.data
-          originalValueStr = dataAsString()
           toast.success('User #' + userId.value + ' was updated successfully.')
         })
         .catch((error) => {
@@ -171,6 +206,7 @@ export const useUserStore = defineStore('user', () => {
 	return {
 		user, users, customer, userId, userPhotoUrl, userIsGuest,
 		availablePoints,
-		login, loginAsGuest, logout, restoreToken, changePassword, loadUsers, loadCustomer, save
+		login, register,loginAsGuest, logout, restoreToken, changePassword,
+		loadUsers, loadCustomer, save
 	}
 })

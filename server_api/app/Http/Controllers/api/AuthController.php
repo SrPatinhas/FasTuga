@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -21,13 +22,17 @@ class AuthController extends Controller
     public function register(RegisterUserRequest $request)
     {
         try {
+            $photo = null;
+            if($request->hasFile('photo')){
+                $photo = $this->uploadPhoto($request);
+            }
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'type' => 'C',
                 'blocked' => false,
-                'photo_url' => null
+                'photo_url' => $photo
             ]);
 
             Customer::create([
@@ -83,5 +88,12 @@ class AuthController extends Controller
         catch (\Exception $e) {
             return ["response" => 'Authentication has failed!', "code" => 401];
         }
+    }
+
+
+    private function uploadPhoto(Request $request){
+        $request->validate(['photo' => 'nullable|image|mimes:jpeg,png,jpg']);
+        Storage::putFile('public/fotos', $request->file('photo'));
+        return  $request->file('photo')->hashName();
     }
 }

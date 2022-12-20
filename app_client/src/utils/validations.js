@@ -13,20 +13,41 @@ const emailFormat = () => {
     return v => v && regex.test(v) || "Must be a valid email"
 }
 
-const validateEmail = (email) => {
-  return String(email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-};
-
-const validatePhoneNumber = (phone) => {
-  return phone.match(/^(9)[/0-9]{8}$/g);
+const regex = {
+	email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+	phone: /^(9)[/0-9]{8}$/g,
+	visa: /^4[0-9]{12}(?:[0-9]{3})?$/g,
+	visaMaster: /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$/g,
+	nif: /^[/0-9]{8,9}$/g
 }
 
+const validateEmail = (email) => {
+  return String(email).toLowerCase().match(regex.email);
+};
+const validatePhoneNumber = (phone) => {
+  return phone.match(regex.phone);
+}
 const validateVisaCard = (card) => {
   // Visa Card
-  const isVisa = card.match(/^4[0-9]{12}(?:[0-9]{3})?$/g);
+  const isVisa = card.match(regex.visa);
   // Visa Master Card:
-  const isVisaMaster = card.match(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$/g);
+  const isVisaMaster = card.match(regex.visaMaster);
   return isVisa || isVisaMaster;
+}
+const validateNIF = (nif) => {
+	return nif.match(regex.nif);
+}
+
+const isValidEmail = (email) => {
+	let mail = String(email).toLowerCase();
+	return regex.email.test(mail);
+};
+const isValidPhoneNumber = (phone) => {
+	phone = parseInt(phone)
+	return regex.phone.test(phone);
+}
+const isValidNIF = (nif) => {
+	return regex.nif.test(nif);
 }
 
 export default {
@@ -36,6 +57,11 @@ export default {
     emailFormat,
     validateEmail,
     validatePhoneNumber,
-    validateVisaCard
+    validateVisaCard,
+	validateNIF,
+
+	isValidEmail,
+	isValidPhoneNumber,
+	isValidNIF
 }
   

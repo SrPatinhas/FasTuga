@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -27,7 +28,18 @@ class ProductController extends Controller
 
     public function store(StoreUpdateProductRequest $request)
     {
-        $newProduct = Product::create($request->validated());
+
+        $photo = null;
+        if($request->hasFile('photo')){
+            $photo = $this->uploadPhoto($request);
+        }
+        $newProduct = Product::create([
+            'name' => $request->name,
+            'type' => $request->type,
+            'description' => $request->description,
+            'photo_url' => $photo,
+            'price' => $request->price
+        ]);
         return new ProductResource($newProduct);
     }
 
@@ -60,7 +72,7 @@ class ProductController extends Controller
         return OrderResource::collection($orders);
     }
 
-    
+
     public function trending(){
         $mostUsedProduct = Product::select('products.*', DB::raw('count(order_items.product_id) as times_ordered'))
             ->join('order_items', 'products.id', '=', 'order_items.product_id')
@@ -74,9 +86,15 @@ class ProductController extends Controller
 
         return ProductResource::collection($mostUsedProduct);
     }
-    
-//Manager stats
 
+
+    private function uploadPhoto(Request $request){
+        $request->validate(['photo' => 'nullable|image|mimes:jpeg,png,jpg']);
+        Storage::putFile('public/products', $request->file('photo'));
+        return  $request->file('photo')->hashName();
+    }
+
+//Manager stats
 private function topItemsByCategory($category, $page){
     $mostUsedProduct = Product::select('products.*', DB::raw('count(order_items.product_id) as times_ordered'))
         ->join('order_items', 'products.id', '=', 'order_items.product_id')
@@ -99,5 +117,5 @@ private function topItemsByCategory($category, $page){
     }
     public function getTopDessertItems(){
         return $this->topItemsByCategory('dessert', 4);
-    }  
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateEmployeeRequest;
+use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -23,14 +24,20 @@ class EmployeeController extends Controller
         return UserResource::collection($usersList);
     }
 
-    public function create(CreateEmployeeRequest $request){
+    public function create(CreateEmployeeRequest $request)
+    {
+        $photo = null;
+        if($request->hasFile('photo')){
+            $photo = $this->uploadPhoto($request);
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'type' => $request->type,
             'blocked' => false,
-            'photo_url' => null
+            'photo_url' => $photo
         ]);
 
         return new UserResource($user);
@@ -66,5 +73,12 @@ class EmployeeController extends Controller
             return OrderResource::collection(Order::where([['status', '=', 'T'], ['delivered_by', '=', $user->id]])->get());
         }
         return response()->json(['message' => 'Type not found'], 404);
+    }
+
+
+    private function uploadPhoto(Request $request){
+        $request->validate(['photo' => 'nullable|image|mimes:jpeg,png,jpg']);
+        Storage::putFile('public/fotos', $request->file('photo'));
+        return  $request->file('photo')->hashName();
     }
 }
