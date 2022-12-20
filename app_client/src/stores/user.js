@@ -15,6 +15,13 @@ export const useUserStore = defineStore('user', () => {
 	const user = ref();
 	const users = ref();
 	const customer = ref();
+	const customers = ref();
+	const employees = ref();
+
+	const productTypes = ref([
+        {type: 'customer', icon: 'bi bi-people'},
+        {type: 'employee', icon: 'bi bi-people-fill'},
+	])
 
 	const userIsGuest = ref( false);
 
@@ -65,6 +72,29 @@ export const useUserStore = defineStore('user', () => {
 			throw error
 		}
 	}
+
+	async function fetchCustomers(page = 1) {
+		try {
+			const response = await axios.get('/customers?page=' + page);
+			customers.value = response.data;
+			return customers.value;
+		} catch (error){
+			customers.value = {};
+			throw error;
+		}
+	}
+
+	async function fetchEmployees(page = 1) {
+		try {
+			const response = await axios.get('/employees?page=' + page);
+			employees.value = response.data;
+			return employees.value;
+		} catch (error){
+			employees.value = {};
+			throw error;
+		}
+	}
+
 
 	function clearUser() {
 		delete axios.defaults.headers.common.Authorization
@@ -169,8 +199,8 @@ export const useUserStore = defineStore('user', () => {
 
 
 	return {
-		user, users, customer, userId, userPhotoUrl, userIsGuest,
-		availablePoints,
-		login, loginAsGuest, logout, restoreToken, changePassword, loadUsers, loadCustomer, save
+		user, users, customer, customers, employees, userId, userPhotoUrl, userIsGuest,
+		availablePoints, productTypes,
+		login, loginAsGuest, logout, restoreToken, changePassword, loadUsers, loadCustomer, fetchCustomers, fetchEmployees, save
 	}
 })
