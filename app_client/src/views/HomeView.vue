@@ -4,19 +4,65 @@
 	import {useMenuStore} from "@/stores/menu";
 	import {useUserStore} from "@/stores/user";
 	import {useRouter} from "vue-router";
+	import {inject, ref} from "vue";
+	import ProductItemTop from "@/components/products/ProductItemTop.vue";
+	import OrderLast from "@/components/order/orderLast.vue";
 
 	const menuStore = useMenuStore();
 	const userStore = useUserStore();
 	const router = useRouter();
+	const axios = inject('axios');
 
 	const guestUser = () => {
 		userStore.loginAsGuest();
 		router.push({name: 'Menus'});
 	}
+
+	const topProducts = ref([]);
+	const lastOrders = ref([]);
+
+	if(userStore.isCustomer) {
+		loadTopProducts();
+		loadLastOrders();
+	}
+	async function loadTopProducts() {
+		try {
+			const response = await axios.get('customers/top-products');
+			topProducts.value = response.data.data
+		} catch (error) {
+			topProducts.value = [];
+			throw error
+		}
+	}
+	async function loadLastOrders() {
+		try {
+			const response = await axios.get('customers/last-orders');
+			lastOrders.value = response.data.data
+		} catch (error) {
+			lastOrders.value = [];
+			throw error
+		}
+	}
 </script>
 
 <template>
 	<div class="home">
+		<section class="pt-4" v-if="userStore.isCustomer">
+			<div v-if="topProducts.length > 0">
+				<h2 class="text-center pt-4 pt-sm-3">Your most bought on this restaurant</h2>
+				<p class="text-muted text-center">Buy again if you liked it</p>
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+					<ProductItemTop v-for="(food, index) of topProducts" :key="'trending_' + index" v-bind="food"/>
+				</div>
+			</div>
+			<div v-if="lastOrders.length > 0">
+				<h2 class="text-center pt-4 pt-sm-3">Your last orders on this restaurant</h2>
+				<p class="text-muted text-center">Check what you most buy</p>
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+					<OrderLast v-for="(orders, index) of lastOrders" :key="'trending_' + index" v-bind="orders"/>
+				</div>
+			</div>
+		</section>
 		<section class="pt-4">
 			<h2 class="h3 mb-4 pt-2 text-center">How it works?</h2>
 			<div class="row g-0 bg-light rounded-3">
@@ -57,7 +103,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="pt-4">
+		<section class="pt-4" v-if="!userStore.isAuthenticated">
 			<div class="row pt-4 mt-2 mt-lg-3 mb-md-2">
 				<div class="col-lg-6 mb-grid-gutter">
 					<div class="d-block d-sm-flex justify-content-around align-items-center bg-faded-info rounded-3">

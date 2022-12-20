@@ -53,6 +53,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/{customer}',               'show')->whereNumber('customer');/*Feito*/
         Route::get('/{customer}/order/{order}', 'orderDetails')->whereNumber('customer');/*Erro nao sei porque*/
         Route::get('/{customer}/orders',        'customerOrders')->whereNumber('customer');/*Feito*/
+        Route::get('/top-products',             'topProducts');
+        Route::get('/last-orders',              'lastOrders');
     });
     //--END CUSTOMER
 

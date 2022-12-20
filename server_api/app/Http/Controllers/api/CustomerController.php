@@ -5,13 +5,20 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
+use App\Http\Resources\LastOrdersResource;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\TopProductResource;
 use App\Models\Customer;
+use App\Models\OrderItem;
+use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -96,4 +103,26 @@ class CustomerController extends Controller
         }
         return response()->json(['message' => 'Type not found'], 404);
     }
+
+
+    public function topProducts(){
+        $customerId = Auth::user()->customer->id;
+        $items = Product::join('order_items', 'order_items.product_id', '=', 'products.id')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->where('orders.customer_id', $customerId)
+            ->select('products.*', DB::raw('SUM(order_items.product_quantity) as total_quantity'))
+            ->groupBy('products.id')
+            ->orderBy('total_quantity', 'desc')
+            ->get()
+            ->take(4);
+
+        return TopProductResource::collection($items);
+    }
+
+    public function lastOrders(){
+        $customerId = Auth::user()->customer->id;
+        $lastOrders = Order::where('customer_id', $customerId)->latest()->take(3)->get();
+        return LastOrdersResource::collection($lastOrders);
+    }
+
 }
