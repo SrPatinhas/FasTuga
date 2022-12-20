@@ -15,14 +15,12 @@ export const useUserStore = defineStore('user', () => {
 	const user = ref();
 	const users = ref();
 	const customer = ref();
-	const customers = ref([]);
-	const employees = ref(true);
+	const customers = ref();
+	const employees = ref();
 
-	const userTypes = ref([
-        {type: 'C', icon: 'bi bi-people'},
-        {type: 'ED', icon: 'bi bi-people-fill'},
-		{type: 'EC', icon: 'bi bi-people-fill'},
-		{type: 'EM', icon: 'bi bi-people-fill'}
+	const productTypes = ref([
+        {type: 'customer', icon: 'bi bi-people'},
+        {type: 'employee', icon: 'bi bi-people-fill'},
 	])
 
 	const userIsGuest = ref( false);
@@ -102,9 +100,9 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
-	async function fetchCustomers() {
+	async function fetchCustomers(page = 1) {
 		try {
-			const response = await axios.get('/customers');
+			const response = await axios.get('/customers?page=' + page);
 			customers.value = response.data;
 			return customers.value;
 		} catch (error){
@@ -124,22 +122,6 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
-
-	    // Local users count
-		const totalUsers = computed(() => {
-			return customers.value.length;
-		});
-	
-		function getUsersByFilter(type) {
-			if(customers.value.length === 0 ){
-				return [];
-			}
-			return customers.value.filter(customer => customer.user.type === type);
-		}
-		
-		function getUsersByFilterTotal(type) {
-			return getUsersByFilter(type).length;
-		}
 
 	function clearUser() {
 		delete axios.defaults.headers.common.Authorization
@@ -280,10 +262,10 @@ export const useUserStore = defineStore('user', () => {
 
 	return {
 		user, users, customer, customers, employees, userId, userPhotoUrl, userIsGuest,
-		totalUsers, availablePoints, userTypes,
+		availablePoints, productTypes,
 		login, register,loginAsGuest, logout, restoreToken, changePassword,
 		loadUsers, loadCustomer, save,
 		isCustomer, isChef, isDelivery, isEmployee, isManager, isAuthenticated,
-		fetchCustomers, fetchEmployees, getUsersByFilter, getUsersByFilterTotal
+		fetchCustomers, fetchEmployees,
 	}
 })
