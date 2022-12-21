@@ -19,7 +19,7 @@ Route::controller(OrderGuestController::class)->prefix('orders')->group(function
     Route::post('/guest/payment',       'paymentGuest');/*POR FAZER*/
     Route::get('/guest/{order}',        'showGuest')->whereNumber('order'); /*Feito*/
     Route::get('/guest/{order}/status', 'getOrderStatusGuest')->whereNumber('order');/*Feito*/  // Requests for the kitchen
-    Route::get('/board',                'getBoardItems');/*POR FAZER*/
+    Route::get('/board',                'getBoardItems');/*Feito*/
 });
 
 // Leave this 3 requests public so anyone can get them
@@ -49,12 +49,12 @@ Route::middleware('auth:api')->group(function () {
     //--CUSTOMER
     Route::controller(CustomerController::class)->prefix('customers')->group(function () {
         Route::get('/',                         'index'); /*Feito*/
-        Route::get('/me',                       'customerInfo');/*Erro nao sei porque*/
+        Route::get('/me',                       'customerInfo');/*Feito*/
         Route::get('/{customer}',               'show')->whereNumber('customer');/*Feito*/
-        Route::get('/{customer}/order/{order}', 'orderDetails')->whereNumber('customer');/*Erro nao sei porque*/
+        Route::get('/{customer}/order/{order}', 'orderDetails')->whereNumber('customer');/*Feito*/
         Route::get('/{customer}/orders',        'customerOrders')->whereNumber('customer');/*Feito*/
-        Route::get('/top-products',             'topProducts');
-        Route::get('/last-orders',              'lastOrders');
+        Route::get('/top-products',             'topProducts');/*Feito*/
+        Route::get('/last-orders',              'lastOrders');/*Feito*/
     });
     //--END CUSTOMER
 
@@ -63,9 +63,9 @@ Route::middleware('auth:api')->group(function () {
         // Restaurant / Manager routes
         Route::get('/',                 'index');/*Feito*/
         Route::post('/',                'create');/*Feito*/
-        Route::get('/{employee}',       'show')->whereNumber('employee');/*Erro nao sei porque*/
-        Route::put('/{employee}',       'update')->whereNumber('employee');/*Por dar check*/
-        Route::delete('/{employee}',    'delete')->whereNumber('employee');/*Por dar check*/
+        Route::get('/{user}',           'show')->whereNumber('user');/*Feito*/
+        Route::put('/{user}',           'update')->whereNumber('user');/*Feito*/
+        Route::delete('/{user}',        'delete')->whereNumber('user');/*Feito*/
     });
     //--END EMPLOYEE
 
