@@ -27,6 +27,7 @@ import ClientsAccount from "../components/settings/CustomersList.vue";
 import EmployeesAccount from "../components/settings/EmployeesList.vue";
 import CreateEmployee from "../components/settings/CreateEmployee.vue";
 import Products from "../components/settings/Products.vue";
+import CreateProduct from "../components/settings/CreateProduct.vue";
 import Orders from "../components/settings/Orders.vue";
 
 //const userStore = useUserStore();
@@ -185,6 +186,15 @@ const router = createRouter({
 					path: 'products',
 					name: 'Products',
 					component: Products,
+					meta: {
+						requiresAuth: true,
+						role: 'm'
+					}
+				},
+				{
+					path: 'create-product',
+					name: 'CreateProduct',
+					component: CreateProduct,
 					meta: {
 						requiresAuth: true,
 						role: 'm'
