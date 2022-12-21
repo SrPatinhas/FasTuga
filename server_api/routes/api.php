@@ -65,7 +65,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/',                'create');/*Feito*/
         Route::get('/{user}',           'show')->whereNumber('user');/*Feito*/
         Route::put('/{user}',           'update')->whereNumber('user');/*Feito TEMOS DE PASSAR O "type":"EM",*/
-        Route::delete('/{user}',        'destroy')->whereNumber('user');/*ERRO*/
+        Route::delete('/{user}',        'destroy')->whereNumber('user');/*Feito*/
     });
     //--END EMPLOYEE
 
@@ -73,9 +73,9 @@ Route::middleware('auth:api')->group(function () {
     Route::controller(ProductController::class)->prefix('products')->group(function () {
         // Only a manager can use this ones
         Route::post('/',                    'store');/*Feito*/
-        Route::put('/{product}',            'update')->whereNumber('product');/*Erro na passagem de parametr */
+        Route::put('/{product}',            'update')->whereNumber('product');/*Feito*/
         Route::post('/{product}/photos',   'updatePhoto')->whereNumber('product');/*Erro */
-        Route::delete('/{product}',         'destroy')->whereNumber('product');/*Erro database */
+        Route::delete('/{product}',         'destroy')->whereNumber('product');/*Feito*/
         // TODO -> talvez para estatisticas?
         Route::get('/top-items',        'getTopItems');/*Erro */
         Route::get('/{product}/orders', 'getOrdersOfProduct')->whereNumber('product');
@@ -89,7 +89,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/payment',         'payment');  /*Por fazer*/
         Route::post('/{order}/refund',  'refund')->whereNumber('order');/*Por fazer*/
         Route::put('/{order}',          'update')->whereNumber('order');/*Erro */
-        Route::delete('/{order}',       'destroy')->whereNumber('order');/*Erro database */
+        Route::delete('/{order}',       'destroy')->whereNumber('order');/*Feito */
 
         // Requests for the kitchen
         Route::get('/active',                       'getActiveOrders');/*Feito*/

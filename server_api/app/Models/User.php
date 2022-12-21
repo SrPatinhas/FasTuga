@@ -15,14 +15,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // Add Laravel Tokens
 use Laravel\Passport\HasApiTokens;
 
-    class Flight extends Model
-    {
-        use SoftDeletes;
-    }
+
 class User extends Authenticatable
 {
 
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'name',

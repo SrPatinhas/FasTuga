@@ -15,6 +15,8 @@ use App\Http\Requests\UpdateUserPasswordRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeController extends Controller
 {
@@ -54,7 +56,7 @@ class EmployeeController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     { 
         //So menager pode
-        if ($user->type='EM') {
+        if(Auth::user()->type == 'EM') {
             $user->update($request->validated());
             return new UserResource($user);
             
@@ -66,9 +68,12 @@ class EmployeeController extends Controller
 
     public function destroy(User $user)
     {
+        if(User::where("id", $user->id)->exists()) {
         User::where("id", $user->id)->delete();
-        $user->delete();
         return new UserResource($user);
+        }
+        return response()->json(['message' => 'User not found'], 403);
+
     }
 
     public function getEmployees(){
