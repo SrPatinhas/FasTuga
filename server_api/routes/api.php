@@ -92,7 +92,7 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/{order}',       'destroy')->whereNumber('order');/*Erro database */
 
         // Requests for the kitchen
-        Route::get('/active',                       'getActiveOrders');/*Vazio */
+        Route::get('/active',                       'getActiveOrders');/*Feito*/
         Route::get('/{order}/status',               'getOrderStatus')->whereNumber('order');/*Erro */
         Route::post('/{order}/status',              'setOrderStatus')->whereNumber('order');
     });
