@@ -1,19 +1,33 @@
 <script setup>
-	import {ref} from "vue";
+	  import {ref, computed, inject} from 'vue';
 	import {useUserStore} from "@/stores/user.js";
 	import avatarNoneUrl from '@/assets/avatar-none.png';
 	import Pagination from "@/components/navigation/Pagination.vue";
 
-	const userStore = useUserStore();
-	userStore.fetchCustomers();
+	const axios = inject('axios');
+	const customer = ref();
+	const customers = ref([]);
 	
 	function updateUsers(newPage) {
 		userStore.fetchCustomers(newPage);
 	}
+
+	async function fetchCustomers(page = 1) {
+		try {
+			const response = await axios.get('/customers?page=' + page);
+			customers.value = response.data;
+			return customers.value;
+		} catch (error){
+			customers.value = {};
+			throw error;
+		}
+	}
+
+	fetchCustomers()
 </script>
 
 <template>
-	<div class="d-block d-sm-flex align-items-center py-4 border-bottom" v-for="(customer, index) of userStore.customers.data" :key="index">
+	<div class="d-block d-sm-flex align-items-center py-4 border-bottom" v-for="(customer, index) of customers.data" :key="index">
 		<div class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" style="width: 12.5rem;">
 				<img v-if="customer.user.photo_url==''" :src="avatarNoneUrl" class="card-img-top" :alt="name">
 				<img v-else :src="customer.user.photo_url" class="card-img-top" :alt="name">
@@ -42,7 +56,7 @@
 				</div>
 			</div>
 		</div>
-		<div v-if="userStore.customers?.meta !== undefined">
-			<Pagination @page-change="updateUsers" :pagination="userStore.customers.meta"/>
+		<div v-if="customers?.meta !== undefined">
+			<Pagination @page-change="updateUsers" :pagination="customers.meta"/>
 		</div>
 </template>

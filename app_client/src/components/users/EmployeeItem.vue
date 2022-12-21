@@ -1,15 +1,30 @@
 <script setup>
-	import {useUserStore} from "@/stores/user.js";
+  import {ref, computed, inject} from 'vue';
 	import avatarNoneUrl from '@/assets/avatar-none.png';
 	import Pagination from "@/components/navigation/Pagination.vue";
-	import {useRouter, RouterLink} from "vue-router"
+	import { RouterLink } from "vue-router"
 
-	const userStore = useUserStore();
-	userStore.fetchEmployees();
+  const axios = inject('axios');
+  const employee = ref([]);
+	const employees = ref([]);
+
 
 	function updateEmployees(newPage) {
-		userStore.fetchEmployees(newPage);
+		fetchEmployees(newPage);
 	}
+
+  async function fetchEmployees(page = 1) {
+		try {
+			const response = await axios.get('/employees?page=' + page);
+			employees.value = response.data;
+			return employees.value;
+		} catch (error){
+			employees.value = {};
+			throw error;
+		}
+	}
+
+  fetchEmployees()
 </script>
 
 <template>
@@ -17,7 +32,7 @@
 		<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'CreateEmployee' }" :to="{ name: 'CreateEmployee' }">
 			<button type="button" class="btn btn-primary">Add Employee</button>
 		</router-link>
-	<div class="d-block d-sm-flex align-items-center py-4 border-bottom" v-for="(employee, index) of userStore.employees.data" :key="index">
+	<div class="d-block d-sm-flex align-items-center py-4 border-bottom" v-for="(employee, index) of employees.data" :key="index">
 		<div class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" style="width: 12.5rem;">
 				<img v-if="employee.photo_url==''" :src="avatarNoneUrl" class="card-img-top" :alt="name">
 				<img v-else :src="employee.photo_url" class="card-img-top" :alt="name">
@@ -47,8 +62,8 @@
 			</div>
 		</div>
 
-		<div v-if="userStore.employees?.meta !== undefined">
-			<Pagination @page-change="updateEmployees" :pagination="userStore.employees.meta"/>
+		<div v-if="employees?.meta !== undefined">
+			<Pagination @page-change="updateEmployees" :pagination="employees.meta"/>
 		</div>
 
 		
