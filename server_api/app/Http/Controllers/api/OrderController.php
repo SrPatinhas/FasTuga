@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PaymentOrderRequest;
+use App\Http\Resources\OrderDetailResource;
 use App\Http\Resources\OrderResource;
+use App\Models\Customer;
+use App\Models\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -11,6 +15,7 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class OrderController extends Controller
 {
@@ -30,13 +35,106 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function payment(Order $order)
+    public function payment(PaymentOrderRequest $request, Order $order)
     {
-        return new OrderResource($order);
+        if(!Auth::user()->getIsCustomer()){
+            return response()->json(['message' => 'Your user cannot create orders'], 401);
+        }
+        $customerId = Auth::user()->customer->id;
+        $total_order = 0;
+        $points_discount = 0;
+        $points_used = 0;
+
+        $products = [];
+        $local_number = 0;
+        // get the real value from DB (prevent any security breach
+        foreach ($request->items as $item){
+            $local_number += 1;
+            $product = Product::find($item['id']);
+            $product_total = $product->price * $item['quantity'];
+            $total_order += $product_total;
+            if($product->price != $item["price"]){
+                return response()->json(['message' => 'Price of the product dont match'], 400);
+            }
+            // create new array to prevent multiple calls to the DB next
+            $newItem = [
+                'product_id'    => $product->id,
+                'status'        => $product->type == 'hot dish' ? 'W' : 'R', // 'hot' = 'Waiting' : 'Ready'
+                'price'         => $product->price,
+                'quantity'      => $item['quantity'],
+                'local_number'  => $local_number,
+            ];
+            $products[] = $newItem;
+        }
+        if($request->checkout['points'] > 0){
+            if(($request->checkout['points'] % 10) == 0){
+                $points_used = $request->checkout['points'];
+                $points_discount = ($request->checkout['points'] / 2);
+            }
+        }
+        $total_order_paying = $total_order - $points_discount;
+        $points_gained = floor($total_order / 10);
+
+        // check if the values are valid for payment
+        if(!$this->checkPayment($request->checkout['pay_type'], $request->checkout['pay_reference'], $total_order_paying)){
+            return response()->json(['message' => 'The payment values are not valid'], 400);
+        }
+        // call the payment server
+        if(!$this->callPaymentGateway($request->checkout['pay_type'], $request->checkout['pay_reference'], $total_order_paying)){
+            return response()->json(['message' => 'The payment values are not valid by the payment server'], 400);
+        }
+
+        // validates the ticket number
+        $last_ticket = Order::latest()->first()->ticket_number;
+        if($last_ticket == 99){
+            $last_ticket = 0;
+        }
+        $current_date = Carbon::now();
+        $order = Order::create([
+            'ticket_number'             => $last_ticket + 1,
+            'status'                    => 'P',
+            'customer_id'               => $customerId,
+            'total_price'               => $total_order,
+            'total_paid'                => $total_order_paying,
+            'total_paid_with_points'    => $points_discount,
+            'points_gained'             => $points_gained,
+            'points_used_to_pay'        => $points_used,
+            'payment_type'              => $request->checkout['pay_type'],
+            'payment_reference'         => $request->checkout['pay_reference'],
+            'date'                      => $current_date->toDateString(),
+            'created_at'                => $current_date,
+            'updated_at'                => $current_date,
+            'notes'                     => $request->notes,
+        ]);
+
+        foreach ($products as $prod) {
+            OrderItem::create([
+                'order_id'              => $order->id,
+                'order_local_number'    => $prod['local_number'],
+                'product_id'            => $prod['product_id'],
+                'product_quantity'      => $prod['quantity'],
+                'status'                => $prod['status'],
+                'price'                 => $prod['price'],
+                'notes'                 => $request->notes,
+            ]);
+        }
+
+        return new OrderDetailResource($order);
     }
 
     public function refund(Order $order)
     {
+        // call the payment server
+        if(!$this->callPaymentGateway($order->payment_type, $order->payment_reference, $order->total_paid, true)){
+            return response()->json(['message' => 'The payment values are not valid by the payment server'], 400);
+        }
+        if($order->total_paid_with_points > 0) {
+            Customer::where('id', $order->customer_id)->increment('points', ($order->total_paid_with_points * 2));
+        }
+        if($order->points_gained > 0) {
+            Customer::where('id', $order->customer_id)->increment('decrement', $order->points_gained);
+        }
+
         return new OrderResource($order);
     }
 
@@ -70,16 +168,6 @@ class OrderController extends Controller
         //Passar os status da order
         return new OrderStatusResource($order);
     }
-
-
-
-    public function store(StoreUpdateOrderRequest $request)
-    {
-        $newOrder = Order::create($request->validated());
-        return new OrderResource($newOrder);
-    }
-
-
 
 
 
@@ -184,65 +272,45 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order status updated. Order went from '. $oldStatus . ' to ' . $order->status, 'order' => new OrderResource($order)], 200);
     }
 
-
-    public function create(CreateOrderRequest $request){
-
-        $order = new Order;
-
-        $current_date = Carbon::now()->toDateString();
-        $current_date_time = Carbon::now()->toDateTimeString();
-
-        $order->status = 'H';
-
-        $order->date = $current_date;
-        $order->opened_at = $current_date_time;
-        $order->current_status_at = $current_date_time;
-
-        $order->fill($request->validated());
-
-        $order->save();
-
-        $productsList = $request->products;
-        $size = count($productsList);
-
-        $orderTotalPrice = 0;
-
-        for ($i=0; $i < $size; $i++) {
-
-            $product = Product::findOrFail($productsList[$i]["id"]);
-
-            if($product->price != $productsList[$i]["price"]){
-                return response()->json(['message' => 'Price of the product dont match'], 400);
-            }
-
-            $productTotalPrice = $product->price * $productsList[$i]["quantity"];
-
-            if ($productTotalPrice != $productsList[$i]["totalPrice"]) {
-                return response()->json(['message' => 'Price of the product dont match'], 400);
-            }
-
-            $orderTotalPrice += $productTotalPrice;
-
-            $orderItem = new OrderItem();
-
-            $orderItem->order_id = $order->id;
-            $orderItem->product_id = $productsList[$i]["id"];
-            $orderItem->quantity = $productsList[$i]["quantity"];
-            $orderItem->unit_price = $productsList[$i]["price"];
-            $orderItem->sub_total_price = $productsList[$i]["totalPrice"];
-
-            $orderItem->save();
-
-        };
-
-        $orderTotalPrice = round($orderTotalPrice, 2);
-
-        if ($orderTotalPrice != (float)$order->total_price) {
-            $order->status = 'C';
-            $order->save();
-            return response()->json(['message' => 'Price of the order dont match'], 403);
+    private function callPaymentGateway($pay_type, $pay_reference, $order_value, $isRefund = false)
+    {
+        $url = 'https://dad-202223-payments-api.vercel.app';
+        if($isRefund){
+            $url = $url . '/api/refunds';
+        } else {
+            $url = $url . '/api/payments';
         }
+        $response = Http::post($url, [
+            "type"      => $pay_type,
+            "reference" => $pay_reference,
+            "value"     => $order_value
+        ]);
 
-        return response()->json(['message' => 'Order created successfully.', 'order' => new OrderResource($order)], 200);
+        if ($response->status() == 201) {
+            return true;
+        }
+        return false;
+    }
+
+    private function checkPayment($pay_type, $pay_reference, $order_value)
+    {
+        $paymentValid = false;
+        $pay_type = strtolower($pay_type);
+        if ($pay_type === "visa") { // for a Visa payment is the Visa Card ID with 16 digits;
+            // Test visa
+            $paymentValid = preg_match('/^4[0-9]{12}(?:[0-9]{3})?$/', $pay_reference);
+            if(!$paymentValid){
+                // Test visaMaster
+                $paymentValid = preg_match('/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$/', $pay_reference);
+            }
+            $paymentValid = $paymentValid && $order_value < 200;
+        } else if ($pay_type === "paypal") { // the reference for the PayPal is a valid email
+            $paymentValid = filter_var($pay_reference, FILTER_VALIDATE_EMAIL) && preg_match('/\.(pt|com)$/', $pay_reference);
+            $paymentValid = $paymentValid && $order_value < 50;
+        } else if ($pay_type === "mbway") { // the reference for the MbWay is the mobile phone number with 9 digits
+            $paymentValid =  preg_match('/^(9)[0-9]{8}$/', $pay_reference);
+            $paymentValid = $paymentValid && $order_value < 10;
+		}
+        return $paymentValid;
     }
 }

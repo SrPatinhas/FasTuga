@@ -13,10 +13,10 @@
 						<div v-if="item.type !== 'hot dish'">
 							<label class="form-label" for="quantity1">Quantity</label>
 							<div class="d-flex align-items-center width-110 justify-content-between">
-								<button class="btn btn-icon btn-small" :disabled="item.count === 1" @click="updateItem(item, -1)">
+								<button class="btn btn-icon btn-small" :disabled="item.quantity === 1" @click="updateItem(item, -1)">
 									<i class="bi-dash"></i>
 								</button>
-								<span class="px-2">{{ item.count }}</span>
+								<span class="px-2">{{ item.quantity }}</span>
 								<button class="btn btn-icon btn-small" @click="updateItem(item, 1)">
 									<i class="bi-plus"></i>
 								</button>
@@ -26,7 +26,7 @@
 				</div>
 				<div  class="text-center">
 					<div class="fs-3 text-black">
-						€{{ (item.count * item.price).toFixed(2).split(".")[0] }}.<small>{{ (item.count * item.price).toFixed(2).split(".")[1] }}</small>
+						€{{ (item.quantity * item.price).toFixed(2).split(".")[0] }}.<small>{{ (item.quantity * item.price).toFixed(2).split(".")[1] }}</small>
 					</div>
 					<a class="btn btn-link text-danger" data-bs-toggle="modal" data-bs-target="#deleteItemModal" @click="itemToDelete(item)">
 						<i class="bi-trash me-2"></i>
@@ -62,7 +62,7 @@
 				</div>
 				<div class="modal-body">
 					<p>This will remove the product <b>{{ deleteItem.name }}</b>.</p>
-					<p>This item costs <b>€{{ (deleteItem.count * deleteItem.price).toFixed(2) }}</b>, that will be removed from your bag.</p>
+					<p>This item costs <b>€{{ (deleteItem.quantity * deleteItem.price).toFixed(2) }}</b>, that will be removed from your bag.</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -103,7 +103,7 @@
 
 	// orderStore.updateQuantityItemOnOrder
 	const updateItem = (item, quantity) => {
-		if(item.count == 1 && quantity == -1){
+		if(item.quantity == 1 && quantity == -1){
 			OpenModal.value = true;
 		} else {
 			orderStore.updateQuantityItemOnOrder(item, quantity);

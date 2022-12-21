@@ -71,6 +71,8 @@ return new class extends Migration
 
             $table->json('custom')->nullable();
 
+            $table->string('notes')->nullable();
+
             // Time related information about the order
             $table->timestamps();
 

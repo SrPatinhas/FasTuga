@@ -11,10 +11,10 @@
 			</div>
 		</div>
 		<div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center flex-1">
-			<div class="text-muted mb-2">Quantity:</div>{{ count }}
+			<div class="text-muted mb-2">Quantity:</div>{{ quantity }}
 		</div>
 		<div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center flex-1">
-			<div class="text-muted mb-2">Subtotal</div><span class="fs-5">{{ (price * count).toFixed(2) }}</span>€
+			<div class="text-muted mb-2">Subtotal</div><span class="fs-5">{{ (price * quantity).toFixed(2) }}</span>€
 		</div>
 	</div>
 </template>
@@ -27,7 +27,7 @@
 		name: String,
 		image: String,
 		price: Number,
-		count: Number,
+		quantity: Number,
 		type: String,
 		description: String
 	});
