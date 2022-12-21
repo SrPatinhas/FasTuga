@@ -9,6 +9,10 @@
 		</div>
 	</div>
 	<div v-else>
+		
+		<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'CreateProduct' }" :to="{ name: 'CreateProduct' }">
+			<button type="button" class="btn btn-primary">Add product</button>
+		</router-link>
 		<div class="d-block d-sm-flex align-items-center py-4 border-bottom" v-for="(product, index) of productStore.products.data" :key="index">
 			<div class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" style="width: 12.5rem;">
 				<img :src="product.photo_url" class="card-img-top" :alt="name">
