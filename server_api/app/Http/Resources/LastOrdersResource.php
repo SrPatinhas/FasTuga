@@ -19,15 +19,15 @@ class LastOrdersResource extends JsonResource
             'id'                        => $this->id,
             'ticket_number'             => $this->ticket_number,
             'status'                    => $this->status,
-            'total_price'               => $this->total_price,
-            'total_paid'                => $this->total_paid,
+            'total_price'               => (float) $this->total_price,
+            'total_paid'                => (float) $this->total_paid,
             'points_gained'             => $this->points_gained,
             'payment_type'              => $this->payment_type,
             'date'                      => $this->date,
             'delivered_by'              => User::find($this->delivered_by)->name,
             'created_at'                => $this->created_at,
             'update_at'                 => $this->updated_at,
-            'total_items'               => $this->orderItems->count()
+            'total_items'               => (int) $this->orderItems->count()
         ];
     }
 }

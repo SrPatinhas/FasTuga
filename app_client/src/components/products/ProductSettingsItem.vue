@@ -1,5 +1,5 @@
 <template>
-	<div v-if="productStore.products?.data || productStore.products?.data?.length === 0">
+	<div v-if="productStore.products?.data?.length === 0">
 		<div class="p-5 bg-faded-warning rounded-3">
 			<div class="">
 				<h1 class="fw-bold">No Products to show <i class="bi bi-emoji-frown fs-2 text-danger"></i></h1>

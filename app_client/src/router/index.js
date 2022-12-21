@@ -23,7 +23,9 @@ import Account from "../components/settings/Account.vue";
 import Purchases from "../components/settings/Purchases.vue";
 // Manager
 import DashboardManager from "../components/settings/DashboardManager.vue";
-import UsersAccount from "../components/settings/UsersAccount.vue";
+import ClientsAccount from "../components/settings/CustomersList.vue";
+import EmployeesAccount from "../components/settings/EmployeesList.vue";
+import CreateEmployee from "../components/settings/CreateEmployee.vue";
 import Products from "../components/settings/Products.vue";
 import Orders from "../components/settings/Orders.vue";
 
@@ -153,9 +155,27 @@ const router = createRouter({
 					}
 				},
 				{
-					path: 'users-account',
-					name: 'UsersAccount',
-					component: UsersAccount,
+					path: 'clients-account',
+					name: 'ClientsAccount',
+					component: ClientsAccount,
+					meta: {
+						requiresAuth: true,
+						role: 'm'
+					}
+				},
+				{
+					path: 'employees-account',
+					name: 'EmployeesAccount',
+					component: EmployeesAccount,
+					meta: {
+						requiresAuth: true,
+						role: 'm'
+					}
+				},
+				{
+					path: 'create-employee',
+					name: 'CreateEmployee',
+					component: CreateEmployee,
 					meta: {
 						requiresAuth: true,
 						role: 'm'
@@ -206,7 +226,7 @@ router.beforeEach((to, from, next) => {
 			return
 		}
 	}
-
+	/*
 	if (handlingFirstRoute) {
 		handlingFirstRoute = false
 		next({name: 'Redirect', params: {redirectTo: to.fullPath}})
@@ -215,6 +235,7 @@ router.beforeEach((to, from, next) => {
 		next()
 		return
 	}
+	*/
 	if ((to.name == 'Login') || (to.name == 'home')) {
 		next()
 		return

@@ -15,12 +15,15 @@ export const useUserStore = defineStore('user', () => {
 	const user = ref();
 	const users = ref();
 	const customer = ref();
-	const customers = ref();
-	const employees = ref();
+	const customers = ref([]);
+	const employee = ref([]);
+	const employees = ref([]);
 
-	const productTypes = ref([
-        {type: 'customer', icon: 'bi bi-people'},
-        {type: 'employee', icon: 'bi bi-people-fill'},
+	const userTypes = ref([
+        {type: 'C', icon: 'bi bi-people'},
+        {type: 'ED', icon: 'bi bi-people-fill'},
+		{type: 'EC', icon: 'bi bi-people-fill'},
+		{type: 'EM', icon: 'bi bi-people-fill'}
 	])
 
 	const userIsGuest = ref( false);
@@ -126,6 +129,22 @@ export const useUserStore = defineStore('user', () => {
 	}
 
 
+	    // Local users count
+		const totalUsers = computed(() => {
+			return customers.value.length;
+		});
+	
+		function getUsersByFilter(type) {
+			if(customers.value.length === 0 ){
+				return [];
+			}
+			return customers.value.filter(customer => customer.user.type === type);
+		}
+		
+		function getUsersByFilterTotal(type) {
+			return getUsersByFilter(type).length;
+		}
+
 	function clearUser() {
 		delete axios.defaults.headers.common.Authorization
 		sessionStorage.removeItem('token');
@@ -184,6 +203,8 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
+	
+
 
 	function loginAsGuest() {
 		userIsGuest.value = true;
@@ -203,6 +224,7 @@ export const useUserStore = defineStore('user', () => {
 	}
 
 	async function restoreToken() {
+		console.log('restoreToken');
 		let storedToken = sessionStorage.getItem('token')
 		if (storedToken) {
 			axios.defaults.headers.common.Authorization = "Bearer " + storedToken
@@ -265,10 +287,10 @@ export const useUserStore = defineStore('user', () => {
 
 	return {
 		user, users, customer, customers, employees, userId, userPhotoUrl, userIsGuest,
-		availablePoints, productTypes, isGuest,
+		availablePoints, userTypes, isGuest,
 		login, register,loginAsGuest, logout, restoreToken, changePassword,
 		loadUsers, loadCustomer, save,
 		isCustomer, isChef, isDelivery, isEmployee, isManager, isAuthenticated,
-		fetchCustomers, fetchEmployees,
+		fetchCustomers, fetchEmployees, getUsersByFilter, getUsersByFilterTotal
 	}
 })

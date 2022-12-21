@@ -40,8 +40,13 @@
 							</router-link>
 						</li>
 						<li class="border-bottom mb-0">
-							<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'UsersAccount' }" :to="{ name: 'UsersAccount' }">
-								<i class="bi-people opacity-60 me-2"></i> Users List <span class="fs-sm text-muted ms-auto">(12/2103)</span>
+							<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'ClientsAccount' }" :to="{ name: 'ClientsAccount' }">
+								<i class="bi-people opacity-60 me-2"></i> Clients List <span class="fs-sm text-muted ms-auto">(12/2103)</span>
+							</router-link>
+						</li>
+						<li class="border-bottom mb-0">
+							<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'EmployeesAccount' }" :to="{ name: 'EmployeesAccount' }">
+								<i class="bi-people opacity-60 me-2"></i> Employees List <span class="fs-sm text-muted ms-auto">(12/2103)</span>
 							</router-link>
 						</li>
 						<li class="border-bottom mb-0">
