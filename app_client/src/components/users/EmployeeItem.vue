@@ -8,6 +8,9 @@
   const employee = ref([]);
 	const employees = ref([]);
 
+  const userId = computed(() => {
+		return user.value?.id ?? -1
+	});
 
 	function updateEmployees(newPage) {
 		fetchEmployees(newPage);
@@ -24,7 +27,34 @@
 		}
 	}
 
+  async function fetchEmployee(id) {
+		try {
+			const response = await axios.get('/employees/' + id);
+			employee.value = response.data;
+			return employee.value;
+		} catch (error){
+			throw error;
+		}
+	}
+
+
+  const emit = defineEmits(["save", "cancel"]);
+
+  const editClick = (user) => {
+  emit("edit", user)
+}
+
+  const save = () => {
+  emit("save", editingUser.value);
+}
+
+const cancel = () => {
+  emit("cancel", editingUser.value);
+}
+
+
   fetchEmployees()
+
 </script>
 
 <template>
@@ -52,8 +82,8 @@
 					</span>
 				</div>
 				<div class="d-flex justify-content-center justify-content-sm-start pt-3">
-					<button class="btn bg-faded-info btn-icon me-2" data-toggle="modal" data-target="#open-ticket" type="button" aria-label="Edit" data-bs-original-title="Edit">
-						<i class="bi bi-pencil-square"></i>
+					<button class="btn bg-faded-danger btn-icon" type="button" data-bs-toggle="modal" data-bs-target="#open-ticket" @click="fetchEmployee(employee.id)" > 
+						<i class="bi bi-pencil"></i>
 					</button>
 					<button class="btn bg-faded-danger btn-icon" type="button" data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
 						<i class="bi bi-trash"></i>
@@ -67,47 +97,33 @@
 		</div>
 
 		
-		<form class="needs-validation modal fade show"  id="open-ticket" tabindex="-1" aria-hidden="true" role="dialog">
+    <div class="modal fade" id="open-ticket" tabindex="-1" aria-hidden="true" >
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Submit new ticket</h5>
+              <h5 class="modal-title">Edit user - {{ employee.name }}</h5>
               <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <p class="text-muted fs-sm">We normally respond tickets within 2 business days.</p>
               <div class="row gx-4 gy-3">
                 <div class="col-12">
-                  <label class="form-label" for="ticket-subject">Subject</label>
-                  <input class="form-control" type="text" id="ticket-subject" required="">
-                  <div class="invalid-feedback">Please fill in the subject line!</div>
+                  <label class="form-label" for="ticket-subject">Name</label>
+                  <input class="form-control" type="text" id="ticket-subject" 
+                  required v-model="employee.name">
+                  <label class="form-label" for="ticket-subject">Email</label>
+                  <input class="form-control" type="text" id="ticket-subject"
+                  required v-model="employee.email">
+                  <div class="invalid-feedback">Please fill in the name!</div>
                 </div>
                 <div class="col-sm-6">
                   <label class="form-label" for="ticket-type">Type</label>
                   <select class="form-select" id="ticket-type" required="">
-                    <option value="">Choose type</option>
-                    <option value="Website problem">Website problem</option>
-                    <option value="Partner request">Partner request</option>
-                    <option value="Complaint">Complaint</option>
-                    <option value="Info inquiry">Info inquiry</option>
+                  <option selected value="employee.type"></option>
+									<option value="Delivery">Delivery</option>
+                  <option value="Chef">Chef</option>
+									<option value="Manager">Manager</option>
                   </select>
                   <div class="invalid-feedback">Please choose ticket type!</div>
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label" for="ticket-priority">Priority</label>
-                  <select class="form-select" id="ticket-priority" required="">
-                    <option value="">How urgent is your issue?</option>
-                    <option value="Urgent">Urgent</option>
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                  </select>
-                  <div class="invalid-feedback">Please choose how urgent your ticket is!</div>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="ticket-description">Describe your issue</label>
-                  <textarea class="form-control" id="ticket-description" rows="8" required=""></textarea>
-                  <div class="invalid-feedback">Please provide ticket description!</div>
                 </div>
                 <div class="col-12">
                   <input class="form-control" type="file" id="file-input">
@@ -115,10 +131,10 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-              <button class="btn btn-primary" type="submit">Submit Ticket</button>
+              <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+              <button class="btn btn-primary" type="submit">Save</button>
             </div>
           </div>
         </div>
-      </form>
+      </div>
 </template>

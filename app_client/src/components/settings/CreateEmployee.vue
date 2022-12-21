@@ -107,6 +107,9 @@ import {ref, inject, computed, reactive} from 'vue'
 <template>
 	  <section class="col-lg-8 pt-lg-4 pb-4 mb-3">
               <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
+		<router-link class="btn " :to="{ name: 'EmployeesAccount' }">
+			<i class="bi bi-arrow-left"></i>
+		</router-link>
                 <h2 class="h3 py-2 text-center text-sm-start">New Employee</h2>
 
 						<form class="row g-3" @submit.prevent="">
