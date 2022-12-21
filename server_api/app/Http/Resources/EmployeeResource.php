@@ -16,9 +16,11 @@ class EmployeeResource extends JsonResource
     {
 
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'type' => $this->type,
+            'id'        => $this->id,
+            'name'      => $this->name,
+            'email'     => $this->email,
+            'blocked'   => $this->blocked,
+            'type'      => $this->type,
             'photo_url' => ($this->photo_url != '' ? env('LOCAL_FILE_PATH_AVATARS', 'http://server_api.test/storage/fotos/') . $this->photo_url : ''),
         ];
     }
