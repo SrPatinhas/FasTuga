@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\ProductResource;
+use App\Http\Requests\StoreUpdateProductRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -13,6 +14,7 @@ use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+
 
 class ProductController extends Controller
 {

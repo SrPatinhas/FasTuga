@@ -35,13 +35,13 @@ class OrderGuestController extends Controller
         return new OrderResource($order);
     }
 
-    public function destroy(Order $order)
+    /*public function destroy(Order $order)
     {
-        Order::where("order_id", $order->id)->delete();
+        Order::where("id", $order->id)->delete();
         $order->delete();
         return new OrderResource($order);
     }
-
+    */
 
     public function update_completed(UpdateCompleteOrderRequest $request, Order $order)
     {

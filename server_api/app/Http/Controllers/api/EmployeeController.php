@@ -52,14 +52,21 @@ class EmployeeController extends Controller
 
 
     public function update(UpdateUserRequest $request, User $user)
-    {
-        $user->update($request->validated());
-        return new UserResource($user);
+    { 
+        //So menager pode
+        if ($user->type='EM') {
+            $user->update($request->validated());
+            return new UserResource($user);
+            
+        }
+        return response()->json(['message' => 'You are not Manager'], 403);
     }
+
+    
 
     public function destroy(User $user)
     {
-        User::where("employee_id", $user->id)->delete();
+        User::where("id", $user->id)->delete();
         $user->delete();
         return new UserResource($user);
     }
