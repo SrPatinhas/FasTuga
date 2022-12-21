@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderStatusResource;
+use App\Http\Resources\BoardItemsResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -68,7 +69,13 @@ class OrderGuestController extends Controller
     //por fazer
     public function getBoardItems (Order $order){
 
-        return new OrderStatusResource($order);
+        //return new BoardItemsResource($order);
+        
+        $preparing = BoardItemsResource::collection($order->where('status', 'P')->get());
+        $ready = BoardItemsResource::collection($order->where('status', 'R')->get());
+
+        return response()->json(['ready' => $ready, 'preparing' => $preparing]);
+
     }
 
 //ate aqui

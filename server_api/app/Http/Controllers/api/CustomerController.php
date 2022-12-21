@@ -30,9 +30,14 @@ class CustomerController extends Controller
     }
 
     public function customerInfo(){
-        $customerId = Auth::user()->customer->id;
-        $customer = Customer::findOrFail($customerId);
-        return new CustomerResource($customer);
+             
+        if(Auth::user()->type == 'C'){   
+
+            $customerId = Auth::user()->customer->id;     
+            $customer = Customer::findOrFail($customerId);
+                return new CustomerResource($customer);
+        }
+        return response()->json(['You are not customer', 400]);
     }
 
     public function show(Customer $customer)
