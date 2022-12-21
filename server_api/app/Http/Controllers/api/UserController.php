@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\UserCustomerResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -19,6 +20,9 @@ class UserController extends Controller
 {
     public function userInfo(Request $request)
     {
+        if($request->user()->type == 'C'){
+            return new UserCustomerResource($request->user());
+        }
         return new UserResource($request->user());
     }
 

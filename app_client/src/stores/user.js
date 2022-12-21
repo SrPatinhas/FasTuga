@@ -8,16 +8,11 @@ export const useUserStore = defineStore('user', () => {
 	const socket = inject("socket");
 	const axios = inject('axios');
 	const toast = inject("toast");
-	const serverBaseUrl = inject('serverBaseUrl');
 
 	const orderStore = useOrdersStore();
 
 	const user = ref();
-	const users = ref();
 	const customer = ref();
-	const customers = ref([]);
-	const employee = ref([]);
-	const employees = ref([]);
 
 	const userTypes = ref([
         {type: 'C', icon: 'bi bi-people'},
@@ -32,10 +27,8 @@ export const useUserStore = defineStore('user', () => {
 		if (!user.value?.photo_url) {
 			return avatarNoneUrl
 		}
-		//return serverBaseUrl + '/storage/fotos/' + user.value.photo_url
 		return user.value.photo_url;
 	})
-
 	const userId = computed(() => {
 		return user.value?.id ?? -1
 	});
@@ -43,12 +36,12 @@ export const useUserStore = defineStore('user', () => {
 		return user.value?.points ?? 50;
 	});
 
-	const isAuthenticated = computed(() => {
-		return !!user.value?.id ?? false;
-	});
 	/*
 	 * Roles
 	 */
+	const isAuthenticated = computed(() => {
+		return !!user.value?.id ?? false;
+	});
 	const isGuest = computed(() => {
 		return userIsGuest;
 	});
@@ -69,81 +62,19 @@ export const useUserStore = defineStore('user', () => {
 	});
 
 
-
-
-
-
-
-
-	async function loadUsers() {
-		try {
-			const response = await axios.get('users')
-			users.value = response.data.data
-		} catch (error) {
-			clearUser()
-			throw error
-		}
-	}
-
-
 	async function loadUser() {
 		try {
 			const response = await axios.get('users/me')
+			if(response.data.data.customer !== undefined) {
+				customer.value = response.data.data.customer
+				delete response.data.data.customer;
+			}
 			user.value = response.data.data
 		} catch (error) {
 			clearUser()
 			throw error
 		}
 	}
-
-	async function loadCustomer() {
-		try {
-			const response = await axios.get('customers/me')
-			customer.value = response.data.data
-		} catch (error) {
-			clearUser()
-			throw error
-		}
-	}
-
-	async function fetchCustomers(page = 1) {
-		try {
-			const response = await axios.get('/customers?page=' + page);
-			customers.value = response.data;
-			return customers.value;
-		} catch (error){
-			customers.value = {};
-			throw error;
-		}
-	}
-
-	async function fetchEmployees(page = 1) {
-		try {
-			const response = await axios.get('/employees?page=' + page);
-			employees.value = response.data;
-			return employees.value;
-		} catch (error){
-			employees.value = {};
-			throw error;
-		}
-	}
-
-
-	    // Local users count
-		const totalUsers = computed(() => {
-			return customers.value.length;
-		});
-	
-		function getUsersByFilter(type) {
-			if(customers.value.length === 0 ){
-				return [];
-			}
-			return customers.value.filter(customer => customer.user.type === type);
-		}
-		
-		function getUsersByFilterTotal(type) {
-			return getUsersByFilter(type).length;
-		}
 
 	function clearUser() {
 		delete axios.defaults.headers.common.Authorization
@@ -153,21 +84,14 @@ export const useUserStore = defineStore('user', () => {
 
 	async function login(credentials) {
 		try {
-			const response = await axios.post('login', credentials)
-			axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
-			sessionStorage.setItem('token', response.data.access_token)
-			await loadUser();
-			socket.emit('loggedIn', user.value);
-			//await projectsStore.loadProjects()
-			userIsGuest.value = false;
+			const response = await axios.post('login', credentials);
+			await defineUserSession(response.data.access_token);
 			return true
 		} catch (error) {
 			clearUser()
-			//projectsStore.clearProjects()
 			return false
 		}
 	}
-
 
 	async function register(credentials) {
 		try {
@@ -189,22 +113,21 @@ export const useUserStore = defineStore('user', () => {
 					'Content-Type': 'multipart/form-data'
 				}
 			});
-			axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
-			sessionStorage.setItem('token', response.data.access_token);
-			await loadUser();
-			socket.emit('loggedIn', user.value);
-			//await projectsStore.loadProjects()
-			userIsGuest.value = false;
-			return true
+			await defineUserSession(response.data.access_token);
+			return true;
 		} catch (error) {
-			clearUser()
-			//projectsStore.clearProjects()
-			return false
+			clearUser();
+			return false;
 		}
 	}
 
-	
-
+	async function defineUserSession(access_token) {
+		axios.defaults.headers.common.Authorization = "Bearer " + access_token;
+		sessionStorage.setItem('token', access_token);
+		await loadUser();
+		socket.emit('loggedIn', user.value);
+		userIsGuest.value = false;
+	}
 
 	function loginAsGuest() {
 		userIsGuest.value = true;
@@ -270,27 +193,25 @@ export const useUserStore = defineStore('user', () => {
 		errors.value = null
 		axios.put('users/customers/' + userId.value, user.value)
         .then((response) => {
-          user.value = response.data.data
-          toast.success('User #' + userId.value + ' was updated successfully.')
+			user.value = response.data.data
+			toast.success('User #' + userId.value + ' was updated successfully.')
         })
         .catch((error) => {
-          if (error.response.status == 422) {
-              toast.error('User #' + userId.value  + ' was not updated due to validation errors!')
-              errors.value = error.response.data.errors
-            } else {
-              toast.error('User #' + userId.value  + ' was not updated due to unknown server error!')
-            }
+			if (error.response.status == 422) {
+				toast.error('User #' + userId.value  + ' was not updated due to validation errors!')
+				errors.value = error.response.data.errors
+			} else {
+				toast.error('User #' + userId.value  + ' was not updated due to unknown server error!')
+			}
         })
 	 }
  
 
 
 	return {
-		user, users, customer, customers, employees, userId, userPhotoUrl, userIsGuest,
+		user, customer, userId, userPhotoUrl, userIsGuest,
 		availablePoints, userTypes, isGuest,
-		login, register,loginAsGuest, logout, restoreToken, changePassword,
-		loadUsers, loadCustomer, save,
-		isCustomer, isChef, isDelivery, isEmployee, isManager, isAuthenticated,
-		fetchCustomers, fetchEmployees, getUsersByFilter, getUsersByFilterTotal
+		login, register, loginAsGuest, logout, restoreToken, changePassword, save,
+		isCustomer, isChef, isDelivery, isEmployee, isManager, isAuthenticated
 	}
 })

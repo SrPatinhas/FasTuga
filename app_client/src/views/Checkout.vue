@@ -45,25 +45,6 @@
 						Your NIF is invalid
 					</div>
 				</div>
-
-				<div class="col-12 col-md-6">
-					<label for="inputState" class="form-label">Payment Type<span class="text-danger">*</span></label>
-					<select id="inputState" class="form-select form-control" required v-model="orderCheckout.pay_type">
-						<option selected value="" disabled>Default Payment type</option>
-						<option value="visa">VISA</option>
-						<option value="mbway">MBway</option>
-						<option value="paypal">Paypal</option>
-					</select>
-				</div>
-				<div class="col-12 col-md-6">
-					<label for="inputCity" class="form-label">Payment Reference<span class="text-danger">*</span></label>
-					<input type="text" class="form-control" id="inputCity" placeholder="Email, phone number or credit card"
-						   :class="validatePayment ? 'is-valid' : (orderCheckout.pay_reference ? 'is-invalid' : '')"
-						   required v-model="orderCheckout.pay_reference">
-					<div class="invalid-feedback" :class="!validatePayment && orderCheckout.pay_reference && 'd-block'">
-						Your default payment is invalid
-					</div>
-				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-6 mb-4 mb-sm-0">
@@ -71,7 +52,7 @@
 					<div class="accordion accordio-flush shadow-sm rounded-3 mb-4" id="payment-methods">
 						<div class="accordion-item border-bottom">
 							<div class="accordion-header">
-								<div class="d-table accordion-button" data-bs-toggle="collapse" data-bs-target="#credit-card" aria-expanded="false">
+								<div class="d-table accordion-button" :class="orderCheckout.pay_type !== 'visa' && 'collapsed'" data-bs-toggle="collapse" data-bs-target="#credit-card" aria-expanded="false">
 									<input class="form-check-input" type="radio" name="license" id="payment-card" value="visa" v-model="orderCheckout.pay_type" @change="orderCheckout.pay_reference = ''">
 									<label class="form-check-label fw-medium" for="payment-card">
 										<i class="bi-credit-card text-muted fs-lg align-middle mt-n1 ms-2"></i>
@@ -79,7 +60,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="collapse" id="credit-card" data-bs-parent="#payment-methods">
+							<div class="collapse" :class="orderCheckout.pay_type === 'visa' && 'show'" id="credit-card" data-bs-parent="#payment-methods">
 								<div class="accordion-body py-2">
 									<input class="form-control bg-image-none mb-3" type="text" v-model="orderCheckout.pay_reference" placeholder="4xxxxxxxxxxxxxxx">
 								</div>
@@ -87,7 +68,7 @@
 						</div>
 						<div class="accordion-item border-bottom">
 							<div class="accordion-header">
-								<div class="d-table collapsed accordion-button" data-bs-toggle="collapse" data-bs-target="#paypal" aria-expanded="false">
+								<div class="d-table accordion-button" :class="orderCheckout.pay_type !== 'paypal' && 'collapsed'" data-bs-toggle="collapse" data-bs-target="#paypal" aria-expanded="false">
 									<input class="form-check-input" type="radio" name="license" id="payment-paypal" value="paypal" v-model="orderCheckout.pay_type" @change="orderCheckout.pay_reference = ''">
 									<label class="form-check-label fw-medium" for="payment-paypal">
 										<i class="bi-paypal text-muted fs-base align-middle mt-n1 ms-2"></i>
@@ -95,7 +76,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="collapse" id="paypal" data-bs-parent="#payment-methods">
+							<div class="collapse" :class="orderCheckout.pay_type === 'paypal' && 'show'" id="paypal" data-bs-parent="#payment-methods">
 								<div class="accordion-body pt-2">
 									<input class="form-control" type="text" required="" id="fd-phone" v-model="orderCheckout.pay_reference" placeholder="email@email.com">
 								</div>
@@ -103,7 +84,7 @@
 						</div>
 						<div class="accordion-item border-bottom">
 							<div class="accordion-header">
-								<div class="d-table collapsed accordion-button" data-bs-toggle="collapse" data-bs-target="#cash" aria-expanded="false">
+								<div class="d-table accordion-button" :class="orderCheckout.pay_type !== 'mbway' && 'collapsed'" data-bs-toggle="collapse" data-bs-target="#cash" aria-expanded="false">
 									<input class="form-check-input" type="radio" name="license" id="payment-mbway" value="mbway" v-model="orderCheckout.pay_type" @change="orderCheckout.pay_reference = ''">
 									<label class="form-check-label fw-medium" for="payment-mbway">
 										<i class="bi-qr-code text-muted fs-lg align-middle mt-n1 ms-2"></i>
@@ -111,7 +92,7 @@
 									</label>
 								</div>
 							</div>
-							<div class="collapse" id="cash" data-bs-parent="#payment-methods">
+							<div class="collapse" :class="orderCheckout.pay_type === 'mbway' && 'show'" id="cash" data-bs-parent="#payment-methods">
 								<div class="accordion-body pt-2">
 									<input class="form-control" type="text" required="" v-model="orderCheckout.pay_reference" placeholder="9xxxxxxxx">
 								</div>
@@ -182,7 +163,7 @@
 </template>
 
 <script setup>
-import {computed, inject, reactive, ref} from "vue";
+	import {computed, inject, reactive, ref} from "vue";
 	import {useRouter} from "vue-router";
 	import validations from "@/utils/validations";
 	import {useOrdersStore} from "@/stores/order";
@@ -194,24 +175,31 @@ import {computed, inject, reactive, ref} from "vue";
 	const orderStore = useOrdersStore();
 
 	const orderPoints = ref(0);
-
 	const paymentLoading = ref(false);
-
 	const orderCheckout = reactive({
 		name: '',
 		email: '',
-		password: '',
-		password_confirmation: '',
-		photo: null,
 		nif: '',
 		phone: '',
 		pay_type: '',
 		pay_reference: '',
 		points: 0,
 		loading: false
-	})
+	});
 
-
+	if(userStore.user) {
+		orderCheckout.name 	= userStore.user.name;
+		orderCheckout.email = userStore.user.email;
+	}
+	if(userStore.customer) {
+		orderCheckout.nif 				= userStore.customer.nif;
+		orderCheckout.phone 			= userStore.customer.phone;
+		orderCheckout.pay_type 			= userStore.customer.default_payment_type.toLowerCase();
+		orderCheckout.pay_reference 	= userStore.customer.default_payment_reference;
+	}
+	if(orderStore.orderPoints) {
+		orderCheckout.points = orderStore.orderPoints;
+	}
 	const checkPayment = () => {
 		let paymentValid = false;
 		let paymentType = orderCheckout.pay_type;

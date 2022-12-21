@@ -7,12 +7,9 @@ use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\LastOrdersResource;
 use App\Http\Resources\OrderResource;
-use App\Http\Resources\ProductResource;
 use App\Http\Resources\TopProductResource;
 use App\Models\Customer;
-use App\Models\OrderItem;
 use App\Models\Product;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -25,19 +22,19 @@ use Illuminate\Support\Facades\Storage;
 class CustomerController extends Controller
 {
 
-    public function index(){
+    public function index()
+    {
         return CustomerResource::collection(Customer::paginate(15));
     }
 
-    public function customerInfo(){
-             
-        if(Auth::user()->type == 'C'){   
-
-            $customerId = Auth::user()->customer->id;     
+    public function customerInfo()
+    {
+        if(Auth::user()->type == 'C'){
+            $customerId = Auth::user()->customer->id;
             $customer = Customer::findOrFail($customerId);
                 return new CustomerResource($customer);
         }
-        return response()->json(['You are not customer', 400]);
+        return response()->json(['Customer not found', 400]);
     }
 
     public function show(Customer $customer)
