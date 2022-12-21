@@ -64,8 +64,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/',                 'index');/*Feito*/
         Route::post('/',                'create');/*Feito*/
         Route::get('/{user}',           'show')->whereNumber('user');/*Feito*/
-        Route::put('/{user}',           'update')->whereNumber('user');/*Feito*/
-        Route::delete('/{user}',        'delete')->whereNumber('user');/*Feito*/
+        Route::put('/{user}',           'update')->whereNumber('user');/*Feito TEMOS DE PASSAR O "type":"EM",*/
+        Route::delete('/{user}',        'destroy')->whereNumber('user');/*ERRO*/
     });
     //--END EMPLOYEE
 
@@ -73,7 +73,7 @@ Route::middleware('auth:api')->group(function () {
     Route::controller(ProductController::class)->prefix('products')->group(function () {
         // Only a manager can use this ones
         Route::post('/',                    'store');/*Feito*/
-        Route::put('/{product}',            'update')->whereNumber('product');/*Erro por causa da func getTopItems*/
+        Route::put('/{product}',            'update')->whereNumber('product');/*Erro na passagem de parametr */
         Route::post('/{product}/photos',   'updatePhoto')->whereNumber('product');/*Erro */
         Route::delete('/{product}',         'destroy')->whereNumber('product');/*Erro database */
         // TODO -> talvez para estatisticas?

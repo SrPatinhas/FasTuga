@@ -6,15 +6,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 // Remove Sanctum Tokens
 //use Laravel\Sanctum\HasApiTokens;
 // Add Laravel Tokens
 use Laravel\Passport\HasApiTokens;
 
-
+    class Flight extends Model
+    {
+        use SoftDeletes;
+    }
 class User extends Authenticatable
 {
+
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
@@ -88,6 +95,7 @@ class User extends Authenticatable
         return $this->type == 'C';
     }
 
-
-
+    
 }
+
+
