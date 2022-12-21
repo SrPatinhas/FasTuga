@@ -45,11 +45,11 @@
 }
 
   const save = () => {
-  emit("save", editingUser.value);
+  emit("save", employee.value);
 }
 
 const cancel = () => {
-  emit("cancel", editingUser.value);
+  emit("cancel", employee.value);
 }
 
 
@@ -85,7 +85,7 @@ const cancel = () => {
 					<button class="btn bg-faded-danger btn-icon" type="button" data-bs-toggle="modal" data-bs-target="#open-ticket" @click="fetchEmployee(employee.id)" > 
 						<i class="bi bi-pencil"></i>
 					</button>
-					<button class="btn bg-faded-danger btn-icon" type="button" data-bs-toggle="tooltip" aria-label="Delete" data-bs-original-title="Delete">
+					<button class="btn bg-faded-danger btn-icon" type="button" data-bs-toggle="modal" data-bs-target="#deleteEmployee" aria-label="Delete" data-bs-original-title="Delete">
 						<i class="bi bi-trash"></i>
 					</button>
 				</div>
@@ -132,9 +132,49 @@ const cancel = () => {
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
-              <button class="btn btn-primary" type="submit">Save</button>
+              <button class="btn btn-primary" type="submit" >Save</button>
             </div>
           </div>
         </div>
       </div>
+
+
+
+      <div class="modal fade" id="deleteEmployee" tabindex="-1" aria-hidden="true" >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" v-if="employee.blocked===0">Blocked user - {{ employee.name }}</h5>
+              <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row gx-4 gy-3">
+                <div class="col-12">
+                  <label class="form-label" for="ticket-subject">Are you sure you want blocked the employee {{ employee.id }} - {{ employee.name }} ?</label>
+                 
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No</button>
+              <button class="btn btn-primary" type="submit" >Yes</button>
+            </div>
+            <h5 class="modal-title" v-if="employee.blocked===1">Unblocked user - {{ employee.name }}</h5>
+              <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row gx-4 gy-3">
+                <div class="col-12">
+                  <label class="form-label" for="ticket-subject">Are you sure you want unblocked the employee {{ employee.id }} - {{ employee.name }} ?</label>
+                 
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No</button>
+              <button class="btn btn-primary" type="submit" >Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+      </div>
+      </div>
+    </div>
+      </div>
+
 </template>

@@ -25,8 +25,10 @@ class Order extends Model
         'payment_reference',
         'date',
         'delivered_by',
-        'custom'
-
+        'custom',
+        'notes',
+        'created_at',
+        'updated_at'
     ];
 
     // P "Preparing", R "Ready", D "Delivered", C "Cancelled"

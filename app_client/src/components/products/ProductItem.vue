@@ -45,7 +45,7 @@
 				price: prod.price,
 				type: prod.type,
 				description: prod.description,
-				count: 1
+				quantity: 1
 			}
 			orderStore.addItemToOrder(item);
 		}

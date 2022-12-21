@@ -33,7 +33,7 @@ export const useUserStore = defineStore('user', () => {
 		return user.value?.id ?? -1
 	});
 	const availablePoints = computed(() => {
-		return user.value?.points ?? 50;
+		return customer.value?.points ?? 0;
 	});
 
 	/*

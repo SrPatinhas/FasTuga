@@ -32,7 +32,7 @@ const orderKitchenList = ref([
 				"price": 9.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			}
 		]
 	},
@@ -56,7 +56,7 @@ const orderKitchenList = ref([
 				"price": 19.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			},
 			{
 				"id": 152,
@@ -65,7 +65,7 @@ const orderKitchenList = ref([
 				"price": 9.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			}
 		]
 	},
@@ -89,7 +89,7 @@ const orderKitchenList = ref([
 				"price": 19.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			},
 			{
 				"id": 152,
@@ -98,7 +98,7 @@ const orderKitchenList = ref([
 				"price": 9.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			}
 		]
 	},
@@ -121,7 +121,7 @@ const orderKitchenList = ref([
 				"price": 19.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			},
 			{
 				"id": 152,
@@ -130,7 +130,7 @@ const orderKitchenList = ref([
 				"price": 9.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			}
 		]
 	},
@@ -153,7 +153,7 @@ const orderKitchenList = ref([
 				"price": 19.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			},
 			{
 				"id": 152,
@@ -162,7 +162,7 @@ const orderKitchenList = ref([
 				"price": 9.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			}
 		]
 	},
@@ -185,7 +185,7 @@ const orderKitchenList = ref([
 				"price": 19.9,
 				"type": "cold dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			},
 			{
 				"id": 152,
@@ -194,7 +194,7 @@ const orderKitchenList = ref([
 				"price": 9.9,
 				"type": "hot dish",
 				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"count": 3
+				"quantity": 3
 			}
 		]
 	}
