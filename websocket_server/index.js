@@ -25,8 +25,8 @@ instrument(io, {
     mode: "development",
 });
 
-httpServer.listen(3000, () =>{
-    console.log('listening on *:3000');
+httpServer.listen(8081, () =>{
+    console.log('listening on *:8081');
 });
 
 let SessionHandler = require("./SessionHandler.js");

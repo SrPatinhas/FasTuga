@@ -19,13 +19,12 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 import "bootstrap"
 
 import "./assets/main.css";
-import "./assets/dashboard.css";
 
 const app = createApp(App);
 
 app.provide('socket', io(wsConnection));
 
-const serverBaseUrl = `${apiDomain}/api`
+const serverBaseUrl = `${apiDomain}`
 app.provide('axios', axios.create({
     baseURL: serverBaseUrl + '/api',
     headers: {
