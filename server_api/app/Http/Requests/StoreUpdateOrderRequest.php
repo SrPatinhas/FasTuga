@@ -50,17 +50,14 @@ class StoreUpdateOrderRequest extends FormRequest
             'status.in' => "The payment type needs to be 'P', 'R', 'D' or 'C' "
 
             'customer_id.required' => "You have to provide your customer_id",
-            'customer_id.exists' => "Insert a valid users id",
+            'customer_id.exists' => "Insert a exists customers id",
 
-            'total_price.required' => "You have to provide a total_price",
             'total_price.numeric' => "Insert a valid numeric",
             'total_price.min' => "The total_price must be at least 0",
 
-            'total_paid.required' => "You have to provide a total_paid",
             'total_paid.numeric' => "Insert a valid numeric",
             'total_paid.min' => "The total_paid must be at least 0",
 
-            'total_paid_with_points.required' => "You have to provide a total_paid_with_points",
             'total_paid_with_points.numeric' => "Insert a valid numeric",
             'total_paid_with_points.min' => "The total_paid_with_points must be at least 0",
 
@@ -70,12 +67,14 @@ class StoreUpdateOrderRequest extends FormRequest
 
             'payment_type.required' => "You have to provide the order payment_type",
             'payment_type.in' => "The payment type needs to be 'VISA', 'PAYPAL' or 'MBWAY'"
+            
+            'payment_reference.string' => "Insert a valid string", 
 
             'date.required' => "You have to provide date",
             'date.date' => "Insert a valid date",
 
             'delivered_by.required' => "You have to provide your delivered_by",
-            'delivered_by.exists' => "Insert a valid users id"
+            'delivered_by.exists' => "Insert a exists users id"
             
         ];
     }

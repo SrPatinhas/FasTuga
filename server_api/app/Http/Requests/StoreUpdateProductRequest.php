@@ -45,8 +45,6 @@ class StoreUpdateProductRequest extends FormRequest
             'description.string' => "Insert a valid string",
 
             'photo_url.required' => "You have to provide a photo_url",
-            'photo_url.file' => "Insert a valid file",
-            'photo_url.image' => "Insert a valid image",
 
             'price.required' => "You have to provide a price",
             'price.numeric' => "Insert a valid numeric",

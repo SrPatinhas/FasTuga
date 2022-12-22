@@ -37,7 +37,7 @@ class ProductController extends Controller
         }
         $newProduct = Product::create([
             'name' => $request->name,
-            'type' => $request->type,
+            'type' => str_replace('_', ' ', $request->type),
             'description' => $request->description,
             'photo_url' => $photo,
             'price' => $request->price
@@ -114,10 +114,10 @@ private function topItemsByCategory($category, $page){
 }
 
     public function getTopHotItems(){
-        return $this->topItemsByCategory('hot_dish', 4);
+        return $this->topItemsByCategory('hot dish', 4);
     }
     public function getTopColdItems(){
-        return $this->topItemsByCategory('cold_dish', 4);
+        return $this->topItemsByCategory('cold dish', 4);
     }
     public function getTopDessertItems(){
         return $this->topItemsByCategory('dessert', 4);
