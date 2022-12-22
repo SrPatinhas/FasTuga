@@ -13,7 +13,7 @@
 					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Status:</span>{{ orderStore.orderDetail.status_label }}</div>
 				</div>
 				<div class="col-md-3 mb-2">
-					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Paid:</span>{{ orderStore.orderDetail?.total_paid.toFixed(2) }}€</div>
+					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Paid:</span>{{ orderStore.orderDetail?.total_paid?.toFixed(2) }}€</div>
 				</div>
 				<div class="col-md-3 mb-2">
 					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Ticket Number:</span>{{ orderStore.orderDetail.ticket_number }}</div>

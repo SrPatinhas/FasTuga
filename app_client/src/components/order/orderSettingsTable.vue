@@ -103,9 +103,13 @@
 					<td class="py-3">{{ order.payment_type }}</td>
 					<td class="py-3">
 						<div class="btn-group me-2" role="group" aria-label="Actions">
-							<a class="btn btn-outline-success" href="#order-details" data-bs-toggle="modal" @click="seeOrderDetail(order)">
+							<a class="btn btn-outline-secondary" href="#order-details" data-bs-toggle="modal" @click="seeOrderDetail(order)">
 								<i class="bi bi-eye m-0"></i>
 							</a>
+							<router-link v-if="userStore.isCustomer && (order.status.toLowerCase() === 'r' || order.status.toLowerCase() === 'p')"
+										 class="btn btn-outline-success btn-lg" :to="{ name: 'OrderDetail', params: {id: order.id} }">
+								<i class="bi bi-link m-0"></i>
+							</router-link>
 							<a v-if="userStore.isManager && order.status.toLowerCase() !== 'd'"  href="#cancelling-order" data-bs-toggle="modal" class="btn btn-outline-danger" @click="modalDeleteOrders(order)">
 								<i class="bi bi-trash m-0"></i>
 							</a>

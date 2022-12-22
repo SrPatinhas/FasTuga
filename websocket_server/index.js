@@ -42,7 +42,8 @@ io.on('connection', (socket) => {
      * Events to the "restaurant_kitchen"
      **/
     socket.on('orderNew', (order) => {
-        io.to("restaurant").emit('orderNew', order); // sends the new order
+        console.log(`new order`);
+        io.emit('orderNew'); // sends the new order
     });
     /**
      * Events to the "restaurant_counter"

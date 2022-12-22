@@ -14,11 +14,13 @@ class BoardItemsResource extends JsonResource
      */
     public function toArray($request)
     {
+        $status = ["P" => "Preparing", "R" => "Ready", "D" => "Delivered"];
         return[
-            'id'                        => $this->id,
-            'ticket_number'             => $this->ticket_number,
-            'status'                    => $this->status,
-            'date'                      => $this->date,
+            'id'            => $this->id,
+            'status'        => $this->status,
+            'ticket_number' => $this->ticket_number,
+            'status_label'  => $status[$this->status],
+            'date'          => $this->date,
         ];
     }
 }
