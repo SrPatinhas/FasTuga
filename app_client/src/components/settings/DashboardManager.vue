@@ -115,37 +115,37 @@ import SettingsBar from "../navigation/SettingsBar.vue"
 							<!-- TODO Criar lista de top 10 dos produtos mais vendidos e o total que cada 1 fez -->
 							<div class="d-flex justify-content-between align-items-center fs-sm py-2 border-bottom">
 								<div class="d-flex align-items-start py-1">
-									<img src="img/marketplace/account/flags/usa.png" width="20" alt="USA">
+<!--									<img src="img/marketplace/account/flags/usa.png" width="20" alt="USA">-->
 									<div class="ps-1">prato 1</div>
 								</div><span>$452</span>
 							</div>
 							<div class="d-flex justify-content-between align-items-center fs-sm py-2 border-bottom">
 								<div class="d-flex align-items-start py-1">
-									<img src="img/marketplace/account/flags/sweden.png" width="20" alt="Sweden">
+<!--									<img src="img/marketplace/account/flags/sweden.png" width="20" alt="Sweden">-->
 									<div class="ps-1">prato 1</div>
 								</div><span>$318</span>
 							</div>
 							<div class="d-flex justify-content-between align-items-center fs-sm py-2 border-bottom">
 								<div class="d-flex align-items-start py-1">
-									<img src="img/marketplace/account/flags/india.png" width="20" alt="India">
+<!--									<img src="img/marketplace/account/flags/india.png" width="20" alt="India">-->
 									<div class="ps-1">prato 1</div>
 								</div><span>$106</span>
 							</div>
 							<div class="d-flex justify-content-between align-items-center fs-sm py-2 border-bottom">
 								<div class="d-flex align-items-start py-1">
-									<img src="img/marketplace/account/flags/france.png" width="20" alt="France">
+<!--									<img src="img/marketplace/account/flags/france.png" width="20" alt="France">-->
 									<div class="ps-1">prato 1</div>
 								</div><span>$82</span>
 							</div>
 							<div class="d-flex justify-content-between align-items-center fs-sm py-2 border-bottom">
 								<div class="d-flex align-items-start py-1">
-									<img src="img/marketplace/account/flags/argentina.png" width="20" alt="Argentina">
+<!--									<img src="img/marketplace/account/flags/argentina.png" width="20" alt="Argentina">-->
 									<div class="ps-1">prato 14</div>
 								</div><span>$40</span>
 							</div>
 							<div class="d-flex justify-content-between align-items-center fs-sm pt-2">
 								<div class="d-flex align-items-start py-1">
-									<img src="img/marketplace/account/flags/south-africa.png" width="20" alt="South Africa">
+<!--									<img src="img/marketplace/account/flags/south-africa.png" width="20" alt="South Africa">-->
 									<div class="ps-1">prato 23</div>
 								</div><span>$17</span>
 							</div>

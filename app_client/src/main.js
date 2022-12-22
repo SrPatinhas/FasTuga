@@ -23,10 +23,9 @@ import "./assets/dashboard.css";
 
 const app = createApp(App);
 
-app.provide('serverUrl', `${apiDomain}/api`);
 app.provide('socket', io(wsConnection));
 
-const serverBaseUrl = 'http://server_api.test'
+const serverBaseUrl = `${apiDomain}/api`
 app.provide('axios', axios.create({
     baseURL: serverBaseUrl + '/api',
     headers: {

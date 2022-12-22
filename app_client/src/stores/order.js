@@ -162,7 +162,11 @@ export const useOrdersStore = defineStore('orders', () => {
 	async function completeOrder(checkout) {
 		delete checkout.loading;
 		order.value.checkout = checkout;
-		const response = await axios.post('/orders/payment', order.value);
+		let url = '/orders/payment';
+		if(userStore.isGuest){
+			url = '/orders/guest/payment';
+		}
+		const response = await axios.post(url, order.value);
 		if(response.data.data?.id){
 			orderDetail.value = response.data.data;
 			socket.emit('orderNew', order.value);
