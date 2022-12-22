@@ -32,6 +32,7 @@ class OrderController extends Controller
     // Check if order is from Auth user_id
     public function show(Order $order)
     {
+
         return new OrderResource($order);
     }
 
@@ -140,7 +141,7 @@ class OrderController extends Controller
 
     public function update(StoreUpdateOrderRequest $request, Order $order)
     {
-        
+
         $order->update($request->validated());
         return new OrderResource($order);
     }

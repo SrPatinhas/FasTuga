@@ -46,4 +46,9 @@ app.use(router);
 app.component('FieldErrorMessage', FieldErrorMessage);
 app.component('ConfirmationDialog', ConfirmationDialog);
 
-app.mount('#app');
+// All navigations are now always asynchronous
+// https://www.vuemastery.com/blog/vue-router-4-route-params-not-available-on-created-setup/
+// Replace -> app.mount('#app')
+//router.isReady().then(() => {
+    app.mount('#app');
+//});

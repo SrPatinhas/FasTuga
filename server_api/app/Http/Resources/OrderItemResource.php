@@ -20,8 +20,9 @@ class OrderItemResource extends JsonResource
             'order_local_number'    => $this->order_local_number,
             'product'               => new ProductResource($this->product),
             'status'                => $status[$this->status],
-            'price'                 => $this->price,
-            'preparation_by'        => new EmployeeResource($this->employee),
+            'price'                 => (float) $this->price,
+            'quantity'              => (int) $this->product_quantity,
+            'preparation_by'        => new EmployeeSimpleResource($this->employee),
             'notes'                 => $this->notes,
             'custom'                => $this->custom,
         ];
