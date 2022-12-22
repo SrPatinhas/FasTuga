@@ -112,7 +112,7 @@ private function topItemsByCategory($category, $page){
 
     return ProductResource::collection($mostUsedProduct);
 }
-
+    /*
     public function getTopHotItems(){
         return $this->topItemsByCategory('hot dish', 4);
     }
@@ -121,8 +121,17 @@ private function topItemsByCategory($category, $page){
     }
     public function getTopDessertItems(){
         return $this->topItemsByCategory('dessert', 4);
-    }
+    }*/
 
+    public function getTopItems(){
+
+        $hotDish =  $this->topItemsByCategory('hot dish', 4);
+        $coldDish =  $this->topItemsByCategory('cold dish', 4);
+        $dessert =  $this->topItemsByCategory('dessert', 4);
+
+        return response()->json(['hot dish' => $hotDish, 'cold dish' => $coldDish , 'dessert' => $dessert]);
+
+    }
 
     
 }
