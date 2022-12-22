@@ -24,11 +24,11 @@ class StoreUpdateProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique',
-            'type' => 'required|in:hot dish,cold dish,drink,dessert',
+            'name' => 'required|string',
+            'type' => 'required|in:hot_dish,cold_dish,drink,dessert',
             'description' =>'required|string',
-            'photo_url' =>'required|string',
-            'price' =>'required|decimal|min:0',
+            'photo_url' =>['required','file','image'],
+            'price' =>'required|numeric|min:0',
             'custom' =>'nullable|json',
         ];
     }

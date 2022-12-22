@@ -77,8 +77,8 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/{product}/photos',   'updatePhoto')->whereNumber('product');/*Erro */
         Route::delete('/{product}',         'destroy')->whereNumber('product');/*Feito*/
         // TODO -> talvez para estatisticas?
-        Route::get('/top-items',        'getTopItems');/*Erro */
-        Route::get('/{product}/orders', 'getOrdersOfProduct')->whereNumber('product');
+        Route::get('/top-items',        'getTopItems');/*POR FAZER*/
+        Route::get('/{product}/orders', 'getOrdersOfProduct')->whereNumber('product');/*Feito*/
     });
     //--END PRODUCTS
 

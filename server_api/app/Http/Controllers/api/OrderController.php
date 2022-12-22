@@ -140,6 +140,7 @@ class OrderController extends Controller
 
     public function update(StoreUpdateOrderRequest $request, Order $order)
     {
+        
         $order->update($request->validated());
         return new OrderResource($order);
     }
