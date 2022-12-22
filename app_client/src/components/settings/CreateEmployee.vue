@@ -10,98 +10,46 @@ import {ref, inject, computed, reactive} from 'vue'
 	const toast = inject('toast')
 	const userStore = useUserStore();
 
-	const credentials = reactive({
+	const employee = reactive({
 		name: '',
 		email: '',
 		password: '',
 		password_confirmation: '',
 		photo: null,
 		type: '',
-		showPassword: false,
-		showPasswordConfirmation: false,
+		blocked: '',
 		loading: false
 	})
 
 	const emit = defineEmits(['register']);
 
-	const btnDisabled = ref(true);
-
-	const register = async () => {
-		if(isFormValid.value) {
-			if (await newEmployee(credentials)) {
-				toast.success('User ' + userStore.user.name + ' was created successfully.')
-				emit('register');
-				//router.back()
-				console.log('register');
-				router.push({name: 'EmployeesAccount'});
-			} else {
-				toast.error('Unable to create employee');
-			} 
-		}
-	}
-
-	async function newEmployee (credentials) {
+	async function newEmployee () {
 		try {
 			const formData = new FormData();
-			if(credentials.photo != null) {
-				formData.append('photo', credentials.photo);
+			if(employee.photo != null) {
+				formData.append('photo', employee.photo);
 			}
-			for (const [key, value] of Object.entries(credentials)) {
-				if(key !== "loading" && key !== "showPassword" && key !== "showPasswordConfirmation" && key !== "photo"){
-					if(key === "type") {
-						formData.append(key, value.toLowerCase());
-					} else {
+			for (const [key, value] of Object.entries(employee)) {
+				if(key !== "loading" && key !== "photo"){
 						formData.append(key, value);
-					}
 				}
 			}
-			const response = await axios.post('employee', formData, {
+			const response = await axios.post('employees', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			});
 			return true
 		} catch (error) {
-			clearUser()
 			return false
 		}
 	}
 
-	const validatePassword = computed(() => {
-		let isValid = false;
-		isValid = credentials.password !== '';
-		isValid = isValid && credentials.password.length >= 4;
-		return isValid;
-	});
-	const validatePasswordConfirmation = computed(() => {
-	  	let isValid = false;
-		isValid = credentials.password_confirmation !== '';
-		isValid = isValid && credentials.password_confirmation === credentials.password;
-		return isValid;
-	});
-	const validateEmail = computed(() => {
-		return validations.isValidEmail(credentials.email);
-	});
-	const validPasswords = computed(() => {
-		return validatePasswords();
-	});
-
-
-	function validatePasswords() {
-		let isValid = false;
-		isValid = credentials.password !== '';
-		isValid = isValid && credentials.password.length >= 4;
-		isValid = isValid && credentials.password_confirmation !== '';
-		isValid = isValid && credentials.password_confirmation === credentials.password;
-		return isValid;
-	}
 	const changeUploadImage = (image) => {
-		credentials.photo = image;
+		employee.photo = image;
 	}
 
-	const isFormValid = computed(() => {
-		return validateEmail.value && validPasswords.value;
-	});
+
 </script>
 
 <template>
@@ -114,66 +62,53 @@ import {ref, inject, computed, reactive} from 'vue'
 
 						<form class="row g-3" @submit.prevent="">
 							<div class="col-12 col-md-6">
-								<label for="inputName" class="form-label">Name<span class="text-danger">*</span></label>
-								<input class="form-control" id="inputName" type="text" placeholder="Name" required v-model="credentials.name">
+								<label for="inputName" class="form-label">Name</label>
+								<input class="form-control" id="inputName" type="text" placeholder="Name" required v-model="employee.name">
 							</div>
 							<div class="col-12 col-md-6">
-								<label for="inputEmail4" class="form-label">Email<span class="text-danger">*</span></label>
+								<label for="inputEmail4" class="form-label">Email</label>
 								<div class="input-group mb-3">
 									<i class="bi-at position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
-									<input class="form-control" :class="validateEmail ? 'is-valid' : (credentials.email ? 'is-invalid' : '')" type="email" placeholder="Email" required v-model="credentials.email">
-								</div>
-								<div class="invalid-feedback" :class="!validateEmail && credentials.email && 'd-block'">
-									Your email is invalid
+									<input class="form-control" type="email" placeholder="Email" required v-model="employee.email">
 								</div>
 							</div>
 
 							<div class="col-12 col-md-6">
-								<label for="inputPassword" class="form-label">Password<span class="text-danger">*</span></label>
+								<label for="inputPassword" class="form-label">Password</label>
 								<div class="input-group mb-3">
 									<i class="bi-shield-lock position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
 									<div class="password-toggle w-100">
-										<input class="form-control" :class="validatePassword ? 'is-valid' : (credentials.password ? 'is-invalid' : '')" id="inputPassword" :type="(credentials.showPassword ? 'text' : 'password')" placeholder="Password" v-model="credentials.password">
+										<input class="form-control" id="inputPassword" :type="(employee.showPassword ? 'text' : 'password')" placeholder="Password" v-model="employee.password">
 										<label class="password-toggle-btn" aria-label="Show/hide password">
-											<input class="password-toggle-check" tabindex="-1" type="checkbox" v-model="credentials.showPassword"><span class="password-toggle-indicator"></span>
+											<input class="password-toggle-check" tabindex="-1" type="checkbox" v-model="employee.showPassword"><span class="password-toggle-indicator"></span>
 										</label>
 									</div>
-								</div>
-								<div class="invalid-feedback" :class="!validatePassword && credentials.password && 'd-block'">
-									Your passwords need to have at least 4 characters
 								</div>
 							</div>
 							<div class="col-12 col-md-6">
-								<label for="inputPasswordConfirm" class="form-label">Password Confirmation<span class="text-danger">*</span></label>
-								<div class="input-group mb-3 has-validation">
-									<i class="bi-shield-lock position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
-									<div class="password-toggle w-100">
-										<input class="form-control" :class="validatePasswordConfirmation ? 'is-valid' : (credentials.password_confirmation ? 'is-invalid' : '')" id="inputPasswordConfirm" :type="(credentials.showPasswordConfirmation ? 'text' : 'password')" placeholder="Password Confirmation" v-model="credentials.password_confirmation">
+								<label for="inputPassword" class="form-label">Password Confirmation</label>
+										<input class="form-control" id="inputPasswordConfirm" :type="(employee.showPasswordConfirmation ? 'text' : 'password')" placeholder="Password Confirmation" v-model="employee.password_confirmation">
 										<label class="password-toggle-btn" aria-label="Show/hide password">
-											<input class="password-toggle-check" tabindex="-1" type="checkbox" v-model="credentials.showPasswordConfirmation"><span class="password-toggle-indicator"></span>
+											<input class="password-toggle-check" tabindex="-1" type="checkbox" v-model="employee.showPasswordConfirmation"><span class="password-toggle-indicator"></span>
 										</label>
 									</div>
-								</div>
-								<div class="invalid-feedback" :class="!validatePasswordConfirmation && credentials.password_confirmation && 'd-block'">
-									Your passwords need to be the same
-								</div>
+							<div class="col-12 col-md-6">
+								<label for="inputState" class="form-label">Employee Type</label>
+								<select id="inputState" class="form-select form-control" required v-model="employee.type">
+									<option value="ED">Delivery</option>
+									<option value="EC">Chef</option>
+									<option value="EM">Manager</option>
+								</select>
 							</div>
 
 							<div class="col-12">
 								<PhotoUploader @image-change="changeUploadImage"/>
 							</div>
-							<div class="col-12 col-md-6">
-								<label for="inputState" class="form-label">Employee Type<span class="text-danger">*</span></label>
-								<select id="inputState" class="form-select form-control" required v-model="credentials.type">
-									<option selected value="" disabled>Delivery</option>
-									<option value="Chef">Chef</option>
-									<option value="Manager">Manager</option>
-								</select>
-							</div>
+							
 							
 
 							<div class="forms_buttons">
-								<button type="submit" class="btn btn-primary" @click="register" :disabled="!isFormValid">
+								<button type="submit" class="btn btn-primary" @click="newEmployee">
 									<span role="status" aria-hidden="true"></span>
 									Add
 								</button>
