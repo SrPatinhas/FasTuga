@@ -1,5 +1,5 @@
 <script setup>
-  import {ref, computed, inject} from 'vue';
+  import {ref, reactive, computed, inject} from 'vue';
 	import avatarNoneUrl from '@/assets/avatar-none.png';
 	import Pagination from "@/components/navigation/Pagination.vue";
 	import { RouterLink } from "vue-router"
@@ -7,6 +7,10 @@
   const axios = inject('axios');
   const employee = ref([]);
 	const employees = ref([]);
+
+  const employeeBlock = reactive({
+		blocked: ''
+	})
 
   const userId = computed(() => {
 		return user.value?.id ?? -1
@@ -37,6 +41,58 @@
 		}
 	}
 
+  async function employeeBlocked (id) {
+		try {
+			const formData = new FormData();
+			for (const [key, value] of Object.entries(employeeBlock)) {
+						formData.append(key, value);
+			}
+			const response = await axios.patch('users/' + id + "/block", formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+      fetchEmployees()
+			return true
+		} catch (error) {
+			return false
+		}
+	}
+  async function employeeUnblocked (id) {
+		try {
+			const formData = new FormData();
+			for (const [key, value] of Object.entries(employeeBlock)) {
+						formData.append(key, value);
+			}
+			const response = await axios.patch('users/' + id + "/unblock", formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+      fetchEmployees()
+			return true
+		} catch (error) {
+			return false
+		}
+	}
+
+  async function employeeDelete (id) {
+		try {
+			const formData = new FormData();
+			for (const [key, value] of Object.entries(employeeBlock)) {
+						formData.append(key, value);
+			}
+			const response = await axios.delete('employees/' + id, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+      fetchEmployees()
+			return true
+		} catch (error) {
+			return false
+		}
+	}
 
   const emit = defineEmits(["save", "cancel"]);
 
@@ -85,7 +141,13 @@ const cancel = () => {
 					<button class="btn bg-faded-danger btn-icon" type="button" data-bs-toggle="modal" data-bs-target="#open-ticket" @click="fetchEmployee(employee.id)" > 
 						<i class="bi bi-pencil"></i>
 					</button>
-					<button class="btn bg-faded-danger btn-icon" type="button" data-bs-toggle="modal" data-bs-target="#deleteEmployee" aria-label="Delete" data-bs-original-title="Delete">
+          <button v-if="employee.blocked==0" class="btn bg-faded-danger btn-icon" type="button" @click="employeeBlocked(employee.id)" > 
+						<i  class="bi bi-unlock-fill"></i>
+					</button>
+          <button v-else="employee.blocked==1" class="btn bg-faded-danger btn-icon" type="button" @click="employeeUnblocked(employee.id)" > 
+						<i  class="bi bi-lock-fill"></i>
+					</button>
+					<button class="btn bg-faded-danger btn-icon" type="button" @click="employeeDelete(employee.id)">
 						<i class="bi bi-trash"></i>
 					</button>
 				</div>
@@ -140,7 +202,7 @@ const cancel = () => {
 
 
 
-      <div class="modal fade" id="deleteEmployee" tabindex="-1" aria-hidden="true" >
+      <!-- <div class="modal fade" id="deleteEmployee" tabindex="-1" aria-hidden="true" >
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
@@ -151,7 +213,6 @@ const cancel = () => {
               <div class="row gx-4 gy-3">
                 <div class="col-12">
                   <label class="form-label" for="ticket-subject">Are you sure you want blocked the employee {{ employee.id }} - {{ employee.name }} ?</label>
-                 
             <div class="modal-footer">
               <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No</button>
               <button class="btn btn-primary" type="submit" >Yes</button>
@@ -169,12 +230,13 @@ const cancel = () => {
               <button class="btn btn-primary" type="submit" >Yes</button>
             </div>
           </div>
+         
         </div>
       </div>
         </div>
       </div>
       </div>
-    </div>
-      </div>
+    </div> -->
+
 
 </template>

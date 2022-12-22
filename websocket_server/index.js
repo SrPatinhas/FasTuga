@@ -12,6 +12,7 @@ const io = new Server(httpServer, {
     cors: {
         origin: [
             "http://127.0.0.1:5173", // client app
+            "http://172.22.21.147", // VM server
             "https://admin.socket.io" // Dashboard Socket.IO
         ],
         methods: ["GET", "POST"],
@@ -78,6 +79,11 @@ io.on('connection', (socket) => {
         if(orderSession){ // receives the id of the user to be notified
             io.to(orderSession.socketID).emit('ticketComplete', order);
         }
+    });
+
+    // tell all the users that there is a new product, to update the list
+    socket.on('newProduct', () => {
+        io.emit('updateProducts');
     });
 
     /*
