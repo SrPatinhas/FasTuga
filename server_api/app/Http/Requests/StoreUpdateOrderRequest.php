@@ -42,6 +42,7 @@ class StoreUpdateOrderRequest extends FormRequest
     public function messages(){
         return [
             'ticket,number.required' => "You have to provide a ticket,number",
+            'ticket,number.integer' => "Insert a valid integer",
             'ticket,number.min' => "The ticket,number must be at least 0",
             'ticket,number.max' => "The ticket,number must be in max 99",
 
@@ -49,25 +50,33 @@ class StoreUpdateOrderRequest extends FormRequest
             'status.in' => "The payment type needs to be 'P', 'R', 'D' or 'C' "
 
             'customer_id.required' => "You have to provide your customer_id",
-            'customer_id.numeric' => "Cutomer Id have to be a number",
+            'customer_id.exists' => "Insert a valid users id",
 
-            'total_price.required' => "You have to provide a ticket,number",
-            'total_price.email' => "The ticket,number must be at least 0",
+            'total_price.required' => "You have to provide a total_price",
+            'total_price.numeric' => "Insert a valid numeric",
+            'total_price.min' => "The total_price must be at least 0",
 
+            'total_paid.required' => "You have to provide a total_paid",
+            'total_paid.numeric' => "Insert a valid numeric",
+            'total_paid.min' => "The total_paid must be at least 0",
 
-            'password.required' => "You have to provide your password",
-            'password.confirmed' => "Passwords do not match",
-            'password.min' => "Password needs to be at least 4 characters",
+            'total_paid_with_points.required' => "You have to provide a total_paid_with_points",
+            'total_paid_with_points.numeric' => "Insert a valid numeric",
+            'total_paid_with_points.min' => "The total_paid_with_points must be at least 0",
 
-            'phone.required' => "You have to provide your phone",
-            'phone.between' => "Insert a valid phone number",
+            'points_gained.required' => "You have to provide a points_gained",
+            'points_gained.integer' => "Insert a valid integer",
+            'points_gained.min' => "The points_gained must be at least 0",
 
-            'nif.size' => "A NIF consists of 9 numbers",
+            'payment_type.required' => "You have to provide the order payment_type",
+            'payment_type.in' => "The payment type needs to be 'VISA', 'PAYPAL' or 'MBWAY'"
 
-            'pay_type.required' => "You have to provide your default payment type",
-            'pay_type.in' => "The payment type needs to be 'visa', 'mbway' or 'paypal'",
+            'date.required' => "You have to provide date",
+            'date.date' => "Insert a valid date",
 
-            'pay_reference.required' => "You have to provide your default payment reference"
+            'delivered_by.required' => "You have to provide your delivered_by",
+            'delivered_by.exists' => "Insert a valid users id"
+            
         ];
     }
 }

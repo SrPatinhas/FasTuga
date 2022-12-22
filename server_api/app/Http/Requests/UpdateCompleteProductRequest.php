@@ -27,4 +27,13 @@ class UpdateCompleteProductRequest extends FormRequest
             'completed' => 'required|boolean',
         ];
     }
+
+    public function messages(){
+        return [
+
+            'completed.required' => "You have to provide a completed",
+            'completed.boolean' => "Insert a valid boolean",
+            
+        ];
+    }
 }
