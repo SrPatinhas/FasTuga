@@ -76,7 +76,23 @@
 		}
 	}
 
-
+  async function employeeDelete (id) {
+		try {
+			const formData = new FormData();
+			for (const [key, value] of Object.entries(employeeBlock)) {
+						formData.append(key, value);
+			}
+			const response = await axios.delete('employees/' + id, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+      fetchEmployees()
+			return true
+		} catch (error) {
+			return false
+		}
+	}
 
   const emit = defineEmits(["save", "cancel"]);
 
@@ -131,7 +147,7 @@ const cancel = () => {
           <button v-else="employee.blocked==1" class="btn bg-faded-danger btn-icon" type="button" @click="employeeUnblocked(employee.id)" > 
 						<i  class="bi bi-lock-fill"></i>
 					</button>
-					<button class="btn bg-faded-danger btn-icon" type="button" data-bs-toggle="modal" data-bs-target="#deleteEmployee" aria-label="Delete" data-bs-original-title="Delete">
+					<button class="btn bg-faded-danger btn-icon" type="button" @click="employeeDelete(employee.id)">
 						<i class="bi bi-trash"></i>
 					</button>
 				</div>
