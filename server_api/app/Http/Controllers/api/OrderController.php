@@ -191,9 +191,9 @@ class OrderController extends Controller
     {
         //OrderResource::$format = 'detailed';
         if (!$request->has('include_assigned')) {
-            return OrderResource::collection($product->Orders->sortByDesc('id'));
+            return OrderResource::collection($product->Orders->orderBy('id', 'desc'));
         } else {
-            return OrderResource::collection($product->Orders->merge($product->assigedOrders)->sortByDesc('id'));
+            return OrderResource::collection($product->Orders->merge($product->assigedOrders)->orderBy('id', 'desc'));
         }
     }
     // TODO Check from here down
@@ -206,7 +206,7 @@ class OrderController extends Controller
             case 'T':
             case 'D':
             case 'C':
-                return OrderResource::collection(Order::where('status', '=', $status)->get())->sortBy('current_status_at')->values()->all();
+                return OrderResource::collection(Order::where('status', '=', $status)->get())->orderBy('current_status_at', 'desc')->values()->all();
         }
 
         return response()->json(['message' => 'The status ' . strtoupper($status) . ' does not exist'], 404);

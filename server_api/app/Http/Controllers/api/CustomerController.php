@@ -51,7 +51,7 @@ class CustomerController extends Controller
     }
 
     public function customerOrders(Customer $customer){
-        $orders = Order::where('customer_id', '=', $customer->id)->sortByDesc('id')->get();
+        $orders = Order::where('customer_id', '=', $customer->id)->orderBy('id', 'desc')->get();
         return OrderResource::collection($orders);
     }
 

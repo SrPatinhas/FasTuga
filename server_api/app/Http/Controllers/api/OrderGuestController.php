@@ -36,8 +36,8 @@ class OrderGuestController extends Controller
     //por fazer
     public function getBoardItems (Order $order)
     {
-        $preparing = BoardItemsResource::collection($order->where('status', 'P')->sortBy('updated_at', 'desc')->get());
-        $ready = BoardItemsResource::collection($order->where('status', 'R')->sortBy('updated_at', 'desc')->get());
+        $preparing = BoardItemsResource::collection($order->where('status', 'P')->orderBy('updated_at', 'desc')->get());
+        $ready = BoardItemsResource::collection($order->where('status', 'R')->orderBy('updated_at', 'desc')->get());
         return response()->json(['ready' => $ready, 'preparing' => $preparing]);
     }
 
