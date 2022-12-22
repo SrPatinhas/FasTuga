@@ -10,5 +10,5 @@
 </template>
 
 <script setup>
-	import ProductList from "@/components/products/ProductSettingsItem.vue"
+	import ProductList from "@/components/products/ProductSettingsList.vue"
 </script>
