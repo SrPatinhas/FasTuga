@@ -43,7 +43,7 @@ export const useUserStore = defineStore('user', () => {
 		return !!user.value?.id ?? false;
 	});
 	const isGuest = computed(() => {
-		return userIsGuest;
+		return userIsGuest.value || !isAuthenticated.value;
 	});
 	const isCustomer = computed(() => {
 		return user.value?.type == 'C' ?? false;
@@ -55,7 +55,7 @@ export const useUserStore = defineStore('user', () => {
 		return user.value?.type == 'ED' ?? false;
 	});
 	const isEmployee = computed(() => {
-		return isCustomer || isDelivery;
+		return isChef.value || isDelivery.value;
 	});
 	const isManager = computed(() => {
 		return user.value?.type == 'EM' ?? false;
@@ -124,9 +124,9 @@ export const useUserStore = defineStore('user', () => {
 	async function defineUserSession(access_token) {
 		axios.defaults.headers.common.Authorization = "Bearer " + access_token;
 		sessionStorage.setItem('token', access_token);
+		userIsGuest.value = false;
 		await loadUser();
 		socket.emit('loggedIn', user.value);
-		userIsGuest.value = false;
 	}
 
 	function loginAsGuest() {
@@ -135,11 +135,10 @@ export const useUserStore = defineStore('user', () => {
 
 	async function logout() {
 		try {
-			await axios.post('logout')
+			await axios.post('logout');
 			socket.emit('loggedOut', user.value)
 			clearUser();
 			orderStore.clearOrderInfo();
-			//projectsStore.clearProjects()
 			return true
 		} catch (error) {
 			return false

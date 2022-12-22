@@ -153,7 +153,6 @@ export const useOrdersStore = defineStore('orders', () => {
 	function clearOrderInfo(){
 		clearBag();
 		clearOrderDetail();
-		orders.value = {};
 	}
 
 	/**

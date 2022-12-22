@@ -1,5 +1,3 @@
-
-
 <template>
 	<!-- Content-->
 	<section class="col-lg-8 pt-lg-4 pb-4 mb-3">
@@ -12,5 +10,5 @@
 </template>
 
 <script setup>
-	import SettingsCustomer from "../users/CustomerItem.vue"
+	import SettingsCustomer from "@/components/users/CustomerItem.vue"
 </script>

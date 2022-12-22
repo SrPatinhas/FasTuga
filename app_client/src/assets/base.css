@@ -570,3 +570,7 @@ fieldset:disabled .btn {
   text-decoration: none;
   background-color: var(--bs-dropdown-link-active-bg);
 }
+
+.spinner-border {
+  --bs-spinner-border-width: 0.15rem;
+}
