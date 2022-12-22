@@ -8,7 +8,7 @@
 					Preparing<span class="badge bg-primary mx-2">{{ filterOrder_Preparing }}</span>
 				</div>
 				<div v-if="ordersLoading">
-					<h1 class="align-items-center d-flex fw-bold justify-content-between">
+					<h1 class="align-items-center d-flex fw-bold justify-content-around">
 						Loading orders Preparing
 						<span class="spinner-border text-primary" role="status">
 						<span class="visually-hidden">Loading...</span>
@@ -24,7 +24,7 @@
 					Ready<span class="badge bg-primary mx-2">{{ filterOrder_Ready }}</span>
 				</div>
 				<div v-if="ordersLoading">
-					<h1 class="align-items-center d-flex fw-bold justify-content-between">
+					<h1 class="align-items-center d-flex fw-bold justify-content-around">
 						Loading orders Ready
 						<span class="spinner-border text-primary" role="status">
 						<span class="visually-hidden">Loading...</span>

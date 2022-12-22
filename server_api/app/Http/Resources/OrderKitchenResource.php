@@ -23,7 +23,8 @@ class OrderKitchenResource extends JsonResource
             'date'                      => $this->date,
             'created_at'                => $this->created_at,
             'update_at'                 => $this->updated_at,
-            'items'                     => OrderItemKitchenResource::collection($this->orderItems)
+            'items'                     => OrderItemKitchenResource::collection($this->orderItems),
+            'notes'                     => $this->notes,
         ];
     }
 }

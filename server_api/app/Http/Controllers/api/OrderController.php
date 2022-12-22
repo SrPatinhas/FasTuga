@@ -175,21 +175,60 @@ class OrderController extends Controller
         return new OrderStatusResource($order);
     }
 
-    public function setOrderStatus(Order $order){
-
-        //Passar os status da order
-        return new OrderStatusResource($order);
-    }
-
-
-
-
-    public function update_completed(UpdateCompleteOrderRequest $request, Order $order)
+    public function setOrderItemStatus(OrderItem $orderItem)
     {
-        $order->completed = $request->validated()['completed'];
-        $order->save();
-        return new OrderResource($order);
+        if(!Auth::hasUser() || Auth::user()->getIsCustomer()){
+            return response()->json(["message" => 'You dont have permissions to change the order item'], 401);
+        }
+
+        if($orderItem->product->type == "hot dish") {
+            if(Auth::user()->type == "EC") {
+                $orderItem->status = ($orderItem->status == "W" ? "P" : "R");
+                $orderItem->preparation_by = Auth::user()->id;
+                $orderItem->save();
+            } else {
+                return response()->json(["message" => 'You dont have the role of Chef to change the order item'], 401);
+            }
+        } else {
+            return response()->json(["message" => 'You dont have permissions to change the order item'], 401);
+        }
+        $order = Order::find($orderItem->order_id);
+        $allReady = true;
+        foreach ($order->orderItems as $item){
+            if($item->status != "R") {
+                $allReady = false;
+            }
+        }
+        if($allReady) {
+            $order->status = "R";
+            $order->updated_at = Carbon::now();
+            $order->save();
+        }
+        return response()->json([
+            "order_status" => $order->status,
+            "item_status" => $orderItem->status
+        ]);
     }
+
+    public function setOrderStatus(Order $order)
+    {
+        if(!Auth::hasUser() || Auth::user()->getIsCustomer()){
+            return response()->json(["message" => 'You dont have permissions to change the order'], 401);
+        }
+        if(Auth::user()->type == "ED") {
+            $order->status = ($order->status == "R" ? "D" : "R");
+            $order->delivered_by = Auth::user()->id;
+            $order->updated_at = Carbon::now();
+            $order->save();
+        } else {
+            return response()->json(["message" => 'You dont have the role of Delivery to change the order item'], 401);
+        }
+        return response()->json([
+            "order_status" => $order->status
+        ]);
+    }
+
+
 
 
     public function getOrdersOfProduct(Request $request, Product $product)
@@ -216,72 +255,4 @@ class OrderController extends Controller
 
         return response()->json(['message' => 'The status ' . strtoupper($status) . ' does not exist'], 404);
     }
-
-
-
-    public function getOrderById($id){
-        return OrderResource::collection(Order::where('id', '=', $id)->get());
-    }
-
-    public function setOrderStatus_old($id, $status){
-        $order = Order::findOrFail($id);
-        $oldStatus = $order->status;
-        $status = strtoupper($status);
-
-        switch($status){
-            case 'H':
-                $order->opened_at = Carbon::now();
-                break;
-            case 'P':
-                $order->prepared_by = Auth::user()->id;
-                Auth::user()->available_at = null;
-                Auth::user()->save();
-                break;
-            case 'R':
-                $order->preparation_time = Carbon::now()->diffInSeconds($order->current_status_at);
-                Auth::user()->available_at = Carbon::now();
-                Auth::user()->save();
-                break;
-            case 'T':
-                $order->delivered_by = Auth::user()->id;
-                Auth::user()->available_at = null;
-                Auth::user()->save();
-                break;
-            case 'D':
-                $order->delivery_time = Carbon::now()->diffInSeconds($order->current_status_at);
-                $order->total_time = Carbon::now()->diffInSeconds($order->opened_at);
-                $order->closed_at = Carbon::now();
-
-                Auth::user()->available_at = Carbon::now();
-                Auth::user()->save();
-                break;
-            case 'C':
-                if($order->status == 'T'){
-                    $user = User::findOrFail($order->delivered_by);
-                    $user->available_at = Carbon::now();
-                    $user->save();
-
-                    $order->delivered_by = null;
-                }else if($order->status == 'P'){
-                    $user = User::findOrFail($order->prepared_by);
-                    $user->available_at = Carbon::now();
-                    $user->save();
-
-                    $order->prepared_by = null;
-                }
-
-                $order->total_time = Carbon::now()->diffInSeconds($order->opened_at);
-                $order->closed_at = Carbon::now();
-                break;
-            default:
-                return response()->json('Status ' . $status . ' doesn\'t exist', 404);
-        }
-
-        $order->current_status_at = Carbon::now();
-        $order->status = $status;
-        $order->save();
-
-        return response()->json(['message' => 'Order status updated. Order went from '. $oldStatus . ' to ' . $order->status, 'order' => new OrderResource($order)], 200);
-    }
-
 }

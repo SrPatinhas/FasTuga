@@ -16,10 +16,11 @@ class OrderItemKitchenResource extends JsonResource
     {
         $status = ["W" => "Waiting", "P" => "Preparing", "R" => "Ready"];
         return [
+            'id'                    => $this->id,
             'order_id'              => $this->order_id,
             'order_local_number'    => $this->order_local_number,
-            'status'                => $status[$this->status],
-            'price'                 => (float) $this->price,
+            'status'                => $this->status,
+            'status_label'          => $status[$this->status],
             'quantity'              => (int) $this->product_quantity,
             'preparation_by'        => $this->preparation_by,
             'notes'                 => $this->notes,

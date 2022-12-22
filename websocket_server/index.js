@@ -55,19 +55,23 @@ io.on('connection', (socket) => {
     /*
      * Events to the "client"
      */
-    socket.on('orderUpdateStatus', (order) => {
-        const orderSession = sessions.getUserSession(order.user_id);
+    socket.on('orderUpdateStatus', (user_id) => {
+        console.log(`order status update`);
+        const orderSession = sessions.getUserSession(user_id);
+        console.log(orderSession);
         if(orderSession){ // receives the id of the user to be notified
-            io.to(orderSession.socketID).emit('orderUpdateStatus', order); // sends the new order
+            io.to(orderSession.socketID).emit('orderUpdateStatus'); // sends the new order
         }
     });
     socket.on('orderCanceled', (idUser_Order) =>{
+        console.log(`order status cancelled`);
         const orderSession = sessions.getUserSession(idUser_Order);
         if(orderSession){ // receives the id of the user to be notified
             io.to(orderSession.socketID).emit('orderCanceled');
         }
     });
     socket.on('refundOrder', (idUser_Order, order) => {
+        console.log(`order refunded`);
         const orderSession = sessions.getUserSession(idUser_Order);
         if(orderSession){ // receives the id of the user to be notified
             io.to(orderSession.socketID).emit('refundOrder', order);
@@ -97,14 +101,6 @@ io.on('connection', (socket) => {
             sessions.addUserSession(user, socket.id);
             socket.join(user.type);
             console.log("[LoggedIn] user_id: " + user.id + " | socketID: " + socket.id);
-            //updated user availability
-            //axios.put(urlAxios + '/api/updateLoggedAt', {"user_id": user.id, "logged": 1}).then(response =>{
-                if (user.type == 'A') {
-                    socket.join('administrator');
-                }
-            //}).catch(error => {
-            //    console.log("Login - Error: " + error.data);
-            //});
         }
     });
 
@@ -121,13 +117,6 @@ io.on('connection', (socket) => {
             return; // user fez logout antes de fechar a página.
         }
         console.log("[Disconnect] user_id: " + x.id + " | socketID: " + socket.id);
-        //axios.put(urlAxios + '/api/updateLoggedAt', {"user_id": x.id, "logged": 0}).then(response =>{
-            if(x.type !== "A"){
-                io.to("restaurant").emit('update_incoming');
-            }
-        //}).catch(error => {
-        //    console.log("disconnect - Error: " + error.data);
-        //});
     });
 
     socket.on('changeBlockedStatus', (user) => {

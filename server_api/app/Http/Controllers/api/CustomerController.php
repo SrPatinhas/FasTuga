@@ -122,6 +122,9 @@ class CustomerController extends Controller
     }
 
     public function lastOrders(){
+        if(Auth::user()->type != 'C') {
+            return response()->json(['message' => 'Type not found'], 404);
+        }
         $customerId = Auth::user()->customer->id;
         $lastOrders = Order::where('customer_id', $customerId)->latest()->take(3)->get();
         return LastOrdersResource::collection($lastOrders);

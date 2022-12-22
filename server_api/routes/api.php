@@ -95,9 +95,10 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/{order}',       'destroy')->whereNumber('order');/*Feito */
 
         // Requests for the kitchen
-        Route::get('/restaurant',       'getActiveOrders');/*Feito*/
-        Route::get('/{order}/status',   'getOrderStatus')->whereNumber('order');/*Erro */
-        Route::post('/{order}/status',  'setOrderStatus')->whereNumber('order');
+        Route::get('/restaurant',                   'getActiveOrders');/*Feito*/
+        Route::get('/{order}/status',               'getOrderStatus')->whereNumber('order');/*Erro */
+        Route::patch('/{order}/status',             'setOrderStatus')->whereNumber('order');
+        Route::patch('/{orderItem}/item/status',    'setOrderItemStatus')->whereNumber('orderItem');
     });
     //--END ORDERS
 });

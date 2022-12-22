@@ -92,7 +92,7 @@
 						<order-detail-item v-for="item of orderStore.orderDetail.items" v-bind="item" />
 					</div>
 					<!-- Footer-->
-					<div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md" v-if="orderStore.orderDetail">
+					<div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md" v-if="orderStore.orderDetail.total_price !== undefined">
 						<div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>{{ orderStore.orderDetail?.total_price.toFixed(2) }}€</span></div>
 						<div class="px-2 py-1"><span class="text-muted">Points earned:&nbsp;</span><span>{{ orderStore.orderDetail.points_gained }}</span></div>
 						<div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>{{ orderStore.orderDetail?.total_paid_with_points.toFixed(2) }}€</span></div>
@@ -129,7 +129,7 @@
 
 	orderStore.udpateOrderDetail();
 
-	socket.on('orderUpdateStatus', (order) => {
+	socket.on('orderUpdateStatus', () => {
 		console.log('orderUpdateStatus event');
 		orderStore.udpateOrderDetail();
 		notifyBrowserUser();
@@ -155,7 +155,7 @@
 		else {
 			const notification = new Notification('Your order was updated!', {
 				icon: logoUrlMini,
-				body: "Your order was just updated to the status '" + orderStore.orderDetail.value.status + "'"
+				body: "Your order was just updated to the status '" + getStatusLabel(orderStore.orderDetail.status) + "'"
 			});
 			notification.onclick = function() {
 				window.open('//stackoverflow.com/a/13328397/1269037');
@@ -168,7 +168,7 @@
 		const toastLength = toastContainer.childNodes.length;
 
 		const toastTitle = "New Order update";
-		const toastContent = "Your order was just updated to the status <b>" + orderStore.orderDetail.value.status + "</b>";
+		const toastContent = "Your order was just updated to the status <b>" + getStatusLabel(orderStore.orderDetail.status) + "</b>";
 		const toastId = 'toast_' + toastLength;
 
 		const toastEl = `<div class="toast ${toastId}" role="alert" aria-live="assertive" aria-atomic="true">
@@ -190,17 +190,27 @@
 		toast.show();
 	}
 	const stepActive = computed(() => {
-		if(orderStore.orderDetail.status.toLowerCase() === 'p'){
-			return 2;
-		}
-		if(orderStore.orderDetail.status.toLowerCase() === 'r'){
-			return 3;
-		}
-		if(orderStore.orderDetail.status.toLowerCase() === 'd'){
-			return 4;
+		if(orderStore.orderDetail.status !== undefined) {
+			if (orderStore.orderDetail.status.toLowerCase() === 'p') {
+				return 2;
+			}
+			if (orderStore.orderDetail.status.toLowerCase() === 'r') {
+				return 3;
+			}
+			if (orderStore.orderDetail.status.toLowerCase() === 'd') {
+				return 4;
+			}
 		}
 		return 1;
 	});
+	const getStatusLabel = (status) => {
+		if(status === 'P'){
+			return 'Ready';
+		}
+		if(status === 'R'){
+			return 'Delivered';
+		}
+	}
 </script>
 
 <style scoped>

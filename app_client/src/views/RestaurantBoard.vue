@@ -23,10 +23,10 @@
 			<div class="width-150"></div>
 		</div>
 		<div v-if="orderKitchenPlaceActive === 'Kitchen'" class="m-0 mt-5 row row-cols-3">
-			<RestaurantBoardItem v-for="item of filterOrderKitchen" v-bind="item"/>
+			<RestaurantBoardItem v-for="(item, index) of filterOrderKitchen" :key="index" v-bind="item" @update-list="fetchOrders" />
 		</div>
 		<div v-if="orderKitchenPlaceActive === 'Delivering'" class="m-0 mt-5 row row-cols-3">
-			<RestaurantBoardItem v-for="item of filterOrderDelivering" v-bind="item"/>
+			<RestaurantBoardItem v-for="(item, index) of filterOrderDelivering" :key="index" v-bind="item" @update-list="fetchOrders" />
 		</div>
 	</section>
 </template>
