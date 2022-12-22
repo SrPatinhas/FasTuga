@@ -41,8 +41,8 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/photo',              'uploadPhoto');/*Feito*/
 
         // Only Manager
-        Route::post('/{user}/block',       'block')->whereNumber('user');/*Feito*/
-        Route::post('/{user}/unblock',     'unblock')->whereNumber('user');/*Feito*/
+        Route::patch('/{user}/block',       'block')->whereNumber('user');/*Feito*/
+        Route::patch('/{user}/unblock',     'unblock')->whereNumber('user');/*Feito*/
     });
     //--END USER
 
