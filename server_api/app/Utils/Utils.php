@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Utils;
+
 use Illuminate\Support\Facades\Http;
 
 /**

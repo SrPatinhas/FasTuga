@@ -2,6 +2,7 @@ import {ref, computed, inject} from 'vue';
 import { defineStore } from 'pinia'
 import utils from "@/utils/utils";
 import {useRoute} from "vue-router";
+import {useUserStore} from "@/stores/user";
 
 export const useOrdersStore = defineStore('orders', () => {
 	const socket = inject("socket");
@@ -9,6 +10,7 @@ export const useOrdersStore = defineStore('orders', () => {
 	const toast = inject("toast");
 
 	const route = useRoute();
+	const userStore = useUserStore();
 
 	// Current bag/cart for user
 	const order = ref({

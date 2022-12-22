@@ -246,7 +246,7 @@
 			orderCheckout.loading = true;
 			if (await orderStore.completeOrder(orderCheckout)) {
 				orderCheckout.loading = false;
-				toast.success(`The order (#${orderStore.order.id}) is now on the status ${orderStore.order.status}!`)
+				toast.success(`The order (#${orderStore.orderDetail.id}) is now on the status ${orderStore.orderDetail.status_label}!`)
 				console.log('order submited');
 				router.push({name: "OrderDetail", params: {id: '1'}});
 			} else {

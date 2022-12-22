@@ -15,7 +15,7 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
-use Utils;
+use App\Utils\Utils;
 
 class OrderController extends Controller
 {

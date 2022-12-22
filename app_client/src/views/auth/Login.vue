@@ -29,6 +29,7 @@
 			router.push({name: 'Menus'});
 		} else {
 			credentials.value.password = ''
+			credentials.value.loading = false;
 			toast.error('User credentials are invalid!')
 		}
 	}

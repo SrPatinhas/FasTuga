@@ -5,7 +5,6 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentOrderRequest;
 use App\Http\Resources\OrderDetailResource;
-use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderStatusResource;
 use App\Http\Resources\BoardItemsResource;
 use App\Models\OrderItem;
@@ -13,7 +12,7 @@ use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
-use Utils;
+use App\Utils\Utils;
 
 class OrderGuestController extends Controller
 {

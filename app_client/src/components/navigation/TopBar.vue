@@ -23,6 +23,16 @@
 				</ul>
 
 				<ul class="navbar-nav">
+					<li class="nav-item" v-if="(userStore.isCustomer || userStore.isGuest)">
+						<router-link class="nav-link position-relative gap-1" :class="{ active: $route.name === 'Bag' }" :to="{ name: 'Bag' }">
+							<i class="fs-5 bi bi bi-bag"></i>
+							<span class="badge">
+								{{ orderStore.totalItems }}
+								<span class="visually-hidden">items on cart</span>
+							</span>
+							{{ orderStore.totalOrderCost }}
+						</router-link>
+					</li>
 					<template v-if="!userStore.isAuthenticated">
 						<li class="nav-item">
 							<router-link class="nav-link" :class="{ active: $route.name === 'Registration' }" :to="{ name: 'Registration' }">
@@ -35,16 +45,6 @@
 							</router-link>
 						</li>
 					</template>
-					<li class="nav-item" v-if="(userStore.isCustomer || userStore.isGuest)">
-						<router-link class="nav-link position-relative gap-1" :class="{ active: $route.name === 'Bag' }" :to="{ name: 'Bag' }">
-							<i class="fs-5 bi bi bi-bag"></i>
-							<span class="badge">
-								{{ orderStore.totalItems }}
-								<span class="visually-hidden">items on cart</span>
-							</span>
-							{{ orderStore.totalOrderCost }}
-						</router-link>
-					</li>
 					<li class="dropdown" v-if="userStore.isAuthenticated">
 						<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							<img :src="userStore.userPhotoUrl" class="rounded-circle z-depth-0 avatar-img" width="32" height="32" alt="avatar image"/>

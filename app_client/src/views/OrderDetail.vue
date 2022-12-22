@@ -45,8 +45,8 @@
 								</div>
 							</div>
 						</li>
-						<li class="nav-item" :class="stepActive === 3 ? 'active' : stepActive > 3 ? 'completed' : ''">
-							<div class="nav-link">
+						<li class="nav-item">
+							<div class="nav-link" :class="stepActive === 3 ? 'active' : stepActive > 3 ? 'completed' : ''">
 								<div class="d-flex align-items-center">
 									<div class="media-tab-media"><i class="bi-list-check"></i></div>
 									<div class="ps-3">
