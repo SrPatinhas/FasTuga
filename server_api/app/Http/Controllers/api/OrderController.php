@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentOrderRequest;
 use App\Http\Resources\OrderDetailResource;
+use App\Http\Resources\OrderKitchenResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Customer;
 use App\Models\OrderItem;
@@ -67,6 +68,9 @@ class OrderController extends Controller
             $products[] = $newItem;
         }
         if($request->checkout['points'] > 0){
+            if($request->checkout['points'] > Auth::user()->customer->points){
+                return response()->json(['message' => 'You are using more points then the ones you have'], 400);
+            }
             if(($request->checkout['points'] % 10) == 0){
                 $points_used = $request->checkout['points'];
                 $points_discount = ($request->checkout['points'] / 2);
@@ -130,11 +134,13 @@ class OrderController extends Controller
         if(!$utils->callPaymentGateway($order->payment_type, $order->payment_reference, $order->total_paid, true)){
             return response()->json(['message' => 'The payment values are not valid by the payment server'], 400);
         }
-        if($order->total_paid_with_points > 0) {
-            Customer::where('id', $order->customer_id)->increment('points', ($order->total_paid_with_points * 2));
-        }
-        if($order->points_gained > 0) {
-            Customer::where('id', $order->customer_id)->increment('decrement', $order->points_gained);
+        if($order->customer_id != null) {
+            if ($order->total_paid_with_points > 0) {
+                Customer::where('id', $order->customer_id)->increment('points', ($order->total_paid_with_points * 2));
+            }
+            if ($order->points_gained > 0) {
+                Customer::where('id', $order->customer_id)->increment('decrement', $order->points_gained);
+            }
         }
 
         return new OrderResource($order);
@@ -142,7 +148,6 @@ class OrderController extends Controller
 
     public function update(StoreUpdateOrderRequest $request, Order $order)
     {
-
         $order->update($request->validated());
         return new OrderResource($order);
     }
@@ -161,7 +166,7 @@ class OrderController extends Controller
 
     // Requests for the kitchen
     public function getActiveOrders(){
-        return OrderResource::collection(Order::where([['status', '!=', 'D'], ['status', '!=', 'C']])->get());
+        return OrderKitchenResource::collection(Order::where([['status', '!=', 'D'], ['status', '!=', 'C']])->orderBy('created_at')->get());
     }
 
     public function getOrderStatus(Order $order){

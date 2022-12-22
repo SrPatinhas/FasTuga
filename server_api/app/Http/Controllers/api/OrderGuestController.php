@@ -5,8 +5,10 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentOrderRequest;
 use App\Http\Resources\OrderDetailResource;
+use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderStatusResource;
 use App\Http\Resources\BoardItemsResource;
+use App\Models\Customer;
 use App\Models\OrderItem;
 use Carbon\Carbon;
 use App\Models\Product;
@@ -47,10 +49,7 @@ class OrderGuestController extends Controller
         if(Auth::hasUser() && Auth::user()->getIsCustomer()){
             $customerId = Auth::user()->customer->id;
         }
-
         $total_order = 0;
-        $points_discount = 0;
-        $points_used = 0;
 
         $products = [];
         $local_number = 0;
@@ -73,22 +72,14 @@ class OrderGuestController extends Controller
             ];
             $products[] = $newItem;
         }
-        if($request->checkout['points'] > 0){
-            if(($request->checkout['points'] % 10) == 0){
-                $points_used = $request->checkout['points'];
-                $points_discount = ($request->checkout['points'] / 2);
-            }
-        }
-        $total_order_paying = $total_order - $points_discount;
-        $points_gained = floor($total_order / 10);
 
         $utils = new Utils();
         // check if the values are valid for payment
-        if(!$utils->checkPayment($request->checkout['pay_type'], $request->checkout['pay_reference'], $total_order_paying)){
+        if(!$utils->checkPayment($request->checkout['pay_type'], $request->checkout['pay_reference'], $total_order)){
             return response()->json(['message' => 'The payment values are not valid'], 400);
         }
         // call the payment server
-        if(!$utils->callPaymentGateway($request->checkout['pay_type'], $request->checkout['pay_reference'], $total_order_paying)){
+        if(!$utils->callPaymentGateway($request->checkout['pay_type'], $request->checkout['pay_reference'], $total_order)){
             return response()->json(['message' => 'The payment values are not valid by the payment server'], 400);
         }
 
@@ -103,10 +94,10 @@ class OrderGuestController extends Controller
             'status'                    => 'P',
             'customer_id'               => $customerId,
             'total_price'               => $total_order,
-            'total_paid'                => $total_order_paying,
-            'total_paid_with_points'    => $points_discount,
-            'points_gained'             => $points_gained,
-            'points_used_to_pay'        => $points_used,
+            'total_paid'                => $total_order,
+            'total_paid_with_points'    => 0,
+            'points_gained'             => 0,
+            'points_used_to_pay'        => 0,
             'payment_type'              => $request->checkout['pay_type'],
             'payment_reference'         => $request->checkout['pay_reference'],
             'date'                      => $current_date->toDateString(),

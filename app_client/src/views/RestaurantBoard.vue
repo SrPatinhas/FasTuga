@@ -1,247 +1,76 @@
-<script setup>
-import {ref, computed} from 'vue'
-import RestaurantBoardItem from "@/components/restaurantBoard/RestaurantBoardItem.vue";
-
-import {useOrdersKitchenStore} from "@/stores/ordersKitchen";
-
-const orderKitchenStore = useOrdersKitchenStore();
-
-const orderKitchenPlaceList = ref(['All', 'Kitchen', 'Delivered', 'Waiting']);
-const orderKitchenPlaceActive = ref('All');
-
-const orderKitchenStatusList = ref(['Preparing', 'Ready', 'Delivered', 'Cancelled']);
-const orderKitchenTypeActive = ref('Preparing');
-const orderKitchenList = ref([
-	{
-		id: 12,
-		date: '2022-12-08 20:00',
-		employeeName: 'Jéjé',
-		method: 'Card',
-		place: 'Kitchen',
-		type: 'Preparing',
-		status: 'waiting',
-		price: 1.4,
-		paid: 2,
-		clientName: "Alice",
-		numberOfPoints: 10,
-		items: [
-			{
-				"id": 152,
-				"name": "Alheira",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 9.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			}
-		]
-	},
-	{
-		id: 13,
-		date: '2022-12-08 20:00',
-		employeeName: 'Jéjé',
-		method: 'Card',
-		place: 'Kitchen',
-		type: 'Preparing',
-		status: 'waiting',
-		price: 1.4,
-		paid: 2,
-		clientName: "Alice",
-		numberOfPoints: 10,
-		items: [
-			{
-				"id": 153,
-				"name": "Alheira 2",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 19.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			},
-			{
-				"id": 152,
-				"name": "Alheira",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 9.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			}
-		]
-	},
-	{
-		id: 14,
-		date: '2022-12-08 20:00',
-		employeeName: 'Jéjé',
-		method: 'Card',
-		place: 'Delivered',
-		type: 'Preparing',
-		status: 'waiting',
-		price: 1.4,
-		paid: 2,
-		clientName: "Alice",
-		numberOfPoints: 10,
-		items: [
-			{
-				"id": 153,
-				"name": "Alheira 2",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 19.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			},
-			{
-				"id": 152,
-				"name": "Alheira",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 9.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			}
-		]
-	},
-	{
-		id: 15,
-		date: '2022-12-08 20:00',
-		employeeName: 'Jéjé',
-		method: 'Card',
-		place: 'Delivered',
-		type: 'Preparing',
-		price: 1.4,
-		paid: 2,
-		clientName: "Alice",
-		numberOfPoints: 10,
-		items: [
-			{
-				"id": 153,
-				"name": "Alheira 2",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 19.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			},
-			{
-				"id": 152,
-				"name": "Alheira",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 9.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			}
-		]
-	},
-	{
-		id: 16,
-		date: '2022-12-08 20:00',
-		employeeName: 'Jéjé',
-		method: 'Card',
-		place: 'Delivered',
-		type: 'Preparing',
-		price: 1.4,
-		paid: 2,
-		clientName: "Alice",
-		numberOfPoints: 10,
-		items: [
-			{
-				"id": 153,
-				"name": "Alheira 2",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 19.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			},
-			{
-				"id": 152,
-				"name": "Alheira",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 9.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			}
-		]
-	},
-	{
-		id: 17,
-		date: '2022-12-08 20:00',
-		employeeName: 'Jéjé',
-		method: 'Card',
-		place: 'Waiting',
-		type: 'Preparing',
-		price: 1.4,
-		paid: 2,
-		clientName: "Alice",
-		numberOfPoints: 10,
-		items: [
-			{
-				"id": 153,
-				"name": "Alheira 2",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 19.9,
-				"type": "cold dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			},
-			{
-				"id": 152,
-				"name": "Alheira",
-				"image": "jBMVpJbZ8uJMRE8N.jpg",
-				"price": 9.9,
-				"type": "hot dish",
-				"description": "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King.",
-				"quantity": 3
-			}
-		]
-	}
-]);
-
-function changeTab(type) {
-	orderKitchenTypeActive.value = type;
-}
-
-const filterOrderKitchen = computed(() => {
-	return orderKitchenList.value.filter(item => item.type === orderKitchenTypeActive.value)
-});
-
-</script>
-
 <template>
 	<section>
 		<div class="sticky-header">
 			<h4 class="text-uppercase text-bold">Restaurant Board</h4>
 			<ul class="nav nav-pills tabs-filter gap-4">
-				<li class="nav-item" role="presentation" v-for="(orderKitchenstatus, index) of orderKitchenStatusList"
-					:key="'tabs_' + index">
-					<button class="nav-link btn rounded-pill d-flex gap-2 align-items-center"
-							:class="(orderKitchenTypeActive === orderKitchenstatus ? 'btn-secondary active' : 'btn-outline-secondary')"
-							:id="'pills-' + orderKitchenstatus + '-tab'" type="button"
-							@click="changeTab(orderKitchenstatus)">
-						{{ orderKitchenstatus }}<span class="badge "
-													  :class="orderKitchenTypeActive === orderKitchenstatus ? 'bg-white text-primary' : 'bg-primary'">{{ filterOrderKitchen.length }}</span>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link btn rounded-pill d-flex gap-2 align-items-center" id="pills-kitchen-tab" type="button"
+							:class="(orderKitchenPlaceActive === 'Kitchen' ? 'btn-secondary active' : 'btn-outline-secondary')"
+							@click="orderKitchenPlaceActive = 'Kitchen'">
+						Kitchen
+						<span class="badge " :class="orderKitchenPlaceActive === 'Kitchen' ? 'bg-white text-primary' : 'bg-primary'">{{ filterOrderKitchen.length }}</span>
+					</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link btn rounded-pill d-flex gap-2 align-items-center" id="pills-delivering-tab" type="button"
+							:class="(orderKitchenPlaceActive === 'Delivering' ? 'btn-secondary active' : 'btn-outline-secondary')"
+							@click="orderKitchenPlaceActive = 'Delivering'">
+						Delivering
+						<span class="badge " :class="orderKitchenPlaceActive === 'Delivering' ? 'bg-white text-primary' : 'bg-primary'">{{ filterOrderDelivering.length }}</span>
 					</button>
 				</li>
 			</ul>
 			<div class="width-150"></div>
 		</div>
-
-		<div class="m-0 mt-5 row row-cols-3">
-			<div class="column px-2 row row-cols-2">
-				<RestaurantBoardItem v-for="item of filterOrderKitchen" v-bind="item"/>
-			</div>
-			<div class="column px-2">
-			</div>
-			<div class="column px-2">
-			</div>
+		<div v-if="orderKitchenPlaceActive === 'Kitchen'" class="m-0 mt-5 row row-cols-3">
+			<RestaurantBoardItem v-for="item of filterOrderKitchen" v-bind="item"/>
+		</div>
+		<div v-if="orderKitchenPlaceActive === 'Delivering'" class="m-0 mt-5 row row-cols-3">
+			<RestaurantBoardItem v-for="item of filterOrderDelivering" v-bind="item"/>
 		</div>
 	</section>
 </template>
 
-<style scoped>
-</style>
-  
-  
+<script setup>
+	import {ref, inject, computed} from 'vue';
+	import RestaurantBoardItem from "@/components/restaurantBoard/RestaurantBoardItem.vue";
+	const axios = inject('axios');
+	const socket = inject("socket");
+
+	const orderKitchenPlaceActive = ref('Kitchen');
+	const orderKitchenList = ref([]);
+	const ordersLoading = ref(true);
+
+	const filterOrderKitchen = computed(() => {
+		return orderKitchenList.value.filter((item) => {
+			if(item.items.length > 0 && item.status !== "R"){
+				return item.items.filter((prod) => {
+					return prod.product_type === 'hot dish' && prod.status !== 'R'
+				}).length > 0;
+			}
+			return false;
+		});
+	});
+	const filterOrderDelivering = computed(() => {
+		return orderKitchenList.value.filter((item) => item.status.toLowerCase() === "r");
+	});
+
+	async function fetchOrders() {
+		try {
+			ordersLoading.value = true;
+			const response = await axios.get('/orders/restaurant');
+			orderKitchenList.value = response.data.data;
+			ordersLoading.value = false;
+			return true;
+		} catch (error){
+			orderKitchenList.value = [];
+			ordersLoading.value = false;
+			throw error;
+		}
+	}
+	fetchOrders();
+
+	socket.on('orderNew', () => {
+		fetchOrders();
+	});
+</script>

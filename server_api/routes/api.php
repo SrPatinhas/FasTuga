@@ -89,13 +89,13 @@ Route::middleware('auth:api')->group(function () {
     Route::controller(OrderController::class)->prefix('orders')->group(function () {
         Route::get('/',                 'index');   /*Feito*/
         Route::get('/{order}',          'show')->whereNumber('order'); /*Feito*/
-        Route::post('/payment',         'payment');  /*Por fazer*/
-        Route::post('/{order}/refund',  'refund')->whereNumber('order');/*Por fazer*/
+        Route::post('/payment',         'payment');  /*Feito*/
+        Route::post('/{order}/refund',  'refund')->whereNumber('order');/*Feito*/
         Route::put('/{order}',          'update')->whereNumber('order');/*Erro */
         Route::delete('/{order}',       'destroy')->whereNumber('order');/*Feito */
 
         // Requests for the kitchen
-        Route::get('/active',           'getActiveOrders');/*Feito*/
+        Route::get('/restaurant',       'getActiveOrders');/*Feito*/
         Route::get('/{order}/status',   'getOrderStatus')->whereNumber('order');/*Erro */
         Route::post('/{order}/status',  'setOrderStatus')->whereNumber('order');
     });
