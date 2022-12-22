@@ -1,5 +1,4 @@
 <template>
-
 	<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
 		<div class="position-sticky pt-3">
 			<ul class="nav flex-column" v-if="userStore.user">
@@ -53,35 +52,6 @@
 					</router-link>
 				</li>
 			</ul>
-
-			<!--<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
-				v-if="userStore.user">
-			  <span>My Projects</span>
-			  <router-link
-				class="link-secondary"
-				:to="{ name: 'NewProject' }"
-				aria-label="Add a new project"
-				@click="clickMenuOption"
-			  >
-				<i class="bi bi-xs bi-plus-circle"></i>
-			  </router-link>
-			</h6> -->
-			<!--<ul class="nav flex-column mb-2">
-			  <li class="nav-item" v-for="prj in projectsStore.myInprogressProjects" :key="prj.id">
-				<router-link
-				  class="nav-link w-100 me-3"
-				  :class="{
-					active: $route.name == 'ProjectTasks' && $route.params.id == prj.id,
-				  }"
-				  :to="{ name: 'ProjectTasks', params: { id: prj.id } }"
-				  @click="clickMenuOption"
-				>
-				  <i class="bi bi-file-ruled"></i>
-				  {{ prj.name }}
-				</router-link>
-			  </li>
-			</ul>-->
-
 			<div class="d-block d-md-none">
 				<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
 					<span>User</span>
@@ -133,12 +103,5 @@
 	</nav>
 </template>
 
-<script>
-export default {
-	name: "Sidebar"
-}
+<script setup>
 </script>
-
-<style scoped>
-
-</style>

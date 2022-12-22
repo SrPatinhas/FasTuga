@@ -27,12 +27,11 @@ class OrderController extends Controller
         } else {
             $orders = Order::whereNotNull('customer_id');
         }
-        return OrderResource::collection($orders->paginate(15));
+        return OrderResource::collection($orders->orderBy('updated_at', 'desc')->paginate(15));
     }
     // Check if order is from Auth user_id
     public function show(Order $order)
     {
-
         return new OrderResource($order);
     }
 

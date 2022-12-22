@@ -35,7 +35,7 @@
 							</router-link>
 						</li>
 					</template>
-					<li class="nav-item" v-if="!userStore.isCustomer || userStore.isGuest">
+					<li class="nav-item" v-if="(userStore.isCustomer || userStore.isGuest)">
 						<router-link class="nav-link position-relative gap-1" :class="{ active: $route.name === 'Bag' }" :to="{ name: 'Bag' }">
 							<i class="fs-5 bi bi bi-bag"></i>
 							<span class="badge">
@@ -74,12 +74,12 @@
 								<li><h6 class="dropdown-header">Restaurant Board</h6></li>
 								<li>
 									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'DashboardManager' }" :to="{name: 'DashboardManager'}">
-										<i class="bi-currency-dollar opacity-50 me-2"></i>Reveneu<span class="ms-auto opacity-50">$1,375.00</span>
+										<i class="bi-currency-dollar opacity-50 me-2"></i>Reveneu <!-- <span class="ms-auto opacity-50">$1,375.00</span> -->
 									</router-link>
 								</li>
 								<li>
-									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'Orders' }" :to="{name: 'Orders'}">
-										<i class="bi-receipt-cutoff opacity-50 me-2"></i>Orders<span class="ms-auto opacity-50">5</span>
+									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'ClientsAccount' }" :to="{name: 'ClientsAccount'}">
+										<i class="bi-people opacity-50 me-2"></i>Clients
 									</router-link>
 								</li>
 								<li>
@@ -88,8 +88,8 @@
 									</router-link>
 								</li>
 								<li>
-									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'ClientsAccount' }" :to="{name: 'ClientsAccount'}">
-										<i class="bi-people opacity-50 me-2"></i>Users
+									<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'Orders' }" :to="{name: 'Orders'}">
+										<i class="bi-receipt-cutoff opacity-50 me-2"></i>Orders <!--<span class="ms-auto opacity-50">5</span> -->
 									</router-link>
 								</li>
 							</template>

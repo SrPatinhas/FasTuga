@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\OrderResource;
+use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -54,17 +58,17 @@ class EmployeeController extends Controller
 
 
     public function update(UpdateUserRequest $request, User $user)
-    { 
+    {
         //So menager pode
         if(Auth::user()->type == 'EM') {
             $user->update($request->validated());
             return new UserResource($user);
-            
+
         }
         return response()->json(['message' => 'You are not Manager'], 403);
     }
 
-    
+
 
     public function destroy(User $user)
     {
@@ -94,5 +98,25 @@ class EmployeeController extends Controller
         $request->validate(['photo' => 'nullable|image|mimes:jpeg,png,jpg']);
         Storage::putFile('public/fotos', $request->file('photo'));
         return  $request->file('photo')->hashName();
+    }
+
+
+    public function sidebarCounts()
+    {
+        if(Auth::user()->type == 'EM') {
+            $monthReveneu   = Order::whereMonth('date', Carbon::now()->month)->where('status', '<>', 'C')->sum('total_paid');
+            $clients        = Customer::count();
+            $employees      = User::where('type', '<>', 'C')->count();
+            $products       = Product::count();
+            $orders         = Order::count();
+
+            return response()->json([
+                'dashboard' => (float) $monthReveneu,
+                'clients'   => (int) $clients,
+                'employees' => (int) $employees,
+                'products'  => (int) $products,
+                'orders'    => (int) $orders
+            ]);
+        }
     }
 }

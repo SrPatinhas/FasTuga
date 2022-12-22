@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\ProductManagerResource;
 use App\Http\Resources\ProductResource;
 use App\Http\Requests\StoreUpdateProductRequest;
 use Carbon\Carbon;
@@ -22,6 +23,11 @@ class ProductController extends Controller
     {
         return ProductResource::collection(Product::all());
     }
+    public function list()
+    {
+        return ProductManagerResource::collection(Product::paginate(15));
+    }
+
 
     public function show(Product $product)
     {
@@ -133,6 +139,6 @@ private function topItemsByCategory($category, $page){
 
     }
 
-    
+
 }
 

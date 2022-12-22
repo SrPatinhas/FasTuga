@@ -66,6 +66,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/{user}',           'show')->whereNumber('user');/*Feito*/
         Route::put('/{user}',           'update')->whereNumber('user');/*Feito TEMOS DE PASSAR O "type":"EM",*/
         Route::delete('/{user}',        'destroy')->whereNumber('user');/*Feito*/
+
+        Route::get('/sidebar',          'sidebarCounts');/*Feito*/
     });
     //--END EMPLOYEE
 
@@ -73,8 +75,9 @@ Route::middleware('auth:api')->group(function () {
     Route::controller(ProductController::class)->prefix('products')->group(function () {
         // Only a manager can use this ones
         Route::post('/',                    'store');/*Feito*/
+        Route::get('/list',                 'list')->withTrashed();/*Feito*/
         Route::put('/{product}',            'update')->whereNumber('product');/*Feito*/
-        Route::post('/{product}/photos',   'updatePhoto')->whereNumber('product');/*Erro */
+        Route::post('/{product}/photos',    'updatePhoto')->whereNumber('product');/*Erro */
         Route::delete('/{product}',         'destroy')->whereNumber('product');/*Feito*/
         // TODO -> talvez para estatisticas?
         Route::get('/top-items',        'getTopItems');/*Feito*/
@@ -92,9 +95,9 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/{order}',       'destroy')->whereNumber('order');/*Feito */
 
         // Requests for the kitchen
-        Route::get('/active',                       'getActiveOrders');/*Feito*/
-        Route::get('/{order}/status',               'getOrderStatus')->whereNumber('order');/*Erro */
-        Route::post('/{order}/status',              'setOrderStatus')->whereNumber('order');
+        Route::get('/active',           'getActiveOrders');/*Feito*/
+        Route::get('/{order}/status',   'getOrderStatus')->whereNumber('order');/*Erro */
+        Route::post('/{order}/status',  'setOrderStatus')->whereNumber('order');
     });
     //--END ORDERS
 });

@@ -12,6 +12,8 @@
 	const orderDetail = ref({});
 	const ordersLoading = ref(true);
 
+	const orderToDelete = ref({});
+
 	function updateOrders(newPage) {
 		fetchOrders(newPage);
 	}
@@ -38,9 +40,9 @@
 		return orders.value.length;
 	});
 
-	async function deleteOrders (id) {
+	async function deleteOrders () {
 		try {
-			await axios.delete('orders/' + id);
+			await axios.delete('orders/' + orderToDelete.value.id);
 			await fetchOrders();
 			return true
 		} catch (error) {
@@ -49,6 +51,9 @@
 	}
 	function seeOrderDetail(order) {
 		orderDetail.value = order;
+	}
+	function modalDeleteOrders(order) {
+		orderToDelete.value = order;
 	}
 </script>
 
@@ -101,7 +106,7 @@
 							<a class="btn btn-outline-success" href="#order-details" data-bs-toggle="modal" @click="seeOrderDetail(order)">
 								<i class="bi bi-eye m-0"></i>
 							</a>
-							<a v-if="userStore.isManager"  href="#cancelling-order" data-bs-toggle="modal" class="btn btn-outline-danger" @click="deleteOrders(order.id)">
+							<a v-if="userStore.isManager && order.status.toLowerCase() !== 'd'"  href="#cancelling-order" data-bs-toggle="modal" class="btn btn-outline-danger" @click="modalDeleteOrders(order)">
 								<i class="bi bi-trash m-0"></i>
 							</a>
 						</div>
@@ -139,15 +144,16 @@
 
 	<div class="modal fade" id="cancelling-order" tabindex="-1" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
+			<div class="modal-content" v-if="orderToDelete.id != undefined">
 				<div class="modal-header">
-					<h5 class="modal-title">Cancel Order - {{ orderDetail.ticket_number }} </h5>
+					<h5 class="modal-title">Cancel Order - {{ orderToDelete.ticket_number }} </h5>
 					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					<div class="row gx-4 gy-3">
 						<div class="col-12">
 							<label class="form-label" for="ticket-subject">Do you want cancel this order?</label>
+							<p>It has <b>{{ orderToDelete.items.length }}</b> items and it costed <b>{{ orderToDelete.total_paid.toFixed(2) }}</b></p>
 							<div class="modal-footer">
 								<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No</button>
 								<button class="btn btn-primary" type="submit" @click="deleteOrders(orderDetail.id)">Yes

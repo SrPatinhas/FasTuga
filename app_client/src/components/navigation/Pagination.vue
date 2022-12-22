@@ -31,6 +31,7 @@
 
 	function changePage(page){
 		if(page > 0 && page <= props.pagination.total) {
+			window.scrollTo(0,0);
 			emit('pageChange', page);
 		}
 	}

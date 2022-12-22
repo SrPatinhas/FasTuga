@@ -36,27 +36,27 @@
 					<ul class="list-unstyled mb-0">
 						<li class="border-bottom mb-0">
 							<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'DashboardManager' }" :to="{ name: 'DashboardManager' }">
-								<i class="bi-currency-dollar opacity-60 me-2"></i> Dashboard <span class="fs-sm text-muted ms-auto">$2342.33</span>
+								<i class="bi-currency-dollar opacity-60 me-2"></i> Dashboard <span class="fs-sm text-muted ms-auto">{{ stats.dashboard.toFixed(2) }}€</span>
 							</router-link>
 						</li>
 						<li class="border-bottom mb-0">
 							<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'ClientsAccount' }" :to="{ name: 'ClientsAccount' }">
-								<i class="bi-people opacity-60 me-2"></i> Clients List <span class="fs-sm text-muted ms-auto">(12/2103)</span>
+								<i class="bi-people opacity-60 me-2"></i> Clients List <span class="fs-sm text-muted ms-auto">{{ stats.clients }}</span>
 							</router-link>
 						</li>
 						<li class="border-bottom mb-0">
 							<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'EmployeesAccount' }" :to="{ name: 'EmployeesAccount' }">
-								<i class="bi-people opacity-60 me-2"></i> Employees List <span class="fs-sm text-muted ms-auto">(12/2103)</span>
+								<i class="bi-people opacity-60 me-2"></i> Employees List <span class="fs-sm text-muted ms-auto">{{ stats.employees }}</span>
 							</router-link>
 						</li>
 						<li class="border-bottom mb-0">
 							<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'Products' }" :to="{ name: 'Products' }">
-								<i class="bi-box opacity-60 me-2"></i> Products <span class="fs-sm text-muted ms-auto">123</span>
+								<i class="bi-box opacity-60 me-2"></i> Products <span class="fs-sm text-muted ms-auto">{{ stats.products }}</span>
 							</router-link>
 						</li>
 						<li class="border-bottom mb-0">
 							<router-link class="nav-link-style d-flex align-items-center px-4 py-3" :class="{ active: $route.name === 'Orders' }" :to="{ name: 'Orders' }">
-								<i class="bi-receipt-cutoff opacity-60 me-2"></i> Orders <span class="fs-sm text-muted ms-auto">34252</span>
+								<i class="bi-receipt-cutoff opacity-60 me-2"></i> Orders <span class="fs-sm text-muted ms-auto">{{ stats.orders }}</span>
 							</router-link>
 						</li>
 					</ul>
@@ -83,13 +83,35 @@
 
 
 <script setup>
-	import {useRouter, RouterLink} from "vue-router"
-	import {inject} from "vue"
+	import {useRouter, RouterLink} from "vue-router";
+	import {ref, inject} from "vue";
+	const axios = inject('axios');
 	import {useUserStore} from "@/stores/user";
 
 	const router = useRouter()
 	const toast = inject("toast")
-	const userStore = useUserStore()
+	const userStore = useUserStore();
+
+	const stats = ref({
+		dashboard: 0,
+		clients: 0,
+		employees: 0,
+		products: 0,
+		orders: 0,
+	});
+
+	async function fetchStats() {
+		try {
+			const response = await axios.get('/employees/sidebar');
+			stats.value = response.data;
+			return true;
+		} catch (error) {
+			throw error;
+		}
+	}
+	if(userStore.isManager) {
+		fetchStats();
+	}
 
 	const logout = async () => {
 		if (await userStore.logout()) {

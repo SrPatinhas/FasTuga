@@ -27,7 +27,7 @@ class StoreUpdateProductRequest extends FormRequest
             'name' => 'required|string',
             'type' => 'required|in:hot_dish,cold_dish,drink,dessert',
             'description' =>'required|string',
-            'photo_url' =>['required','file','image'],
+            'photo' => 'required|file|image',
             'price' =>'required|numeric|min:0',
             'custom' =>'nullable|json',
         ];
@@ -39,17 +39,17 @@ class StoreUpdateProductRequest extends FormRequest
             'name.string' => "Insert a valid string",
 
             'type.required' => "You have to provide the order status",
-            'type.in' => "The type needs to be 'hot_dish','cold_dish','drink' or 'dessert'"
+            'type.in' => "The type needs to be 'hot_dish','cold_dish','drink' or 'dessert'",
 
             'description.required' => "You have to provide a description",
             'description.string' => "Insert a valid string",
 
-            'photo_url.required' => "You have to provide a photo_url",
+            'photo.required' => "You have to provide a photo",
 
             'price.required' => "You have to provide a price",
             'price.numeric' => "Insert a valid numeric",
             'price.min' => "The price must be at least 0"
-            
+
         ];
     }
 }

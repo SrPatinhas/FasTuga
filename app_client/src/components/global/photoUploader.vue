@@ -1,7 +1,8 @@
 <template>
 	<div class="align-items-center row">
 		<div class="col-12 col-md-6 text-center avatar-upload">
-			<img :src="previewImage" class="img-thumbnail" alt="avatar">
+			<img v-if="urlOld && previewImage === avatarNoneUrl" :src="urlOld" class="img-thumbnail" alt="avatar">
+			<img v-else :src="previewImage" class="img-thumbnail" alt="avatar">
 		</div>
 		<div class="col-12 col-md-6 text-center">
 			<label for="formFile" class="form-label">Upload your photo</label>
@@ -16,6 +17,10 @@
 	import avatarNoneUrl from '@/assets/avatar-none.png';
 
 	const emit = defineEmits(['imageChange']);
+
+	const photoDefault = defineProps({
+		urlOld: String
+	});
 
 	const previewImage = ref(avatarNoneUrl);
 	const hasImage = ref(false);
