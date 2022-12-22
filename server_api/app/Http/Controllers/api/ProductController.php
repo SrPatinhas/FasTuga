@@ -114,12 +114,16 @@ private function topItemsByCategory($category, $page){
 }
 
     public function getTopHotItems(){
-        return $this->topItemsByCategory('hot dish', 4);
+        return $this->topItemsByCategory('hot_dish', 4);
     }
     public function getTopColdItems(){
-        return $this->topItemsByCategory('cold dish', 4);
+        return $this->topItemsByCategory('cold_dish', 4);
     }
     public function getTopDessertItems(){
         return $this->topItemsByCategory('dessert', 4);
     }
+
+
+    
 }
+

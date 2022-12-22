@@ -39,7 +39,7 @@ class StoreUpdateProductRequest extends FormRequest
             'name.string' => "Insert a valid string",
 
             'type.required' => "You have to provide the order status",
-            'type.in' => "The payment type needs to be 'hot_dish','cold_dish','drink' or 'dessert'"
+            'type.in' => "The type needs to be 'hot_dish','cold_dish','drink' or 'dessert'"
 
             'description.required' => "You have to provide a description",
             'description.string' => "Insert a valid string",

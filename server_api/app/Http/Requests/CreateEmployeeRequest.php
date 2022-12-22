@@ -49,7 +49,7 @@ class CreateEmployeeRequest extends FormRequest
             'password.min' => "Password needs to be at least 4 characters",
 
             'type.required' => "You have to provide the user type",
-            'type.in' => "The payment type needs to be 'EC', 'ED' or 'EM'"
+            'type.in' => "The type needs to be 'EC', 'ED' or 'EM'"
         ];
     }
 }
