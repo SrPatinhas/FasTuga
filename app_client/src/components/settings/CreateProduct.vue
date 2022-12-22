@@ -10,27 +10,41 @@ import {ref, inject, computed, reactive} from 'vue'
 	const toast = inject('toast')
 	const userStore = useUserStore();
 
-	async function insertProduct(newProduct) {
-	  const name = document.getElementById('inputName').value
-	  const type = document.getElementById('inputType').value
-	  const price = document.getElementById('inputPrice').value
-	  const description = document.getElementById('inputDescription').value
-	  const photo = document.getElementById('inputPhoto').value
+	const product = reactive({
+		name: '',
+		type: '',
+		price: '',
+		description: '',
+		photo: null,
+		loading: false
+	});
 
-	  const response = await axios.post('products', 
-	  {
-          name: name,
-		  type: type,
-		  price: price,
-          description: description,
-		  photo: photo
-        })
-	
-		//products.value.push(response.data.data)
-        //socket.emit('newProducts', response.data.data)
-        return response.data.data
-    }
 
+	async function insertProduct() {
+		product.loading = true;
+		try {
+			const formData = new FormData();
+			if(product.photo != null) {
+				formData.append('photo', product.photo);
+			}
+			for (const [key, value] of Object.entries(product)) {
+				if(key !== "loading" && key !== "photo"){
+					formData.append(key, value);
+				}
+			}
+			const response = await axios.post('products', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+        	socket.emit('newProduct');
+			product.loading = false;
+        	return true;
+		} catch (error) {
+			product.loading = false;
+			return false;
+		}
+	}
 	
 	const changeUploadImage = (image) => {
 		product.photo = image;
@@ -52,28 +66,28 @@ import {ref, inject, computed, reactive} from 'vue'
 							</div>
 							<div class="col-12 col-md-6">
 								<label for="inputName" class="form-label">Name</label>
-								<input class="form-control" id="inputName" type="text" placeholder="">
+								<input class="form-control" id="inputName" type="text" placeholder="" v-model="product.name">
 							</div>
 							<div class="col-12 col-md-6">
 								<label for="inputState" class="form-label">Type</label>
-								<select id="inputType" class="form-select form-control">
-									<option value="HotDish">Hot dish</option>
-									<option value="ColdDish">Cold dish</option>
-									<option value="Dessert">Dessert</option>
-									<option value="Drink">Drink</option>
+								<select id="inputType" class="form-select form-control" v-model="product.type">
+									<option value="hot_dish">Hot dish</option>
+									<option value="cold_dish">Cold dish</option>
+									<option value="dessert">Dessert</option>
+									<option value="drink">Drink</option>
 								</select>
 							</div>
 							<div class="col-12 col-md-6">
 								<label for="inputPrice" class="form-label">Price</label>
-								<input class="form-control" id="inputPrice" type="text" placeholder="">
+								<input class="form-control" id="inputPrice" type="number" placeholder="" v-model="product.price">
 							</div>
 							<label for="inputDescription" class="form-label">Description</label>
-							<textarea class="form-control" id="inputDescription" rows="8" required=""></textarea>
-
-							
+							<textarea class="form-control" id="inputDescription" rows="8" required="" v-model="product.description"></textarea>
 							<div class="forms_buttons">
-								<button type="submit" class="btn btn-primary" @click="insertProduct()">
+								<button class="btn btn-primary" type="submit" :disabled="product.loading" @click="insertProduct">
 									Add
+									<span v-if="product.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+									<i v-else class="bi-arrow-right-short"></i>
 								</button>
 							</div>
 						</form>
