@@ -53,9 +53,11 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        Product::where("product_id", $product->id)->delete();
-        $product->delete();
+        if(Product::where("id", $product->id)->exists()) {
+        Product::where("id", $product->id)->delete();
         return new ProductResource($product);
+        }
+        return response()->json(['message' => 'Product not found'], 403);
     }
 
     public function update_completed(UpdateCompleteProductRequest $request, Product $product)

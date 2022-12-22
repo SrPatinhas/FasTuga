@@ -140,15 +140,20 @@ class OrderController extends Controller
 
     public function update(StoreUpdateOrderRequest $request, Order $order)
     {
+        
         $order->update($request->validated());
         return new OrderResource($order);
     }
 
     public function destroy(Order $order)
     {
-        Order::where("order_id", $order->id)->delete();
-        $order->delete();
-        return new OrderResource($order);
+        if(Order::where("id", $order->id)->exists()){
+            $oldStatus = $order->status = "C";
+            return response()->json(['message' => 'Order status cancel.'], 200);
+        }
+        return response()->json(['message' => 'Order not found'], 403);
+
+
     }
 
 
