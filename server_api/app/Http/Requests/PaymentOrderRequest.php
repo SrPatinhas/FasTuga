@@ -80,7 +80,7 @@ class PaymentOrderRequest extends FormRequest
 
             'checkout.pay_reference.required' => "You have to provide your payment reference",
 
-            'checkout.points.min' => "You need to send the minimum of 0 points",
+            'checkout.points.min' => "You need to send the minimum of 0 points"
         ];
     }
 }

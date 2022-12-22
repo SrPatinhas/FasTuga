@@ -1,11 +1,14 @@
 import {ref, computed, inject} from 'vue';
 import { defineStore } from 'pinia'
 import utils from "@/utils/utils";
+import {useRoute} from "vue-router";
 
 export const useOrdersStore = defineStore('orders', () => {
 	const socket = inject("socket");
 	const axios = inject('axios');
 	const toast = inject("toast");
+
+	const route = useRoute();
 
 	// Current bag/cart for user
 	const order = ref({
@@ -23,8 +26,6 @@ export const useOrdersStore = defineStore('orders', () => {
 		items: [],
 		checkout: {}
 	});
-	// Status of order
-	const status = ref([]);
 
 	/**
 	 * share information in the app
@@ -170,8 +171,14 @@ export const useOrdersStore = defineStore('orders', () => {
 		}
 		return false;
 	}
-	function udpateOrderDetail() {
-		const response = axios.get('/orders/' + orderDetail.value.id);
+	async function udpateOrderDetail() {
+		let orderId = 0;
+		if(orderDetail.value.id !== 0) {
+			orderId = orderDetail.value.id;
+		} else {
+			orderId = route.params.id;
+		}
+		const response = await axios.get('orders/' + orderId);
 		if(response.data.data?.id){
 			orderDetail.value = response.data.data;
 		}
@@ -222,9 +229,9 @@ export const useOrdersStore = defineStore('orders', () => {
 	});
 
 	return {
-		order, orderItems, totalItems, totalOrderCost, orderPoints, orderPointsDiscount,
+		order, orderDetail, orderItems, totalItems, totalOrderCost, orderPoints, orderPointsDiscount,
 		totalOrderDetailItems, totalOrderDetailCost,
 		addItemToOrder, updateQuantityItemOnOrder, deleteItemOnOrder, cancelOrder,
-		completeOrder, restoreLocalStorage, clearOrderInfo
+		completeOrder, restoreLocalStorage, clearOrderInfo, udpateOrderDetail
 	}
 })

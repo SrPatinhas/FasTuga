@@ -30,4 +30,15 @@ class UpdateUserPasswordRequest extends FormRequest
             'password_confirmation' => ['required','same:password'],
         ];
     }
+
+    public function messages(){
+        return [
+            'password.required' => "You have to provide your password",
+            'password.confirmed' => "Passwords do not match",
+
+            'password_confirmation.required' => "You have to provide your password",
+            'password_confirmation.same' => "Is the same password",
+        ];
+    }
+    
 }

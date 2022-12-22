@@ -1,148 +1,137 @@
 <template>
-	<div class="align-items-center d-flex pt-3 px-3">
-		<h1 class="h2">Tracking order: <span class="h5 fw-normal">34VB5540K83</span></h1>
-	</div>
-	<div class="container py-3 mb-2 mb-md-3">
-		<!-- Details-->
-		<div class="row gx-4 mb-4">
-			<div class="col-md-4 mb-2">
-				<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Order Created at:</span>October 15, 2019</div>
+	<div v-if="orderStore.orderDetail.id !== undefined">
+		<div class="align-items-center d-flex pt-3 px-3">
+			<h1 class="h2">Tracking order: <span class="h5 fw-normal">{{ orderStore.orderDetail.id }}</span></h1>
+		</div>
+		<div class="container py-3 mb-2 mb-md-3">
+			<!-- Details-->
+			<div class="row gx-4 mb-4">
+				<div class="col-md-3 mb-2">
+					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Order Created at:</span>{{ orderStore.orderDetail.date }}</div>
+				</div>
+				<div class="col-md-3 mb-2">
+					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Status:</span>{{ orderStore.orderDetail.status_label }}</div>
+				</div>
+				<div class="col-md-3 mb-2">
+					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Paid:</span>{{ orderStore.orderDetail?.total_paid.toFixed(2) }}€</div>
+				</div>
+				<div class="col-md-3 mb-2">
+					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Ticket Number:</span>{{ orderStore.orderDetail.ticket_number }}</div>
+				</div>
 			</div>
-			<div class="col-md-4 mb-2">
-				<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Status:</span>Processing order</div>
+			<!-- Progress-->
+			<div class="card border-0 shadow-lg">
+				<div class="card-body pb-2">
+					<ul class="nav nav-tabs media-tabs nav-justified">
+						<li class="nav-item">
+							<div class="nav-link" :class="stepActive === 1 ? 'active' : stepActive > 1 ? 'completed' : ''">
+								<div class="d-flex align-items-center">
+									<div class="media-tab-media"><i class="bi-bag"></i></div>
+									<div class="ps-3">
+										<div class="media-tab-subtitle text-muted fs-xs mb-1">First step</div>
+										<h6 class="media-tab-title text-nowrap mb-0">Order placed</h6>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="nav-item">
+							<div class="nav-link" :class="stepActive === 2 ? 'active' : stepActive > 2 ? 'completed' : ''">
+								<div class="d-flex align-items-center">
+									<div class="media-tab-media"><i class="bi-cup-hot"></i></div>
+									<div class="ps-3">
+										<div class="media-tab-subtitle text-muted fs-xs mb-1">Second step</div>
+										<h6 class="media-tab-title text-nowrap mb-0">Preparing order</h6>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="nav-item" :class="stepActive === 3 ? 'active' : stepActive > 3 ? 'completed' : ''">
+							<div class="nav-link">
+								<div class="d-flex align-items-center">
+									<div class="media-tab-media"><i class="bi-list-check"></i></div>
+									<div class="ps-3">
+										<div class="media-tab-subtitle text-muted fs-xs mb-1">Third step</div>
+										<h6 class="media-tab-title text-nowrap mb-0">Ready for pick up</h6>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="nav-item">
+							<div class="nav-link" :class="stepActive === 4 ? 'active' : stepActive > 4 ? 'completed' : ''">
+								<div class="d-flex align-items-center">
+									<div class="media-tab-media"><i class="bi-shop"></i></div>
+									<div class="ps-3">
+										<div class="media-tab-subtitle text-muted fs-xs mb-1">Fourth step</div>
+										<h6 class="media-tab-title text-nowrap mb-0">Order delivered</h6>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
 			</div>
-			<div class="col-md-4 mb-2">
-				<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Waitress:</span>Jose E.</div>
+			<!-- Footer-->
+			<div class="d-sm-flex flex-wrap justify-content-between align-items-center text-center pt-4">
+				<div class="form-check mt-2 me-3">
+					<input class="form-check-input" type="checkbox" id="notify-me" v-model="getNotifications">
+					<label class="form-check-label" for="notify-me">Notify me when order is delivered</label>
+				</div><a class="btn btn-primary btn-sm mt-2" href="#order-details" data-bs-toggle="modal">View Order Details</a>
 			</div>
 		</div>
-		<!-- Progress-->
-		<div class="card border-0 shadow-lg">
-			<div class="card-body pb-2">
-				<ul class="nav nav-tabs media-tabs nav-justified">
-					<li class="nav-item">
-						<div class="nav-link completed">
-							<div class="d-flex align-items-center">
-								<div class="media-tab-media"><i class="bi-bag"></i></div>
-								<div class="ps-3">
-									<div class="media-tab-subtitle text-muted fs-xs mb-1">First step</div>
-									<h6 class="media-tab-title text-nowrap mb-0">Order placed</h6>
-								</div>
-							</div>
-						</div>
-					</li>
-					<li class="nav-item">
-						<div class="nav-link active">
-							<div class="d-flex align-items-center">
-								<div class="media-tab-media"><i class="bi-cup-hot"></i></div>
-								<div class="ps-3">
-									<div class="media-tab-subtitle text-muted fs-xs mb-1">Second step</div>
-									<h6 class="media-tab-title text-nowrap mb-0">Processing order</h6>
-								</div>
-							</div>
-						</div>
-					</li>
-					<li class="nav-item">
-						<div class="nav-link">
-							<div class="d-flex align-items-center">
-								<div class="media-tab-media"><i class="bi-list-check"></i></div>
-								<div class="ps-3">
-									<div class="media-tab-subtitle text-muted fs-xs mb-1">Third step</div>
-									<h6 class="media-tab-title text-nowrap mb-0">Quality check</h6>
-								</div>
-							</div>
-						</div>
-					</li>
-					<li class="nav-item">
-						<div class="nav-link">
-							<div class="d-flex align-items-center">
-								<div class="media-tab-media"><i class="bi-shop"></i></div>
-								<div class="ps-3">
-									<div class="media-tab-subtitle text-muted fs-xs mb-1">Fourth step</div>
-									<h6 class="media-tab-title text-nowrap mb-0">Order sent</h6>
-								</div>
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<!-- Footer-->
-		<div class="d-sm-flex flex-wrap justify-content-between align-items-center text-center pt-4">
-			<div class="form-check mt-2 me-3">
-				<input class="form-check-input" type="checkbox" id="notify-me" v-model="getNotifications">
-				<label class="form-check-label" for="notify-me">Notify me when order is delivered</label>
-			</div><a class="btn btn-primary btn-sm mt-2" href="#order-details" data-bs-toggle="modal">View Order Details</a>
-		</div>
-		error
-		<i class="bi bi-exclamation-circle-fill"></i>
-	</div>
-	<button @click="triggerNotifications">Notify me!</button>
 
-	<div class="toast-container position-fixed top-65px end-0 p-3" id="toastContainer"></div>
+		<div class="toast-container position-fixed top-65px end-0 p-3" id="toastContainer"></div>
 
-	<div class="modal fade" id="order-details" aria-modal="true" role="dialog">
-		<div class="modal-dialog modal-lg modal-dialog-scrollable">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Order No - 34VB5540K83</h5>
-					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+		<div class="modal fade" id="order-details" aria-modal="true" role="dialog">
+			<div class="modal-dialog modal-lg modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Order No - {{ orderStore.orderDetail.id }}</h5>
+						<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body pb-0 last-item-no-border">
+						<order-detail-item v-for="item of orderStore.orderDetail.items" v-bind="item" />
+					</div>
+					<!-- Footer-->
+					<div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md" v-if="orderStore.orderDetail">
+						<div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>{{ orderStore.orderDetail?.total_price.toFixed(2) }}€</span></div>
+						<div class="px-2 py-1"><span class="text-muted">Points earned:&nbsp;</span><span>{{ orderStore.orderDetail.points_gained }}</span></div>
+						<div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>{{ orderStore.orderDetail?.total_paid_with_points.toFixed(2) }}€</span></div>
+						<div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">{{ orderStore.orderDetail?.total_paid.toFixed(2) }}€</span></div>
+					</div>
 				</div>
-				<div class="modal-body pb-0 last-item-no-border">
-					<order-detail-item v-for="item of orderStore.orderItems" v-bind="item" />
-				</div>
-				<!-- Footer-->
-				<div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md">
-					<div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>$265.<small>00</small></span></div>
-					<div class="px-2 py-1"><span class="text-muted">Points earned:&nbsp;</span><span>$22.<small>50</small></span></div>
-					<div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>$9.<small>50</small></span></div>
-					<div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">{{ (orderStore.totalOrderDetailCost).split(".")[0] }}.<small>{{ (orderStore.totalOrderDetailCost).split(".")[1] }}€</small></span></div>
-				</div>
+			</div>
+		</div>
+	</div>
+	<div v-else>
+		<div class="p-5 bg-faded-warning rounded-3">
+			<div class="">
+				<h1 class="fw-bold">Loading your order</h1>
+				<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
-	import {inject, ref} from "vue";
+	import {computed, inject, ref} from "vue";
 	import logoUrlMini from '@/assets/logo.png';
 	import { Toast } from "bootstrap";
-	import {useUserStore} from "@/stores/user";
-	import {useOrdersStore} from "@/stores/order";
-
+	const socket = inject("socket");
 	import OrderDetailItem from "@/components/order/orderDetailItem.vue";
 
-	const socket = inject("socket");
-	const orderDetail = ref({});
-	const getNotifications = ref(false);
-
+	import {useUserStore} from "@/stores/user";
+	import {useOrdersStore} from "@/stores/order";
 	const orderStore = useOrdersStore();
 	const userStore = useUserStore();
 
+	const orderDetail = ref({});
+	const getNotifications = ref(false);
 
-	function triggerNotifications() {
-		socket.emit('orderUpdateStatus',
-			{
-				id: 32,
-				status: 'ready',
-				employee: 'mc',
-				chef: 'asdas asd',
-				notes: '',
-				user_id: userStore.userId,
-				items: [{
-					id: 12,
-					name: '7-Up',
-					image: 'KPNzRRCrbwnrxbgk.jpg',
-					price: 1.4,
-					type: 'drink',
-					description: "Alice dodged behind a great deal to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was that?' inquired Alice. 'Reeling and Writhing, of course, I meant,' the King."
-				}]
-			}
-		);
-	}
+	orderStore.udpateOrderDetail();
 
 	socket.on('orderUpdateStatus', (order) => {
 		console.log('orderUpdateStatus event');
-		orderDetail.value = order;
+		orderStore.udpateOrderDetail();
 		notifyBrowserUser();
 	});
 
@@ -166,7 +155,7 @@
 		else {
 			const notification = new Notification('Your order was updated!', {
 				icon: logoUrlMini,
-				body: "Your order was just updated to the status '" + orderDetail.value.status + "'"
+				body: "Your order was just updated to the status '" + orderStore.orderDetail.value.status + "'"
 			});
 			notification.onclick = function() {
 				window.open('//stackoverflow.com/a/13328397/1269037');
@@ -179,7 +168,7 @@
 		const toastLength = toastContainer.childNodes.length;
 
 		const toastTitle = "New Order update";
-		const toastContent = "Your order was just updated to the status <b>" + orderDetail.value.status + "</b>";
+		const toastContent = "Your order was just updated to the status <b>" + orderStore.orderDetail.value.status + "</b>";
 		const toastId = 'toast_' + toastLength;
 
 		const toastEl = `<div class="toast ${toastId}" role="alert" aria-live="assertive" aria-atomic="true">
@@ -200,6 +189,18 @@
 		const toast = new Toast(toastNode);
 		toast.show();
 	}
+	const stepActive = computed(() => {
+		if(orderStore.orderDetail.status.toLowerCase() === 'p'){
+			return 2;
+		}
+		if(orderStore.orderDetail.status.toLowerCase() === 'r'){
+			return 3;
+		}
+		if(orderStore.orderDetail.status.toLowerCase() === 'd'){
+			return 4;
+		}
+		return 1;
+	});
 </script>
 
 <style scoped>
