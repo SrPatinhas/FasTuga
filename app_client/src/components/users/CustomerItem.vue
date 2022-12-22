@@ -9,7 +9,7 @@
 	const customers = ref([]);
 	
 	function updateUsers(newPage) {
-		userStore.fetchCustomers(newPage);
+		fetchCustomers(newPage);
 	}
 
 	async function fetchCustomers(page = 1) {
