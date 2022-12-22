@@ -12,11 +12,11 @@ use App\Http\Controllers\api\OrderGuestController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login',        'login'); /*Feito*/
-    Route::post('register',     'register');
+    Route::post('register',     'register');/*Feito*/
 });
 
 Route::controller(OrderGuestController::class)->prefix('orders')->group(function () {
-    Route::post('/guest/payment',       'paymentGuest');/*POR FAZER*/
+    Route::post('/guest/payment',       'paymentGuest');/*Feito*/
     Route::get('/guest/{order}',        'showGuest')->whereNumber('order'); /*Feito*/
     Route::get('/guest/{order}/status', 'getOrderStatusGuest')->whereNumber('order');/*Feito*/  // Requests for the kitchen
     Route::get('/board',                'getBoardItems');/*Feito*/
