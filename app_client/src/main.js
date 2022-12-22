@@ -1,11 +1,14 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import axios from 'axios'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import axios from 'axios';
 import Toaster from "@meforma/vue-toaster";
-import { io } from "socket.io-client"
+import { io } from "socket.io-client";
 
-import FieldErrorMessage from './components/global/FieldErrorMessage.vue'
-import ConfirmationDialog from './components/global/ConfirmationDialog.vue'
+const apiDomain = import.meta.env.VITE_API_DOMAIN
+const wsConnection = import.meta.env.VITE_WS_CONNECTION
+
+import FieldErrorMessage from './components/global/FieldErrorMessage.vue';
+import ConfirmationDialog from './components/global/ConfirmationDialog.vue';
 
 import App from './App.vue'
 import router from './router'
@@ -20,7 +23,8 @@ import "./assets/dashboard.css";
 
 const app = createApp(App);
 
-app.provide('socket', io("http://127.0.0.1:3000"));
+app.provide('serverUrl', `${apiDomain}/api`);
+app.provide('socket', io(wsConnection));
 
 const serverBaseUrl = 'http://server_api.test'
 app.provide('axios', axios.create({
