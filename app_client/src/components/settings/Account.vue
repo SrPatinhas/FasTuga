@@ -1,6 +1,9 @@
 <script setup>
 	import {useUserStore} from "@/stores/user";
 	const userStore = useUserStore();
+	function save() {
+
+	}
 </script>
 
 <template>

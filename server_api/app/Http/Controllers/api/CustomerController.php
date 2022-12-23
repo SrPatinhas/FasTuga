@@ -126,7 +126,8 @@ class CustomerController extends Controller
             return response()->json(['message' => 'Type not found'], 404);
         }
         $customerId = Auth::user()->customer->id;
-        $lastOrders = Order::where('customer_id', $customerId)->latest()->take(3)->get();
+
+        $lastOrders = Order::where('customer_id', $customerId)->latest()->limit(3)->get();
         return LastOrdersResource::collection($lastOrders);
     }
 

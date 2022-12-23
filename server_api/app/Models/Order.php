@@ -52,7 +52,7 @@ class Order extends Model
     }
     public function responsible()
     {
-        return $this->belongsTo(User::class, 'responsible_id');
+        return $this->belongsTo(User::class, 'delivered_by');
     }
     public function orderItems()
     {

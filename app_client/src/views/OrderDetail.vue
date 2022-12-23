@@ -158,7 +158,7 @@
 				body: "Your order was just updated to the status '" + getStatusLabel(orderStore.orderDetail.status) + "'"
 			});
 			notification.onclick = function() {
-				window.open('//stackoverflow.com/a/13328397/1269037');
+				window.open('http://172.22.21.147/orders/' + orderStore.orderDetail.id);
 			};
 		}
 	}

@@ -1,7 +1,7 @@
 <template>
 	<!-- Item-->
 	<div class="py-4">
-		<div class="card p-4">
+		<div class="card p-4" :class="status !=='D' ? status ==='C' ? 'bg-faded-warning' : 'bg-faded-info' : ''">
 			<div class="d-block fs-1 text-success">
 				<span class="fw-sm fs-3 text-muted">#</span>{{ ticket_number }}
 			</div>

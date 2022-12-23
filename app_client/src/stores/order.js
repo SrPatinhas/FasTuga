@@ -183,9 +183,13 @@ export const useOrdersStore = defineStore('orders', () => {
 		} else {
 			orderId = route.params.id;
 		}
-		const response = await axios.get('orders/' + orderId);
-		if(response.data.data?.id){
-			orderDetail.value = response.data.data;
+		if(orderId !== undefined) {
+			const response = await axios.get('orders/' + orderId);
+			if (response.data.data?.id) {
+				orderDetail.value = response.data.data;
+			}
+		} else {
+			orderDetail.value = [];
 		}
 	}
 
