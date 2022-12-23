@@ -76,7 +76,7 @@ Route::middleware('auth:api')->group(function () {
         // Only a manager can use this ones
         Route::post('/',                    'store');/*Feito*/
         Route::get('/list',                 'list')->withTrashed();/*Feito*/
-        Route::put('/{product}',            'update')->whereNumber('product');/*Feito*/
+        Route::post('/{product}',            'update')->whereNumber('product');/*Feito*/
         Route::post('/{product}/photos',    'updatePhoto')->whereNumber('product');/*Erro */
         Route::delete('/{product}',         'destroy')->whereNumber('product');/*Feito*/
         // TODO -> talvez para estatisticas?

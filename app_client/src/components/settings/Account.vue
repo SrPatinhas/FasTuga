@@ -1,9 +1,48 @@
 <script setup>
+	import {inject, reactive} from 'vue'
 	import {useUserStore} from "@/stores/user";
 	const userStore = useUserStore();
-	function save() {
 
+	const account = reactive({
+		name: '',
+		email: '',
+		photo: null,
+		type: '',
+		phone_number: '',
+		nif: null,
+		default_payment_type: '',
+		default_payment_reference:'',
+		loading: false
+	})
+
+	async function SaveAccount() {
+		//productDetail.loading = true;
+		try {
+			const formData = new FormData();
+			if (account.value.photo != null) {
+				formData.append('photo', account.value.photo);
+			}
+			for (const [key, value] of Object.entries(account)) {
+				if (key !== "photo") {
+					formData.append(key, value);
+				}
+			}
+			await axios.put('users/' + account.value.id, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+			//socket.emit('newProduct');
+			return true;
+		} catch (error) {
+			return false;
+		}
 	}
+
+	const changeUploadImage = (image) => {
+		employee.photo = image;
+	}
+
 </script>
 
 <template>
@@ -71,7 +110,7 @@
 							<input type="email" class="form-control" id="inputEmail" placeholder="Email" required v-model="userStore.user.email"/>
 						</div>
 						<div class="mb-3 d-flex justify-content-end mt-3">
-							<button type="button" class="btn btn-primary px-5" @click="save">Save</button>
+							<button type="button" class="btn btn-primary px-5" @click="SaveAccount()">Save</button>
 							<button type="button" class="btn btn-light px-5" @click="cancel">Cancel</button>
 						</div>
 					</div>

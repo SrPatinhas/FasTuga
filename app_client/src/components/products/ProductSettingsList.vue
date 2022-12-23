@@ -45,7 +45,7 @@
 				<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#edit-product" @click="fetchProduct(product.id)">
 					<i class="bi bi-pencil m-0"></i>
 				</button>
-				<button type="button" class="btn btn-danger" aria-label="Delete" @click="deleteProduct(product.id)">
+				<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-product"  @click="fetchProduct(product.id)">
 					<i class="bi bi-trash m-0"></i>
 				</button>
 			</div>
@@ -98,11 +98,35 @@
 					<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
 					<button class="btn btn-primary" type="submit" @click="SaveProduct(productDetail.id)">
 						Save
-						<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
 					</button>
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<div class="modal fade" id="delete-product" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Delete product - {{ productDetail.name }}</h5>
+					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="row gx-4 gy-3">
+						<div class="col-12">
+							<label class="form-label" for="ticket-subject">Do you want delete the product {{ productDetail.name }}?</label>
+						</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+					<button class="btn btn-primary" type="submit" @click="deleteProduct(productDetail.id)"  data-bs-dismiss="modal">
+							Delete
+					</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
 	</div>
 </template>
 
@@ -154,30 +178,31 @@
 
 	async function fetchProduct(id) {
 		try {
-			productsLoading.value = true;
+			//productsLoading.value = true;
 			const response = await axios.get('/products/' + id);
 			productDetail.value = response.data.data;
-			productsLoading.value = false;
+			//productsLoading.value = false;
 			return true;
 		} catch (error) {
-			productsLoading.value = false;
+			//productsLoading.value = false;
 			throw error;
 		}
 	}
 
-	async function SaveProduct() {
+	async function SaveProduct(id) {
 		//productDetail.loading = true;
 		try {
 			const formData = new FormData();
+			formData.append('method','PUT')
 			if (productDetail.value.photo != null) {
 				formData.append('photo', productDetail.value.photo);
 			}
-			for (const [key, value] of Object.entries(productDetail)) {
-				if (key !== "loading" && key !== "photo") {
+			for (const [key, value] of Object.entries(productDetail.value)) {
+				if (key !== "photo") {
 					formData.append(key, value);
 				}
 			}
-			await axios.put('products/' + productDetail.value.id, formData, {
+			await axios.post('products/' + id, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
@@ -201,5 +226,5 @@
 		}
 	}
 
-	fetchProducts();
+	fetchProducts(1);
 </script>
