@@ -68,6 +68,7 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/{user}',        'destroy')->whereNumber('user');/*Feito*/
 
         Route::get('/sidebar',          'sidebarCounts');/*Feito*/
+        Route::get('/statistic',        'statistic');/*Feito*/
     });
     //--END EMPLOYEE
 
@@ -76,6 +77,7 @@ Route::middleware('auth:api')->group(function () {
         // Only a manager can use this ones
         Route::post('/',                    'store');/*Feito*/
         Route::get('/list',                 'list')->withTrashed();/*Feito*/
+        Route::put('/{product}',            'update')->whereNumber('product')->withTrashed();/*Feito*/
         Route::post('/{product}',            'update')->whereNumber('product');/*Feito*/
         Route::post('/{product}/photos',    'updatePhoto')->whereNumber('product');/*Erro */
         Route::delete('/{product}',         'destroy')->whereNumber('product');/*Feito*/
@@ -90,7 +92,6 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/',                 'index');   /*Feito*/
         Route::get('/{order}',          'show')->whereNumber('order'); /*Feito*/
         Route::post('/payment',         'payment');  /*Feito*/
-        Route::post('/{order}/refund',  'refund')->whereNumber('order');/*Feito*/
         Route::put('/{order}',          'update')->whereNumber('order');/*Erro */
         Route::delete('/{order}',       'destroy')->whereNumber('order');/*Feito */
 

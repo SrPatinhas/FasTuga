@@ -29,7 +29,7 @@
 			<div class="d-block mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto width-110">
 				<img :src="product.photo_url" class="card-img-top" :alt="product.name">
 			</div>
-			<div class="text-center text-sm-start">
+			<div class="text-center text-sm-start flex-1">
 				<h3 class="h6 product-title mb-2">{{ product.name }}</h3>
 				<div class="d-inline-block text-accent w-75">{{ product.description }}</div>
 				<div class="w-100">
@@ -81,8 +81,8 @@
 						<div class="col-sm-6">
 							<label class="form-label" for="input-type">Type</label>
 							<select class="form-select" id="ticket-type" required v-model="productDetail.type">
-								<option value="hot_dish">Hot dish</option>
-								<option value="cold_dish">Cold dish</option>
+								<option value="hot dish">Hot dish</option>
+								<option value="cold dish">Cold dish</option>
 								<option value="dessert">Dessert</option>
 								<option value="drink">Drink</option>
 							</select>
@@ -93,11 +93,11 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+					<button class="btn btn-secondary" type="button" id="closeModalEdit" data-bs-dismiss="modal">Cancel</button>
 					<button class="btn btn-primary" type="submit" @click="SaveProduct(productDetail.id)">
 						Save
+						<span v-if="productDetail.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
 					</button>
 				</div>
 			</div>
@@ -146,6 +146,9 @@
 		photo: null,
 		loading: false
 	});
+	const hasNewPhoto = ref(false);
+
+
 	const pagination = ref({});
 	const products = ref([]);
 	const productsLoading = ref(true);
@@ -153,6 +156,7 @@
 
 	const changeUploadImage = (image) => {
 		productDetail.value.photo = image;
+		hasNewPhoto.value = true;
 	}
 
 
@@ -178,39 +182,41 @@
 
 	async function fetchProduct(id) {
 		try {
-			//productsLoading.value = true;
 			const response = await axios.get('/products/' + id);
 			productDetail.value = response.data.data;
-			//productsLoading.value = false;
 			return true;
 		} catch (error) {
-			//productsLoading.value = false;
 			throw error;
 		}
 	}
 
-	async function SaveProduct(id) {
-		//productDetail.loading = true;
+	async function SaveProduct() {
 		try {
+			productDetail.value.loading = true;
 			const formData = new FormData();
-			formData.append('method','PUT')
+			formData.append('_method', 'PUT');
 			if (productDetail.value.photo != null) {
 				formData.append('photo', productDetail.value.photo);
 			}
 			for (const [key, value] of Object.entries(productDetail.value)) {
-				if (key !== "photo") {
+				if (key !== "loading" && key !== "photo" && key !== "photo_url") {
 					formData.append(key, value);
 				}
 			}
-			await axios.post('products/' + id, formData, {
+			const response = await axios.post('products/' + productDetail.value.id, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			});
-			socket.emit('newProduct');
-			updateProductsList(1);
+			if(response.status === 200) {
+				socket.emit('newProduct');
+				updateProductsList(1);
+				document.getElementById("closeModalEdit").click();
+			}
+			productDetail.value.loading = false;
 			return true;
 		} catch (error) {
+			productDetail.value.loading = false;
 			return false;
 		}
 	}

@@ -3,6 +3,7 @@ import {defineStore} from 'pinia';
 
 import {useOrdersStore} from "@/stores/order";
 import avatarNoneUrl from '@/assets/avatar-none.png';
+import {useRoute, useRouter} from "vue-router";
 
 export const useUserStore = defineStore('user', () => {
 	const socket = inject("socket");
@@ -10,6 +11,8 @@ export const useUserStore = defineStore('user', () => {
 	const toast = inject("toast");
 
 	const orderStore = useOrdersStore();
+	const route = useRoute();
+	const router = useRouter()
 
 	const user = ref();
 	const customer = ref();
@@ -148,13 +151,17 @@ export const useUserStore = defineStore('user', () => {
 
 	async function restoreToken() {
 		console.log('restoreToken');
-		let storedToken = sessionStorage.getItem('token')
+		let storedToken = sessionStorage.getItem('token');
 		if (storedToken) {
 			axios.defaults.headers.common.Authorization = "Bearer " + storedToken
 			await loadUser();
 			socket.emit('loggedIn', user.value)
 			//await projectsStore.loadProjects()
 			orderStore.restoreLocalStorage();
+			console.log(route.name);
+			if (route.name === "Login"){
+				router.back();
+			}
 			userIsGuest.value = false;
 			return true;
 		}

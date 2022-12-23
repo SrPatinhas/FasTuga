@@ -25,9 +25,9 @@ class Utils
             $url = $url . '/api/payments';
         }
         $response = Http::post($url, [
-            "type"      => $pay_type,
+            "type"      => strtolower($pay_type),
             "reference" => $pay_reference,
-            "value"     => $order_value
+            "value"     => (float) $order_value
         ]);
 
         if ($response->status() == 201) {
