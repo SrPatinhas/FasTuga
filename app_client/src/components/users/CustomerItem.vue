@@ -35,21 +35,50 @@
 				</div>
 			</div>
 			<div class="btn-group me-2" role="group" aria-label="First group">
-				<button type="button" class="btn btn-secondary text-white" aria-label="Edit">
-					<i class="bi bi-pencil-square m-0"></i>
+				<button type="button" class="btn btn-secondary text-white" aria-label="Edit" data-bs-toggle="modal" data-bs-target="#customer-detail" @click="fetchCustomer(customer.id)">
+					<i class="bi bi-eye"></i>
 				</button>
-				<button type="button" class="btn btn-warning text-white" aria-label="Edit">
-					<i class="bi bi-lock m-0"></i>
+				<button type="button" class="btn btn-warning text-white" aria-label="Edit" @click="customerToggleBlock(customer.user_id, !customer.user.blocked)">
+					<i class="bi m-0" :class="customer.user.blocked ? 'bi-lock-fill' : 'bi-unlock-fill'"></i>
 				</button>
-				<button type="button" class="btn btn-danger text-white" aria-label="Delete">
-					<i class="bi bi-trash m-0"></i>
-				</button>
-			</div>
+			</div> 	
 		</div>
 		<div v-if="pagination !== undefined">
 			<Pagination v-if="pagination.last_page > 1" @page-change="updateUsers" :pagination="pagination"/>
 		</div>
 	</div>
+
+
+	<div class="modal fade" id="customer-detail" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">View details of customer</h5>
+				</div>
+				<div class="modal-body">
+					<div class="row gx-4 gy-3">
+						<div class="col-12">
+							<label class="form-label" for="ticket-subject"><b>Name:</b> {{ customerDetail.user.name }}</label>
+							<p></p><label class="form-label" for="ticket-subject"><b>Email:</b> {{ customerDetail.user.email }}</label>
+							<p></p><label class="form-label" for="ticket-subject"><b>Phone:</b> {{ customerDetail.user.phone }}</label>
+							<p></p><label class="form-label" for="ticket-subject"><b>Points:</b> {{ customerDetail.points }}</label>
+							<p></p><label class="form-label" for="ticket-subject"><b>NIF:</b> {{ customerDetail.nif }}</label>
+							<p></p><label class="form-label" for="ticket-subject"><b>Default payment type:</b> {{ customerDetail.default_payment_type }}</label>
+							<p></p><label class="form-label" for="ticket-subject"><b>Default payment reference:</b> {{ customerDetail.default_payment_reference }}</label>
+							<label class="form-label" for="ticket-subject"><b>NIF:</b> {{ customerDetail.nif }}</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+					</div>
+				</div>
+
+				<div class="modal fade" id="delete-product" tabindex="-1" aria-hidden="true">
+	</div>
+
 </template>
 
 <script setup>
@@ -61,6 +90,7 @@
 	const customers = ref([]);
 	const pagination = ref({});
 	const customer = ref({});
+	const customerDetail = ref({});
 	const customersLoading = ref(true);
 
 	async function fetchCustomers(page = 1) {
@@ -82,6 +112,28 @@
 	function updateUsers(newPage) {
 		fetchCustomers(newPage);
 	}
+
+	async function fetchCustomer(id) {
+		try {
+			const response = await axios.get('/customers/' + id);
+			customerDetail.value = response.data.data;
+			return customerDetail.value;
+		} catch (error) {
+			customerDetail.value = {};
+			throw error;
+		}
+	}
+	
+	async function customerToggleBlock(id, isToBlock) {
+		try {
+			await axios.patch('users/' + id + (isToBlock ? "/block" : "/unblock"));
+			await fetchCustomers();
+			return true
+		} catch (error) {
+			return false
+		}
+	}
+
 
 	fetchCustomers();
 </script>

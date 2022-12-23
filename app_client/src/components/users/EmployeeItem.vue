@@ -193,7 +193,7 @@
 					'Content-Type': 'multipart/form-data'
 				}
 			});
-			
+
 			if(response.status === 200) {
 				socket.emit('newEmployee');
 				fetchEmployees();
