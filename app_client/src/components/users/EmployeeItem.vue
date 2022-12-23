@@ -68,7 +68,6 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Edit user - {{ employeeDetail.name }}</h5>
-					<button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					<div class="row gx-4 gy-3">
@@ -89,14 +88,15 @@
 							</select>
 							<div class="invalid-feedback">Please choose ticket type!</div>
 						</div>
-						<div class="col-12">
-							<input class="form-control" type="file" id="file-input">
+						<div class="col-12" id="inputPhoto">
+							<PhotoUploader @image-change="changeUploadImage" :url-old="employeeDetail.photo_url"/>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
-					<button class="btn btn-primary" type="submit">Save</button>
+					<button class="btn btn-primary" type="submit" @click="SaveEmployee(employeeDetail.id)" data-bs-dismiss="modal">
+						Save</button>
 				</div>
 			</div>
 		</div>
@@ -108,6 +108,7 @@
 	const axios = inject('axios');
 
 	import avatarNoneUrl from '@/assets/avatar-none.png';
+	import PhotoUploader from "@/components/global/photoUploader.vue";
 	import Pagination from "@/components/navigation/Pagination.vue";
 	import {RouterLink} from "vue-router"
 
@@ -115,6 +116,7 @@
 	const pagination = ref({});
 	const employees = ref([]);
 	const employeesLoading = ref(true);
+	const hasNewPhoto = ref(false);
 
 	async function fetchEmployees(page = 1) {
 		try {
@@ -130,6 +132,12 @@
 			employeesLoading.value = false;
 			throw error;
 		}
+	}
+
+	
+	const changeUploadImage = (image) => {
+		employeeDetail.value.photo = image;
+		hasNewPhoto.value = true;
 	}
 
 	function updateEmployees(newPage) {
@@ -164,6 +172,40 @@
 			return true
 		} catch (error) {
 			return false
+		}
+	}
+
+	async function SaveEmployee() {
+		try {
+			//employeeDelete.value.loading = true;
+			const formData = new FormData();
+			formData.append('_method', 'PUT');
+			if (employeeDetail.value.photo != null) {
+				formData.append('photo', employeeDetail.value.photo);
+			}
+			for (const [key, value] of Object.entries(employeeDetail.value)) {
+				if (key !== "photo" && key !== "photo_url") {
+					formData.append(key, value);
+				}
+			}
+			const response = await axios.post('employees/' + employeeDetail.value.id, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+			fetchEmployees();
+			if(response.status === 200) {
+				socket.emit('newEmployee');
+				fetchEmployees();
+				//updateEmployees(1);
+				//document.getElementById("closeModalEdit").
+				click();
+			}
+			//employeeDelete.value.loading = false;
+			return true;
+		} catch (error) {
+			//employeeDelete.value.loading = false;
+			return false;
 		}
 	}
 
