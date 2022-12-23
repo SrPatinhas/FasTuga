@@ -171,6 +171,7 @@ export const useOrdersStore = defineStore('orders', () => {
 		if(response.data.data?.id){
 			orderDetail.value = response.data.data;
 			socket.emit('orderNew', order.value);
+			await userStore.loadUser();
 			clearBag();
 			return true;
 		}

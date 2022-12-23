@@ -12,7 +12,6 @@ use App\Models\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
@@ -97,7 +96,7 @@ class OrderController extends Controller
         }
 
         // validates the ticket number
-        $last_ticket = Order::latest()->first()->ticket_number;
+        $last_ticket = Order::latest('id')->first()->ticket_number;
         if($last_ticket == 99){
             $last_ticket = 0;
         }
@@ -131,6 +130,9 @@ class OrderController extends Controller
             ]);
         }
 
+        if($points_gained > 0) {
+            Customer::where('id', $customerId)->increment('points', $points_gained);
+        }
         return new OrderDetailResource($order);
     }
 
