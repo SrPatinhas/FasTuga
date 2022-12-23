@@ -1,10 +1,10 @@
 <script setup>
-	import {Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale} from 'chart.js';
-	import { Bar } from 'vue-chartjs'
+	import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend} from 'chart.js';
+	import { Bar, Line } from 'vue-chartjs'
 	import {computed, inject, reactive, ref} from "vue";
 	const axios = inject('axios');
 
-	ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+	ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 	const weeks = [];
 	Date.prototype.getWeek = function () {
@@ -12,27 +12,20 @@
 		return Math.ceil((((this - firstDay) / 86400000) + firstDay.getDay() + 1) / 7);
 	}
 
-	for (let i = 0; i < 6; i++) {
+	for (let i = 5; i >= 0; i--) {
 		const weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() - i * 7));
-		const weekEnd = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6);
 		const weekNumber = weekStart.getWeek();
-
-		//weeks.push({
-		//	week_number: weekNumber,
-		//	start: weekStart,
-		//	end: weekEnd,
-		//});
-		weeks.push(weekNumber);
+		weeks.push("week " + weekNumber);
 	}
 
 
 	const loaded = ref(false);
 	const statistics = ref({});
 	const data = reactive({
-		labels: [5, 4, 3, 2, 1, 0],
+		labels: weeks,//[5, 4, 3, 2, 1, 0],
 		datasets: [
 			{
-				label: 'Data One',
+				label: 'Reveneu €',
 				backgroundColor: '#f87979',
 				data: []
 			}
@@ -40,8 +33,8 @@
 	});
 	async function fetchGraphValues() {
 		const response = await axios.get('/employees/statistic');
-		data.datasets[0].data = response.data.chart;
-		delete response.data.chart;
+		data.datasets[0].data = response.data.graph;
+		delete response.data.graph;
 		statistics.value = response.data;
 		loaded.value = true;
 	}
@@ -92,7 +85,7 @@
 						<div class="card-body">
 							<!-- TODO Pedido para este "grafico" -->
 							<h3 class="fs-sm pb-3 mb-3 border-bottom">Total Revenue <span class="fw-normal fs-xs text-muted">(Past 6 weeks)</span></h3>
-							<Bar v-if="loaded" :data="data" />
+							<Line v-if="loaded" :data="data" />
 						</div>
 					</div>
 				</div>
@@ -106,7 +99,7 @@
 									<img :src="item.photo_url" width="20" :alt="item.name">
 									<div class="ps-1">{{ item.name }}</div>
 								</div>
-								<span>{{ item.price }}€</span>
+								<span>{{ item.price.toFixed(2) }}€</span>
 							</div>
 
 						</div>
