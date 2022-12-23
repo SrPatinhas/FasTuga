@@ -36,7 +36,7 @@ class UpdateUserRequest extends FormRequest
 
             'type' => 'required|in:EC,ED,EM',
 
-            'photo_file' => 'nullable|file|image'
+            'photo' => 'nullable|file|image'
         ];
     }
 

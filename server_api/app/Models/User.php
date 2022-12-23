@@ -2,16 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-// Remove Sanctum Tokens
-//use Laravel\Sanctum\HasApiTokens;
 // Add Laravel Tokens
 use Laravel\Passport\HasApiTokens;
 
@@ -92,7 +87,7 @@ class User extends Authenticatable
         return $this->type == 'C';
     }
 
-    
+
 }
 
 
