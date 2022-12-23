@@ -143,7 +143,7 @@
 		type: '',
 		price: '',
 		description: '',
-		photo: null,
+		photo_url: null,
 		loading: false
 	});
 	const hasNewPhoto = ref(false);

@@ -181,7 +181,7 @@
 			const formData = new FormData();
 			formData.append('_method', 'PUT');
 			if (employeeDetail.value.photo != null) {
-				formData.append('photo', employeeDetail.value.photo);
+				formData.append('photo', employeeDetail.value.photo_url);
 			}
 			for (const [key, value] of Object.entries(employeeDetail.value)) {
 				if (key !== "photo" && key !== "photo_url") {
@@ -193,7 +193,7 @@
 					'Content-Type': 'multipart/form-data'
 				}
 			});
-			fetchEmployees();
+			
 			if(response.status === 200) {
 				socket.emit('newEmployee');
 				fetchEmployees();
