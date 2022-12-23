@@ -232,5 +232,5 @@
 		}
 	}
 
-	fetchProducts(1);
+	fetchProducts();
 </script>

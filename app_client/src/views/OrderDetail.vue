@@ -189,6 +189,7 @@
 		const toast = new Toast(toastNode);
 		toast.show();
 	}
+
 	const stepActive = computed(() => {
 		if(orderStore.orderDetail.status !== undefined) {
 			if (orderStore.orderDetail.status.toLowerCase() === 'p') {
