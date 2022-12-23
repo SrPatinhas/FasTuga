@@ -8,6 +8,7 @@ use App\Http\Resources\CustomerResource;
 use App\Http\Resources\LastOrdersResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\TopProductResource;
+use App\Http\Resources\UserResource;
 use App\Models\Customer;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -56,35 +57,6 @@ class CustomerController extends Controller
     }
 
 
-    public function update(UpdateCustomerRequest $request, $id)
-    {
-        $user = new User;
-        $customer = new Customer;
-
-        $user = User::findOrFail($id);
-        $userBackUp = User::findOrFail($id);
-        $customer = Customer::findOrFail($id);
-
-        $user->type = 'C';
-
-        $user->fill($request->validated());
-
-        if($request->password == null){
-            $value = 0;
-            $user->password = $userBackUp->password;
-        }else{
-            $value = 1;
-            $user->password = Hash::make($request->password);
-        }
-        try{
-            $customer->fill($request->validated());
-            $customer->save();
-        }catch(\Throwable $error){
-            $user->getOriginal();
-        }
-        $user->save();
-        return response()->json(['User updated successfully. ' . $user, 201]);
-    }
 
     public function uploadPhoto(Request $request){
         $request->validate(['photo_file' => 'nullable|image|mimes:jpeg,png,jpg']);

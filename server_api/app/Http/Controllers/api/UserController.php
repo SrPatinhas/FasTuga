@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\UserCustomerResource;
+use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -38,8 +40,28 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        $user->update($request->validated());
-        return new UserResource($user);
+        if(Auth::user()->type == 'EM' || Auth::user()->id == $user->id) {
+
+            $userBackUp = User::findOrFail($user->id);
+
+            if($request->hasFile('photo')){
+                $photo = $this->uploadPhoto($request);
+                $user->update(['photo_url' => $photo]);
+            }
+            $user->update([
+                'name'  => $request->name,
+                'email' => $request->email,
+                'type'  => $request->type
+            ]);
+            if($request->password == null){
+                $user->password = $userBackUp->password;
+            } else {
+                $user->password = Hash::make($request->password);
+            }
+            $user->save();
+            return new UserResource($user);
+        }
+        return response()->json(['message' => 'You are not Manager or the owner of the user'], 403);
     }
 
     public function update_password(UpdateUserPasswordRequest $request, User $user)

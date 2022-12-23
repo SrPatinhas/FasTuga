@@ -63,12 +63,20 @@ class EmployeeController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         //So menager pode
-        if(Auth::user()->type == 'EM') {
-            $user->update($request->validated());
+        if(Auth::user()->type == 'EM' || Auth::user()->id == $user->id) {
+            if($request->hasFile('photo')){
+                $photo = $this->uploadPhoto($request);
+                $user->update(['photo_url' => $photo]);
+            }
+            $user->update([
+                'name'  => $request->name,
+                'email' => $request->email,
+                'type'  => $request->type
+            ]);
+            $user->save();
             return new UserResource($user);
-
         }
-        return response()->json(['message' => 'You are not Manager'], 403);
+        return response()->json(['message' => 'You are not Manager or the owner of the user'], 403);
     }
 
 
