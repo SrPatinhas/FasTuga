@@ -21,12 +21,19 @@ use App\Utils\Utils;
 class OrderController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         if(Auth::user()->getIsCustomer()){
             $orders = Order::where('customer_id', Auth::user()->customer->id);
         } else {
             $orders = Order::whereNotNull('customer_id');
+            if($request->has('status')){
+                $search_array = array('P', 'R', 'D', 'C');
+                $status = strtoupper($request->input('status'));
+                if (in_array($status, $search_array)) {
+                    $orders->where('status', $status);
+                }
+            }
         }
         return OrderResource::collection($orders->orderBy('updated_at', 'desc')->paginate(15));
     }
