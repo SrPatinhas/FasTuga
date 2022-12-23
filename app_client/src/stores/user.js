@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', () => {
 
 	const user = ref();
 	const customer = ref();
+	const errors = ref();
 
 	const userTypes = ref([
         {type: 'C', icon: 'bi bi-people'},
@@ -178,7 +179,7 @@ export const useUserStore = defineStore('user', () => {
             return false
         }
         try {
-            await axios.patch('users/' +userId.value + '/password', passwords)
+            await axios.patch('users/' + userId.value + '/password', passwords)
             return true;
         } catch (error) {
             if (error.response.status == 422) {
@@ -208,7 +209,7 @@ export const useUserStore = defineStore('user', () => {
 
 
 	return {
-		user, customer, userId, userPhotoUrl, userIsGuest,
+		user, customer, userId, userPhotoUrl, userIsGuest, errors,
 		availablePoints, userTypes, isGuest,
 		login, register, loginAsGuest, logout, restoreToken, changePassword, save,
 		isCustomer, isChef, isDelivery, isEmployee, isManager, isAuthenticated

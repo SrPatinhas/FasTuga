@@ -11,7 +11,7 @@ import PublicBoard from "../views/PublicBoard.vue";
 // Auth
 import Login from "../views/auth/Login.vue";
 import Registration from "../views/auth/Registration.vue";
-import ChangePassword from "../views/auth/ChangePassword.vue";
+import ChangePassword from "../components/users/ChangePassword.vue";
 // protected
 import RestaurantBoard from "../views/RestaurantBoard.vue";
 import Users from "../components/users/Users.vue";
