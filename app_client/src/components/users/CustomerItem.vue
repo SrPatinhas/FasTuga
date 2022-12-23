@@ -58,14 +58,11 @@
 				<div class="modal-body">
 					<div class="row gx-4 gy-3">
 						<div class="col-12">
-							<label class="form-label" for="ticket-subject"><b>Name:</b> {{ customerDetail.user.name }}</label>
-							<p></p><label class="form-label" for="ticket-subject"><b>Email:</b> {{ customerDetail.user.email }}</label>
-							<p></p><label class="form-label" for="ticket-subject"><b>Phone:</b> {{ customerDetail.user.phone }}</label>
-							<p></p><label class="form-label" for="ticket-subject"><b>Points:</b> {{ customerDetail.points }}</label>
-							<p></p><label class="form-label" for="ticket-subject"><b>NIF:</b> {{ customerDetail.nif }}</label>
-							<p></p><label class="form-label" for="ticket-subject"><b>Default payment type:</b> {{ customerDetail.default_payment_type }}</label>
-							<p></p><label class="form-label" for="ticket-subject"><b>Default payment reference:</b> {{ customerDetail.default_payment_reference }}</label>
-							<label class="form-label" for="ticket-subject"><b>NIF:</b> {{ customerDetail.nif }}</label>
+							<p></p><label class="form-label"><b>Points:</b> {{ customerDetail.points }}</label>
+							<p></p><label class="form-label"><b>NIF:</b> {{ customerDetail.nif }}</label>
+							<p></p><label class="form-label"><b>Default payment type:</b> {{ customerDetail.default_payment_type }}</label>
+							<p></p><label class="form-label"><b>Default payment reference:</b> {{ customerDetail.default_payment_reference }}</label>
+							<p></p><label class="form-label"><b>NIF:</b> {{ customerDetail.nif }}</label>
 						</div>
 					</div>
 				</div>
@@ -117,12 +114,13 @@
 		try {
 			const response = await axios.get('/customers/' + id);
 			customerDetail.value = response.data.data;
-			return customerDetail.value;
+			return true;
 		} catch (error) {
 			customerDetail.value = {};
 			throw error;
 		}
 	}
+	
 	
 	async function customerToggleBlock(id, isToBlock) {
 		try {
