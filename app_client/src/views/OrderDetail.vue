@@ -5,7 +5,7 @@
 		</div>
 		<div class="container py-3 mb-2 mb-md-3">
 			<!-- Details-->
-			<div class="row gx-4 mb-4">
+			<div class="row gx-4 mb-4" v-if="orderStore.orderDetail.id !== undefined">
 				<div class="col-md-3 mb-2">
 					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Order Created at:</span>{{ orderStore.orderDetail.date }}</div>
 				</div>
@@ -13,7 +13,7 @@
 					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Status:</span>{{ orderStore.orderDetail.status_label }}</div>
 				</div>
 				<div class="col-md-3 mb-2">
-					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Paid:</span>{{ orderStore.orderDetail?.total_paid?.toFixed(2) }}€</div>
+					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Paid:</span>{{ orderStore.orderDetail.total_paid }}€</div>
 				</div>
 				<div class="col-md-3 mb-2">
 					<div class="border-0 card h-100 p-4 shadow-sm text-center"><span class="fw-medium text-dark me-2">Ticket Number:</span>{{ orderStore.orderDetail.ticket_number }}</div>
@@ -93,10 +93,10 @@
 					</div>
 					<!-- Footer-->
 					<div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md" v-if="orderStore.orderDetail.total_price !== undefined">
-						<div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>{{ orderStore.orderDetail?.total_price.toFixed(2) }}€</span></div>
+						<div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>{{ orderStore.orderDetail?.total_price }}€</span></div>
 						<div class="px-2 py-1"><span class="text-muted">Points earned:&nbsp;</span><span>{{ orderStore.orderDetail.points_gained }}</span></div>
-						<div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>{{ orderStore.orderDetail?.total_paid_with_points.toFixed(2) }}€</span></div>
-						<div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">{{ orderStore.orderDetail?.total_paid.toFixed(2) }}€</span></div>
+						<div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>{{ orderStore.orderDetail?.total_paid_with_points }}€</span></div>
+						<div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">{{ orderStore.orderDetail?.total_paid }}€</span></div>
 					</div>
 				</div>
 			</div>
@@ -155,7 +155,7 @@
 		else {
 			const notification = new Notification('Your order was updated!', {
 				icon: logoUrlMini,
-				body: "Your order was just updated to the status '" + getStatusLabel(orderStore.orderDetail.status) + "'"
+				body: "Your order was just updated to the status '" + getStatusLabel(orderStore.orderDetail.status_label) + "'"
 			});
 			notification.onclick = function() {
 				window.open('http://172.22.21.147/orders/' + orderStore.orderDetail.id);
@@ -168,7 +168,7 @@
 		const toastLength = toastContainer.childNodes.length;
 
 		const toastTitle = "New Order update";
-		const toastContent = "Your order was just updated to the status <b>" + getStatusLabel(orderStore.orderDetail.status) + "</b>";
+		const toastContent = "Your order was just updated to the status <b>" + getStatusLabel(orderStore.orderDetail.status_label) + "</b>";
 		const toastId = 'toast_' + toastLength;
 
 		const toastEl = `<div class="toast ${toastId}" role="alert" aria-live="assertive" aria-atomic="true">
@@ -205,6 +205,9 @@
 		return 1;
 	});
 	const getStatusLabel = (status) => {
+		if(status === 'W'){
+			return 'Preparing';
+		}
 		if(status === 'P'){
 			return 'Ready';
 		}

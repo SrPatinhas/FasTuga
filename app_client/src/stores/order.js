@@ -171,12 +171,15 @@ export const useOrdersStore = defineStore('orders', () => {
 		if(response.data.data?.id){
 			orderDetail.value = response.data.data;
 			socket.emit('orderNew', order.value);
-			await userStore.loadUser();
+			if(userStore.isAuthenticated) {
+				await userStore.loadUser();
+			}
 			clearBag();
 			return true;
 		}
 		return false;
 	}
+
 	async function udpateOrderDetail() {
 		let orderId = 0;
 		if(orderDetail.value.id !== 0) {
@@ -185,7 +188,11 @@ export const useOrdersStore = defineStore('orders', () => {
 			orderId = route.params.id;
 		}
 		if(orderId !== undefined) {
-			const response = await axios.get('orders/' + orderId);
+			let url = '/orders/';
+			if(userStore.isGuest){
+				url = '/orders/guest/';
+			}
+			const response = await axios.get(url + orderId);
 			if (response.data.data?.id) {
 				orderDetail.value = response.data.data;
 			}
@@ -235,7 +242,7 @@ export const useOrdersStore = defineStore('orders', () => {
 	 **/
 	socket.on('orderStatusUpdate', (order) => {
 		udpateOrderDetail();
-		toast.info(`The order (#${order.id}) is now on the status ${order.status}!`)
+		toast.info(`The order (#${order.id}) is now on the status ${order.status_label}!`)
 	});
 
 	return {

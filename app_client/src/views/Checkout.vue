@@ -150,25 +150,27 @@
 					<div class="col-sm-6">
 						<h2 class="h5 pb-2">Your total</h2>
 						<div class="rounded-3 bg-secondary px-3 px-sm-4 py-4">
-							<div class="d-flex justify-content-between fs-md border-bottom mb-3">
+							<div class="d-flex justify-content-between fs-md border-bottom mb-3 pb-2">
 								<span>Subtotal:</span>
 								<span class="text-heading">{{ (orderStore.totalOrderCost).split(".")[0] }}.<small>{{ (orderStore.totalOrderCost).split(".")[1] }}€</small></span>
 							</div>
 							<template v-if="userStore.isCustomer">
-								<div class="d-flex justify-content-between fs-md pb-2">
-									<span>Points Earned:</span>
-									<span class="text-heading">{{ orderStore.orderPoints }}</span>
-								</div>
-								<div class="align-items-center d-flex mb-3 small text-muted" role="alert">
-									<i class="mr-2 bi-info-circle"></i>
-									<div>For each 10€, you will get 1 point</div>
-								</div>
-								<div class="d-flex justify-content-between fs-md py-2 border-top" v-if="orderPoints > 0">
-									<span>Discount from points:</span>
-									<span class="text-heading">-{{ (orderPoints / 2) }}€</span>
+								<div class="border-bottom pb-3">
+									<div class="d-flex justify-content-between fs-md pb-2">
+										<span>Points Earned:</span>
+										<span class="text-heading">{{ orderStore.orderPoints }}</span>
+									</div>
+									<div class="align-items-center d-flex mb-3 small text-muted" role="alert">
+										<i class="mr-2 bi-info-circle"></i>
+										<div>For each 10€, you will get 1 point</div>
+									</div>
+									<div class="d-flex justify-content-between fs-md py-2 border-top" v-if="orderPoints > 0">
+										<span>Discount from points:</span>
+										<span class="text-heading">-{{ (orderPoints / 2) }}€</span>
+									</div>
 								</div>
 							</template>
-							<div class="d-flex justify-content-between border-top pt-3 fs-md mb-2">
+							<div class="d-flex justify-content-between fs-md mb-2">
 								<span>Total:</span>
 								<span class="text-heading fw-medium">{{ orderTotal }}.<small>{{ orderTotal_cent }}€</small></span>
 							</div>
@@ -246,7 +248,7 @@
 			orderCheckout.loading = true;
 			if (await orderStore.completeOrder(orderCheckout)) {
 				orderCheckout.loading = false;
-				toast.success(`The order (#${orderStore.orderDetail.id}) is now on the status ${orderStore.orderDetail.status}!`)
+				toast.success(`The order (#${orderStore.orderDetail.id}) is now on the status ${orderStore.orderDetail.status_label}!`)
 				console.log('order submited');
 				router.push({name: "OrderDetail", params: {id: orderStore.orderDetail.id}});
 			} else {

@@ -84,6 +84,7 @@ export const useUserStore = defineStore('user', () => {
 		delete axios.defaults.headers.common.Authorization
 		sessionStorage.removeItem('token');
 		user.value = null
+		customer.value = null
 	}
 
 	async function login(credentials) {

@@ -18,7 +18,8 @@ class OrderDetailResource extends JsonResource
         return [
             'id'                        => $this->id,
             'ticket_number'             => $this->ticket_number,
-            'status'                    => $status[$this->status],
+            'status'                    => $this->status,
+            'status_label'              => $status[$this->status],
             'total_price'               => $this->total_price,
             'total_paid'                => $this->total_paid,
             'total_paid_with_points'    => $this->total_paid_with_points,
