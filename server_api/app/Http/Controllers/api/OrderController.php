@@ -127,23 +127,22 @@ class OrderController extends Controller
         return new OrderDetailResource($order);
     }
 
-    public function refund(Order $order)
+    private function refund(Order $order)
     {
         $utils = new Utils();
         // call the payment server
         if(!$utils->callPaymentGateway($order->payment_type, $order->payment_reference, $order->total_paid, true)){
-            return response()->json(['message' => 'The payment values are not valid by the payment server'], 400);
+            return false;
         }
         if($order->customer_id != null) {
             if ($order->total_paid_with_points > 0) {
                 Customer::where('id', $order->customer_id)->increment('points', ($order->total_paid_with_points * 2));
             }
             if ($order->points_gained > 0) {
-                Customer::where('id', $order->customer_id)->increment('decrement', $order->points_gained);
+                Customer::where('id', $order->customer_id)->decrement('points', $order->points_gained);
             }
         }
-
-        return new OrderResource($order);
+        return true;
     }
 
     public function update(StoreUpdateOrderRequest $request, Order $order)
@@ -154,13 +153,18 @@ class OrderController extends Controller
 
     public function destroy(Order $order)
     {
-        if(Order::where("id", $order->id)->exists()){
-            $oldStatus = $order->status = "C";
-            return response()->json(['message' => 'Order status cancel.'], 200);
+        $oldStatus = $order->status;
+        if($oldStatus != 'C' && $oldStatus != 'D'){
+            $refundOperation = $this->refund($order);
+            if(!$refundOperation){
+                return response()->json(['message' => 'The payment values are not valid by the payment server'], 400);
+            }
+            $order->status = "C";
+            $order->updated_at = Carbon::now();
+            $order->save();
+            return response()->json(['message' => 'Order refunded and status changed to Cancel.']);
         }
         return response()->json(['message' => 'Order not found'], 403);
-
-
     }
 
 

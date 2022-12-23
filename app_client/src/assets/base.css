@@ -574,3 +574,9 @@ fieldset:disabled .btn {
 .spinner-border {
   --bs-spinner-border-width: 0.15rem;
 }
+.table-success {
+  --bs-table-bg: rgba(209, 231, 221, 0.50);
+}
+.table-danger {
+  --bs-table-bg: rgba(248, 215, 218, 0.50);
+}

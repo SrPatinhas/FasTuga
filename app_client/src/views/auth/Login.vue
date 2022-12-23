@@ -64,7 +64,8 @@
 								</div>
 							</fieldset>
 							<div class="forms_buttons">
-								<button type="button" class="btn btn-link">Forgot password?</button>
+<!--								<button type="button" class="btn btn-link">Forgot password?</button>-->
+								<span></span>
 								<button type="submit" class="btn btn-primary" @click="login" :disabled="credentials.loading">
 									<span v-if="credentials.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
 									Log In

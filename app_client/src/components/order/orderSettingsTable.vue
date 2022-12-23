@@ -88,19 +88,21 @@
 					<th>ticket Number</th>
 					<th>Total Price</th>
 					<th>Points Gained</th>
-					<th>Points Used to Pay</th>
+					<th>Points Used</th>
 					<th>Payment Type</th>
+					<th>Status</th>
 					<th>Actions</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr v-for="(order, index) of orders" :key="index">
+				<tr v-for="(order, index) of orders" :key="index" :class="order.status === 'C' ? 'table-danger' : (order.status === 'D' ? 'table-success' : '')">
 					<td class="py-3">{{ order.created_at }}</td>
 					<td class="py-3">{{ order.ticket_number }}</td>
-					<td class="py-3">{{ order.total_price }}</td>
+					<td class="py-3">{{ order.total_price.toFixed(2) }}</td>
 					<td class="py-3">{{ order.points_gained }}</td>
 					<td class="py-3">{{ order.points_used_to_pay }}</td>
 					<td class="py-3">{{ order.payment_type }}</td>
+					<td class="py-3">{{ order.status_label }}</td>
 					<td class="py-3">
 						<div class="btn-group me-2" role="group" aria-label="Actions">
 							<a class="btn btn-outline-secondary" href="#order-details" data-bs-toggle="modal" @click="seeOrderDetail(order)">
@@ -110,7 +112,7 @@
 										 class="btn btn-outline-success btn-lg" :to="{ name: 'OrderDetail', params: {id: order.id} }">
 								<i class="bi bi-link m-0"></i>
 							</router-link>
-							<a v-if="userStore.isManager && order.status.toLowerCase() !== 'd'"  href="#cancelling-order" data-bs-toggle="modal" class="btn btn-outline-danger" @click="modalDeleteOrders(order)">
+							<a v-if="userStore.isManager && order.status.toLowerCase() !== 'd' && order.status.toLowerCase() !== 'c'"  href="#cancelling-order" data-bs-toggle="modal" class="btn btn-outline-danger" @click="modalDeleteOrders(order)">
 								<i class="bi bi-trash m-0"></i>
 							</a>
 						</div>
@@ -157,11 +159,11 @@
 					<div class="row gx-4 gy-3">
 						<div class="col-12">
 							<label class="form-label" for="ticket-subject">Do you want cancel this order?</label>
-							<p>It has <b>{{ orderToDelete.items.length }}</b> items and it costed <b>{{ orderToDelete.total_paid.toFixed(2) }}</b></p>
+							<p>It has <b>{{ orderToDelete.items.length }}</b> items and it costed <b>{{ orderToDelete.total_paid.toFixed(2) }}€</b></p>
+							<p>This will send a refund to the payment saved on the order</p>
 							<div class="modal-footer">
-								<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">No</button>
-								<button class="btn btn-primary" type="submit" @click="deleteOrders(orderDetail.id)">Yes
-								</button>
+								<button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+								<button class="btn btn-primary" type="submit" data-bs-dismiss="modal" @click="deleteOrders(orderDetail.id)">Yes, send refund and cancel</button>
 							</div>
 						</div>
 					</div>
