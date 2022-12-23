@@ -53,7 +53,7 @@
 						<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" style="width: 200px;">
 							<li><h6 class="dropdown-header">Account</h6></li>
 							<li>
-								<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'Account' }" :to="{ name: (userStore.isManager ? 'DashboardManager' : 'Account') }">
+								<router-link class="dropdown-item d-flex align-items-center" :class="{ active: $route.name === 'Account' }" :to="{ name: 'Account' }">
 									<i class="bi-gear opacity-50 me-2"></i>Settings
 								</router-link>
 							</li>

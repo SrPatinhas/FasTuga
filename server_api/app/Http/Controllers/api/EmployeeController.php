@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\TopProductResource;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,6 +18,7 @@ use App\Http\Resources\UserResource;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -116,6 +119,61 @@ class EmployeeController extends Controller
                 'employees' => (int) $employees,
                 'products'  => (int) $products,
                 'orders'    => (int) $orders
+            ]);
+        }
+    }
+
+    public function statistic()
+    {
+        if(Auth::user()->type == 'EM') {
+            $monthReveneu   = Order::whereMonth('date', Carbon::now()->month)->where('status', '<>', 'C')->sum('total_paid');
+
+            $ordersThisMonth = Order::whereDate('created_at', '>=', Carbon::now()->startOfMonth())
+                                    ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
+                                    ->count();
+
+            $orderItems     = Order::whereDate('created_at', '>=', Carbon::now()->startOfMonth())
+                                ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
+                                ->join('order_items', 'order_items.order_id', 'orders.id')
+                                ->withCount('orderItems')
+                                ->sum('order_items.product_quantity');
+            $graph = [];
+            //$graph = Order::selectRaw('YEAR(created_at) year, MONTH(created_at) month, SUM(total_paid) as total_paid')
+            //                ->whereBetween('created_at', [Carbon::now()->subYear(), Carbon::now()])
+            //                ->groupBy('year', 'month')
+            //                ->pluck('total_paid', 'month')->toArray();
+            $graph = Order::selectRaw('YEAR(created_at) year, WEEK(created_at) week, SUM(total_paid) as total_paid')
+                            ->whereBetween('created_at',[Carbon::now()->subWeeks(6), Carbon::now()])
+                            ->groupBy('year', 'week')
+                            ->pluck('total_paid', 'week')->toArray();
+            $weeks = [];
+
+            for ($i = 5; $i >= 0; $i--) {
+                $weekStart = date('Y-m-d', strtotime("-$i week"));
+                $weekNumber = date_format(date_create_from_format('Y-m-d', $weekStart), 'W');
+
+                $value = 0;
+                if(array_key_exists($weekNumber, $graph)){
+                    $value = $graph[$weekNumber];
+                }
+                $weeks[] = (int) $value;
+            }
+
+            $topItems = Product::join('order_items', 'order_items.product_id', '=', 'products.id')
+                            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+                            ->select('products.*', DB::raw('SUM(order_items.product_quantity) as total_quantity'))
+                            ->groupBy('products.id')
+                            ->orderBy('total_quantity', 'desc')
+                            ->get()
+                            ->take(5);
+
+
+            return response()->json([
+                'graph'         => $weeks,//$graph,
+                'monthReveneu'  => (float) $monthReveneu,
+                'orders'        => (int) $ordersThisMonth,
+                'orderItems'    => (int) $orderItems,
+                'topItems'      => TopProductResource::collection($topItems)
             ]);
         }
     }

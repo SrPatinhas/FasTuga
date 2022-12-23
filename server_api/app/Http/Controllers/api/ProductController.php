@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\ProductManagerResource;
 use App\Http\Resources\ProductResource;
-use App\Http\Requests\StoreUpdateProductRequest;
+use App\Http\Requests\StoreProductRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -34,9 +35,8 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
-    public function store(StoreUpdateProductRequest $request)
+    public function store(StoreProductRequest $request)
     {
-
         $photo = null;
         if($request->hasFile('photo')){
             $photo = $this->uploadPhoto($request);
@@ -51,9 +51,19 @@ class ProductController extends Controller
         return new ProductResource($newProduct);
     }
 
-    public function update(StoreUpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product) //UpdateProductRequest
     {
-        $product->update($request->validated());
+        if($request->hasFile('photo')){
+            $photo = $this->uploadPhoto($request);
+            $product->update(['photo_url' => $photo]);
+        }
+        $product->update([
+            'name' => $request->name,
+            'type' => $request->type,
+            'description' => $request->description,
+            'price' => $request->price
+        ]);
+        $product->save();
         return new ProductResource($product);
     }
 

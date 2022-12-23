@@ -68,6 +68,7 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/{user}',        'destroy')->whereNumber('user');/*Feito*/
 
         Route::get('/sidebar',          'sidebarCounts');/*Feito*/
+        Route::get('/statistic',        'statistic');/*Feito*/
     });
     //--END EMPLOYEE
 
@@ -76,7 +77,7 @@ Route::middleware('auth:api')->group(function () {
         // Only a manager can use this ones
         Route::post('/',                    'store');/*Feito*/
         Route::get('/list',                 'list')->withTrashed();/*Feito*/
-        Route::put('/{product}',            'update')->whereNumber('product');/*Feito*/
+        Route::put('/{product}',            'update')->whereNumber('product')->withTrashed();/*Feito*/
         Route::post('/{product}/photos',    'updatePhoto')->whereNumber('product');/*Erro */
         Route::delete('/{product}',         'destroy')->whereNumber('product');/*Feito*/
         // TODO -> talvez para estatisticas?
