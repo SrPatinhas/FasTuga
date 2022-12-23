@@ -30,7 +30,7 @@ class UpdateCustomerRequest extends FormRequest
 
             'phone' => ['required', 'between:9,13'],
             'nif' => ['nullable','size:9'],
-            'photo_file' => ['nullable','file','image'],
+            'photo' => ['nullable','file','image'],
 
             'gender' => ['required', 'in:M,F'],
 
