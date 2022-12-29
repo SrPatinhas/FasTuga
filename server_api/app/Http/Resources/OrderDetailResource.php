@@ -32,7 +32,7 @@ class OrderDetailResource extends JsonResource
             'custom'                    => $this->custom,
             'created_at'                => $this->created_at,
             'update_at'                 => $this->updated_at,
-            'customer'                  => new CustomerResource($this->customer),
+            'customer'                  => $this->customer_id ? new CustomerResource($this->customer) : null,
             'items'                     => OrderItemResource::collection($this->orderItems)
         ];
     }

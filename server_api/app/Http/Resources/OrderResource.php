@@ -19,7 +19,7 @@ class OrderResource extends JsonResource
             'ticket_number'             => $this->ticket_number,
             'status'                    => $this->status,
             'status_label'              => $this->getStatusNameAttribute(),
-            'customer'                  => new CustomerResource($this->customer),
+            'customer'                  => $this->customer_id ? new CustomerResource($this->customer) : null,
             'total_price'               => (float) $this->total_price,
             'total_paid'                => (float) $this->total_paid,
             'total_paid_with_points'    => (float) $this->total_paid_with_points,

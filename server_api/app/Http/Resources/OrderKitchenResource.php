@@ -19,7 +19,7 @@ class OrderKitchenResource extends JsonResource
             'ticket_number'             => $this->ticket_number,
             'status'                    => $this->status,
             'status_label'              => $this->getStatusNameAttribute(),
-            'user_id'                   => $this->customer->user_id,
+            'user_id'                   => $this->customer_id ? $this->customer->user_id : null,
             'date'                      => $this->date,
             'created_at'                => $this->created_at,
             'update_at'                 => $this->updated_at,
