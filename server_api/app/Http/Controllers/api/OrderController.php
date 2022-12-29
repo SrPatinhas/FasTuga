@@ -25,7 +25,7 @@ class OrderController extends Controller
         if(Auth::user()->getIsCustomer()){
             $orders = Order::where('customer_id', Auth::user()->customer->id);
         } else {
-            $orders = Order::whereNotNull('customer_id');
+            $orders = Order::query();
             if($request->has('status')){
                 $search_array = array('P', 'R', 'D', 'C');
                 $status = strtoupper($request->input('status'));
@@ -51,6 +51,7 @@ class OrderController extends Controller
         $total_order = 0;
         $points_discount = 0;
         $points_used = 0;
+        $has_hotDish = false;
 
         $products = [];
         $local_number = 0;
@@ -62,6 +63,9 @@ class OrderController extends Controller
             $total_order += $product_total;
             if($product->price != $item["price"]){
                 return response()->json(['message' => 'Price of the product dont match'], 400);
+            }
+            if($product->type == 'hot dish'){
+                $has_hotDish = true;
             }
             // create new array to prevent multiple calls to the DB next
             $newItem = [
@@ -103,7 +107,7 @@ class OrderController extends Controller
         $current_date = Carbon::now();
         $order = Order::create([
             'ticket_number'             => $last_ticket + 1,
-            'status'                    => 'P',
+            'status'                    => $has_hotDish ? 'P' : 'R',
             'customer_id'               => $customerId,
             'total_price'               => $total_order,
             'total_paid'                => $total_order_paying,

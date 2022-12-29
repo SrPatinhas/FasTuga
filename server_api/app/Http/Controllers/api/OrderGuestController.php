@@ -53,6 +53,7 @@ class OrderGuestController extends Controller
 
         $products = [];
         $local_number = 0;
+        $has_hotDish = false;
         // get the real value from DB (prevent any security breach
         foreach ($request->items as $item){
             $local_number += 1;
@@ -61,6 +62,9 @@ class OrderGuestController extends Controller
             $total_order += $product_total;
             if($product->price != $item["price"]){
                 return response()->json(['message' => 'Price of the product dont match'], 400);
+            }
+            if($product->type == 'hot dish'){
+                $has_hotDish = true;
             }
             // create new array to prevent multiple calls to the DB next
             $newItem = [
@@ -91,7 +95,7 @@ class OrderGuestController extends Controller
         $current_date = Carbon::now();
         $order = Order::create([
             'ticket_number'             => $last_ticket + 1,
-            'status'                    => 'P',
+            'status'                    => $has_hotDish ? 'P' : 'R',
             'customer_id'               => $customerId,
             'total_price'               => $total_order,
             'total_paid'                => $total_order,
