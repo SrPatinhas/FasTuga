@@ -15,13 +15,13 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'type' => $this->type,
-            'name' => $this->name,
-            'email' => $this->email,
-            'gender' => $this->gender,
-            'gender_name' => $this->genderName,
-            'photo_url' => $this->photo_url,
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'email'         => $this->email,
+            'type'          => $this->type,
+            'blocked'       => $this->blocked,
+            'photo_url'     => ($this->photo_url != '' ? env('LOCAL_FILE_PATH_AVATARS', 'http://server_api.test/storage/fotos/') . $this->photo_url : ''),
+            'custom'        => $this->custom,
         ];
     }
 }

@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build_prod": "vite build --mode production",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -11,13 +12,16 @@
     "axios": "^1.2.0",
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.9.1",
-    "pinia": "^2.0.23",
+    "chart.js": "^4.1.1",
+    "pinia": "^2.0.27",
     "socket.io-client": "^4.5.3",
     "vue": "^3.2.41",
+    "vue-chartjs": "^5.1.0",
     "vue-router": "^4.1.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.2",
+    "sass": "^1.56.1",
     "vite": "^3.1.8"
   }
 }

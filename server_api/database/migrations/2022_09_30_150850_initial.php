@@ -71,6 +71,8 @@ return new class extends Migration
 
             $table->json('custom')->nullable();
 
+            $table->string('notes')->nullable();
+
             // Time related information about the order
             $table->timestamps();
 
@@ -84,6 +86,7 @@ return new class extends Migration
             $table->bigInteger('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders');
             $table->integer('order_local_number');
+            $table->integer('product_quantity')->default(1);
             $table->bigInteger('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products');
             $table->enum('status', ['W', 'P', 'R']);

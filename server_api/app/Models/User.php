@@ -2,28 +2,45 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-// Remove Sanctum Tokens
-//use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 // Add Laravel Tokens
 use Laravel\Passport\HasApiTokens;
 
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'name',
         'email',
         'password',
-        'gender',
+        'type',
+        'blocked',
         'photo_url',
-        'type'
+        'custom',
     ];
+
+    // C "Customer"; EC "Employee - Chef"; ED "Employee - Delivery"; EM "Employee - Manager";
+    public function getTypeNameAttribute()
+    {
+        switch ($this->type) {
+            case 'C':
+                return 'Customer';
+            case 'EC':
+                return 'Employee - Chef';
+            case 'ED':
+                return 'Employee - Delivery';
+            case 'EM':
+                return 'Employee - Manager';
+        }
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -49,44 +66,28 @@ class User extends Authenticatable
         return $this->gender == 'M' ? 'Masculine' : 'Feminine';
     }
 
-    public function projects()
+
+    public function customer()
     {
-        return $this->hasMany(Project::class, 'responsible_id');
+        return $this->hasOne(Customer::class, 'user_id');
     }
 
-    public function tasks()
+    public function orderItem()
     {
-        return $this->hasMany(Task::class, 'owner_id');
+        return $this->hasMany(OrderItem::class, 'preparation_by');
     }
 
-    public function assigedTasks()
+    public function delivering()
     {
-        return $this->belongsToMany(Task::class, 'task_user');
+        return $this->hasMany(Order::class, 'delivered_by');
     }
 
-    // Relations that return only a subset of the tasks
-
-    // Owner and Completed
-    public function tasksCompleted()
+    public function getIsCustomer()
     {
-        return $this->hasMany(Task::class, 'owner_id')->where('completed', 1);
+        return $this->type == 'C';
     }
 
-    // Owner and NOT Completed
-    public function tasksNotCompleted()
-    {
-        return $this->hasMany(Task::class, 'owner_id')->where('completed', 0);
-    }
 
-    // Assigned and Completed
-    public function assigedTasksCompleted()
-    {
-        return $this->belongsToMany(Task::class, 'task_user')->where('completed', 1);
-    }
-
-    // Assigned and Not Completed
-    public function assigedTasksNotCompleted()
-    {
-        return $this->belongsToMany(Task::class, 'task_user')->where('completed', 0);
-    }
 }
+
+
